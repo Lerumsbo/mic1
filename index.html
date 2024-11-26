@@ -31,6 +31,7 @@
       margin-bottom: 30px;
       padding: 10px;
       border-radius: 8px;
+      background-color: #f4f4f4;
     }
     section.collapsed .song-list {
       display: none;
@@ -40,6 +41,9 @@
       font-size: 20px;
       cursor: pointer;
       color: #333;
+      background-color: #f4f4f4; /* Very light gray for section headers */
+      padding: 5px;
+      border-radius: 5px;
     }
     #status {
       font-size: 18px;
@@ -65,7 +69,7 @@
 </head>
 <body>
   <h1>Spotify Playlist</h1>
-  <p>Klicka på en låt för att spela upp från en angiven starttid. Du måste logga in först.</p>
+  <p>Klicka på en låt eller playlist för att spela upp från en angiven starttid. Du måste logga in först.</p>
   
   <button id="stop-btn" onclick="stopPlayback()">Stoppa uppspelning</button>
   <button id="login-btn" onclick="authenticateSpotify()">Logga in med Spotify</button>
@@ -80,11 +84,11 @@
 
     let accessToken = "";
 
-    const filenames = ['Warmup.txt', 'Intro.txt', 'Mål.txt', 'Spelpauser.txt', 'Utvisning.txt'];
-    
     const sectionColors = [
-      '#ADD8E6', '#D8BFD8', '#D3D3D3', '#E6E6FA', '#B0E0E6'  // Ljusblått, ljuslila och ljusgrått
+      '#ADD8E6', '#D8BFD8', '#D3D3D3', '#E6E6FA', '#B0E0E6'  // Light colors for button backgrounds
     ];
+
+    const filenames = ['Warmup.txt', 'Intro.txt', 'Mål.txt', 'Spelpauser.txt', 'Utvisning.txt'];
 
     async function authenticateSpotify() {
       const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
@@ -134,8 +138,7 @@
     async function createSection(sectionName, lines, sectionColor) {
       const section = document.createElement('section');
       section.classList.add('collapsed');
-      section.style.backgroundColor = sectionColor;
-      section.style.border = `1px solid ${darkenColor(sectionColor, 0.2)}`;
+      section.style.backgroundColor = '#f4f4f4';  // Very light gray background for section
 
       const header = document.createElement('h2');
       header.textContent = sectionName;
@@ -151,14 +154,24 @@
         const [uri, startTime] = line.split(';');
         const button = document.createElement('button');
         
-        const trackMetadata = await getTrackMetadata(uri);
-        button.textContent = `${trackMetadata.name} (${trackMetadata.artists.map(artist => artist.name).join(", ")}) +${(startTime / 1000).toFixed(1)}s`;
+        let trackMetadata;
+        if (uri.startsWith('spotify:track:')) {
+          trackMetadata = await getTrackMetadata(uri);
+          button.textContent = `${trackMetadata.name} (${trackMetadata.artists.map(artist => artist.name).join(", ")}) +${(startTime / 1000).toFixed(1)}s`;
+        } else if (uri.startsWith('spotify:playlist:')) {
+          button.textContent = `Playlist: ${uri} +${(startTime / 1000).toFixed(1)}s`;
+        }
+
         button.onclick = function () {
-          playSpotifyTrack(uri, parseInt(startTime));
+          if (uri.startsWith('spotify:track:')) {
+            playSpotifyTrack(uri, parseInt(startTime));
+          } else if (uri.startsWith('spotify:playlist:')) {
+            playSpotifyPlaylist(uri);
+          }
         };
 
-        // Lighten section color for button background
-        const buttonColor = lightenColor(sectionColor, 0.4); // Lighten section color for button background
+        // Assign background color from the section color
+        const buttonColor = lightenColor(sectionColor, 0.4); // Lighten the section color for button background
         button.style.backgroundColor = buttonColor;
 
         content.appendChild(button);
@@ -175,14 +188,6 @@
       const r = Math.min((num >> 16) + percent * 255, 255);
       const g = Math.min((num >> 8 & 0x00FF) + percent * 255, 255);
       const b = Math.min((num & 0x0000FF) + percent * 255, 255);
-      return `#${(1 << 24) + (r << 16) + (g << 8) + b}`.toString(16).slice(1);
-    }
-
-    function darkenColor(color, percent) {
-      const num = parseInt(color.slice(1), 16);
-      const r = Math.max((num >> 16) - percent * 255, 0);
-      const g = Math.max((num >> 8 & 0x00FF) - percent * 255, 0);
-      const b = Math.max((num & 0x0000FF) - percent * 255, 0);
       return `#${(1 << 24) + (r << 16) + (g << 8) + b}`.toString(16).slice(1);
     }
 
@@ -221,6 +226,32 @@
       } else {
         const error = await response.json();
         updateStatus(`Kunde inte spela upp låten: ${error.error.message}`);
+        console.error("API-fel:", error);
+      }
+    }
+
+    async function playSpotifyPlaylist(uri) {
+      if (!accessToken) {
+        updateStatus("Du måste logga in först!");
+        return;
+      }
+
+      const response = await fetch("https://api.spotify.com/v1/me/player/play", {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uris: [uri],
+        }),
+      });
+
+      if (response.status === 204) {
+        updateStatus(`Playlisten ${uri} spelas!`);
+      } else {
+        const error = await response.json();
+        updateStatus(`Kunde inte spela upp playlisten: ${error.error.message}`);
         console.error("API-fel:", error);
       }
     }
