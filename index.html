@@ -11,79 +11,40 @@
       padding: 20px;
     }
     .song-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      list-style-type: none;
       padding: 0;
     }
     .song-list button {
-      flex: 1 0 18%;
-      padding: 20px;
-      font-size: 14px;
-      text-align: center;
+      margin: 10px;
+      padding: 10px;
       cursor: pointer;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background-color: #f0f0f0;
-      transition: background-color 0.3s;
-    }
-    .song-list button:hover {
-      background-color: #ddd;
-    }
-    .song-list button span {
-      display: block;
-      margin-bottom: 5px;
-    }
-    .section {
-      margin-top: 20px;
-      padding: 10px;
-      border-radius: 8px;
-    }
-    .section-header {
-      cursor: pointer;
-      background-color: #f0f0f0;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-      margin-bottom: 5px;
-    }
-    .section-content {
-      display: none;
-      padding-left: 20px;
-    }
-    #status {
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      background-color: #f9f9f9;
-    }
-    button#login-button,
-    button#stop-button {
-      background-color: #4CAF50;
+      border: none;
       color: white;
       font-size: 16px;
-      padding: 10px 20px;
-      border: none;
       border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
     }
-
-    button#login-button:hover,
-    button#stop-button:hover {
-      background-color: #45a049;
+    section {
+      margin-bottom: 30px;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+    #status {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
   <h1>Spotify Playlist</h1>
   <p>Klicka på en låt för att spela upp från en angiven starttid. Du måste logga in först.</p>
-
-  <button id="login-button" onclick="authenticateSpotify()">Logga in med Spotify</button>
-  <button id="stop-button" onclick="stopPlayback()">Stoppa uppspelning</button>
-
-  <div id="status">Status: Väntar på inloggning...</div>
-
+  
+  <button onclick="stopPlayback()">Stoppa uppspelning</button>
+  <button onclick="authenticateSpotify()">Logga in med Spotify</button>
+  
+  <div id="status"></div>
   <div id="sections"></div>
 
   <script>
@@ -92,37 +53,109 @@
     const SCOPES = "user-modify-playback-state user-read-playback-state";
 
     let accessToken = "";
-    let isPlaying = false;
 
-    // Uppdatera status på sidan
-    function updateStatus(message) {
-      document.getElementById("status").textContent = `Status: ${message}`;
-    }
+    const filenames = ['Warmup.txt', 'Intro.txt', 'Mål.txt', 'Spelpauser.txt', 'Utvisning.txt'];
+    
+    const colorPalette = [
+      '#FFDDC1', '#FFABAB', '#FFC3A0', '#FF677D', '#D4A5A5',
+      '#392F5A', '#31A2AC', '#61C0BF', '#6B4226', '#D9BF77'
+    ];
 
-    // Hantera autentisering med Spotify
-    function authenticateSpotify() {
+    async function authenticateSpotify() {
       const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
       window.location.href = authUrl;
     }
 
-    // Hämta access token från URL:n
     function getAccessTokenFromUrl() {
       const hash = window.location.hash.substring(1);
       const params = new URLSearchParams(hash);
       return params.get("access_token");
     }
 
-    // Spara access token vid inloggning
-    window.onload = async function () {
+    window.onload = function () {
       const token = getAccessTokenFromUrl();
       if (token) {
         accessToken = token;
         updateStatus("Inloggning lyckades!");
-        await loadSongsFromFolder('/tracks'); // Ladda låtar från mappen
       }
     };
 
-    // Spela en specifik låt från en viss starttid
+    async function loadSongsFromFolder() {
+      try {
+        const folderPath = '/mic1/tracks';
+        
+        for (const [index, filename] of filenames.entries()) {
+          const fileUrl = `${folderPath}/${filename}`;
+          const response = await fetch(fileUrl);
+
+          if (!response.ok) {
+            updateStatus(`Kunde inte ladda ${filename}`);
+            continue;
+          }
+
+          const text = await response.text();
+          const lines = text.split("\n").filter(line => line.trim() !== "");
+          const sectionName = filename.split('.')[0]; // Filnamn utan extension som sektionens namn
+          const sectionElement = await createSection(sectionName, lines, colorPalette[index]);
+          document.getElementById('sections').appendChild(sectionElement);
+        }
+      } catch (error) {
+        updateStatus("Fel vid inläsning av filer.");
+        console.error("Laddningsfel:", error);
+      }
+    }
+
+    async function createSection(sectionName, lines, sectionColor) {
+      const section = document.createElement('section');
+      const header = document.createElement('h2');
+      header.textContent = sectionName;
+
+      const content = document.createElement('div');
+      content.classList.add('song-list');
+
+      // Skapa knappar för varje rad i filen
+      for (const line of lines) {
+        const [uri, startTime] = line.split(';');
+        const button = document.createElement('button');
+        
+        const trackMetadata = await getTrackMetadata(uri);
+        button.textContent = `${trackMetadata.name} (${trackMetadata.artists.map(artist => artist.name).join(", ")}) +${(startTime / 1000).toFixed(1)}s`;
+        button.onclick = function () {
+          playSpotifyTrack(uri, parseInt(startTime));
+        };
+
+        // Sätt bakgrundsfärg för knappen baserat på sektionens färg
+        button.style.backgroundColor = lightenColor(sectionColor, 0.5);
+
+        content.appendChild(button);
+      }
+
+      section.appendChild(header);
+      section.appendChild(content);
+
+      return section;
+    }
+
+    function lightenColor(color, percent) {
+      const num = parseInt(color.slice(1), 16);
+      const r = (num >> 16) + percent * 255;
+      const g = (num >> 8 & 0x00FF) + percent * 255;
+      const b = (num & 0x0000FF) + percent * 255;
+      return `#${(1 << 24) + (Math.min(r, 255) << 16) + (Math.min(g, 255) << 8) + Math.min(b, 255)}`.slice(1);
+    }
+
+    async function getTrackMetadata(uri) {
+      const response = await fetch(`https://api.spotify.com/v1/tracks/${uri.split(":")[2]}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+        }
+      });
+
+      const data = await response.json();
+      return data;
+    }
+
     async function playSpotifyTrack(uri, startTimeMs) {
       if (!accessToken) {
         updateStatus("Du måste logga in först!");
@@ -142,7 +175,6 @@
       });
 
       if (response.status === 204) {
-        isPlaying = true;
         updateStatus("Låten spelas från angiven tid!");
       } else {
         const error = await response.json();
@@ -151,7 +183,6 @@
       }
     }
 
-    // Stoppa uppspelning
     async function stopPlayback() {
       if (!accessToken) {
         updateStatus("Du måste logga in först!");
@@ -166,7 +197,6 @@
       });
 
       if (response.status === 204) {
-        isPlaying = false;
         updateStatus("Uppspelning stoppad!");
       } else {
         const error = await response.json();
@@ -175,90 +205,13 @@
       }
     }
 
-
-// Ladda låtar från alla .txt-filer i /mic1/tracks-mappen
-async function loadSongsFromFolder() {
-  try {
-    // Uppdaterad folderPath som inkluderar /mic1
-    const folderPath = '/mic1/tracks'; 
-
-    // Lista alla filer i mappen /tracks (detta måste vara en manuell lista i GitHub Pages)
-    const filenames = ['Warmup.txt', 'Intro.txt', 'Mål.txt', 'Spelpauser.txt', 'Utvisning.txt']; // Lägg till de faktiska filnamnen här
-    
-    // Färgpalett för sektionerna
-    const colorPalette = [
-      '#FFDDC1', '#FFABAB', '#FFC3A0', '#FF677D', '#D4A5A5',
-      '#392F5A', '#31A2AC', '#61C0BF', '#6B4226', '#D9BF77'
-    ];
-
-    for (const [index, filename] of filenames.entries()) {
-      const fileUrl = `${folderPath}/${filename}`;  // Bygg fullständig URL till filen
-      const response = await fetch(fileUrl);
-
-      if (!response.ok) {
-        updateStatus(`Kunde inte ladda ${filename}`);
-        continue;
-      }
-
-      const text = await response.text();
-      const lines = text.split("\n").filter(line => line.trim() !== "");
-      const sectionName = filename.split('.')[0]; // Filnamn utan extension som sektionens namn
-      const sectionElement = await createSection(sectionName, lines, colorPalette[index]);
-      document.getElementById('sections').appendChild(sectionElement);
+    function updateStatus(message) {
+      const statusElement = document.getElementById('status');
+      statusElement.textContent = message;
     }
-  } catch (error) {
-    updateStatus("Fel vid inläsning av filer.");
-    console.error("Laddningsfel:", error);
-  }
-}
 
-
-// Skapa sektion för varje fil
-async function createSection(sectionName, lines, sectionColor) {
-  const section = document.createElement('section');
-  const header = document.createElement('h2');
-  header.textContent = sectionName;
-
-  const content = document.createElement('div');
-  content.classList.add('song-list');
-
-  // Skapa knappar för varje rad i filen
-  for (const line of lines) {
-    const [uri, startTime] = line.split(';');
-    const button = document.createElement('button');
-    
-    const trackMetadata = await getTrackMetadata(uri);
-    button.textContent = `${trackMetadata.name} (${trackMetadata.artists.map(artist => artist.name).join(", ")}) +${(startTime / 1000).toFixed(1)}s`;
-    button.onclick = function () {
-      playSpotifyTrack(uri, parseInt(startTime));
-    };
-
-    // Sätt bakgrundsfärg för knappen baserat på sektionens färg
-    button.style.backgroundColor = sectionColor;
-
-    // Lägg till knappen i sektionen
-    content.appendChild(button);
-  }
-
-  // Lägg till sektionen i HTML-dokumentet
-  section.appendChild(header);
-  section.appendChild(content);
-
-  return section;
-}
-
-    // Hämta metadata för en låt
-    async function getTrackMetadata(uri) {
-      const response = await fetch(`https://api.spotify.com/v1/tracks/${uri.split(":")[2]}`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`,
-        }
-      });
-
-      const data = await response.json();
-      return data;
-    }
+    // Ladda filerna när sidan är klar
+    loadSongsFromFolder();
   </script>
 </body>
 </html>
