@@ -51,9 +51,11 @@
 
     .song-list button {
       margin: 10px;
-      width: 160px;
-      height: 50px;
+      width: 200px;
+      height: 80px;
       text-align: center;
+      line-height: 1.4;
+      background-color: #87CEEB; /* Light blue default */
     }
 
     #status {
@@ -101,7 +103,7 @@
     const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
     const REDIRECT_URI = "https://lerumsbo.github.io/mic1/index.html";
     const SCOPES = "user-modify-playback-state user-read-playback-state";
-    const sectionColors = ['#ADD8E6', '#D8BFD8', '#D3D3D3', '#E6E6FA', '#B0E0E6']; // Light color palette for buttons
+    const sectionColors = ['#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE']; // Slightly darker colors
     let accessToken = "";
 
     const filenames = ['Warmup.txt', 'Intro.txt', 'Mål.txt', 'Spelpauser.txt', 'Utvisning.txt'];
@@ -173,10 +175,10 @@
 
         if (uri.startsWith('spotify:track:')) {
           const trackMetadata = await getTrackMetadata(uri);
-          button.textContent = `${trackMetadata.name} (${trackMetadata.artists.map(artist => artist.name).join(", ")}) +${(startTime / 1000).toFixed(1)}s`;
+          button.textContent = `${trackMetadata.name} - ${trackMetadata.artists.map(artist => artist.name).join(", ")} [${(startTime / 1000).toFixed(1)}s]`;
         } else if (uri.startsWith('spotify:playlist:')) {
           const playlistMetadata = await getPlaylistMetadata(uri);
-          button.textContent = `${playlistMetadata.name} +${(startTime / 1000).toFixed(1)}s`;
+          button.textContent = `${playlistMetadata.name} [${(startTime / 1000).toFixed(1)}s]`;
         }
 
         button.onclick = function () {
