@@ -11,16 +11,28 @@
       padding: 20px;
     }
     .song-list {
-      list-style-type: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px; /* Mellanrum mellan knappar */
       padding: 0;
     }
-    .song-list li {
-      margin: 10px 0;
-    }
-    button {
-      margin-left: 10px;
-      padding: 5px 10px;
+    .song-list button {
+      flex: 1 0 18%; /* Gör att varje knapp tar 18% av bredden, max 5 knappar per rad */
+      padding: 20px;
+      font-size: 14px;
+      text-align: center;
       cursor: pointer;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f0f0f0;
+      transition: background-color 0.3s;
+    }
+    .song-list button:hover {
+      background-color: #ddd;
+    }
+    .song-list button span {
+      display: block;
+      margin-bottom: 5px;
     }
     #status {
       margin-top: 20px;
@@ -33,11 +45,11 @@
 <body>
   <h1>Spotify Playlist</h1>
   <p>Klicka på en låt för att spela upp från en angiven starttid. Du måste logga in först.</p>
-  
+
   <button onclick="authenticateSpotify()">Logga in med Spotify</button>
   <button onclick="stopPlayback()">Stoppa uppspelning</button>
 
-  <ul class="song-list" id="songList"></ul>
+  <div class="song-list" id="songList"></div>
 
   <div id="status">Status: Väntar på inloggning...</div>
 
@@ -151,11 +163,14 @@
           // Hämta låttitel från Spotify
           const trackInfo = await fetchTrackInfo(trackId);
 
-          const listItem = document.createElement("li");
+          const listItem = document.createElement("button");
           listItem.innerHTML = `
-            <span>Låt: ${trackInfo ? trackInfo.name : uri}</span>
-            <button onclick="playSpotifyTrack('${uri}', ${parseInt(startTime)})">Spela från ${startTime / 1000} sekunder</button>
+            <span>${trackInfo ? trackInfo.name : uri}</span>
+            (+${startTime / 1000}s)
           `;
+          listItem.onclick = function() {
+            playSpotifyTrack(uri, parseInt(startTime));
+          };
           songListElement.appendChild(listItem);
         }
 
@@ -187,22 +202,6 @@
         return null;
       }
     }
-
-    // Hantera mellanslagstangent (start/pause) för uppspelning
-    window.addEventListener("keydown", function(event) {
-      if (event.code === "KeyQ") {
-        if (isPlaying) {
-          stopPlayback(); // Om låten spelas, stoppa uppspelningen
-        } else {
-          const firstSongButton = document.querySelector("button");
-          if (firstSongButton) {
-            // Spela den första låten på listan om inget är spelande
-            firstSongButton.click();
-          }
-        }
-        event.preventDefault(); // Förhindra att mellanslag används för att scrolla
-      }
-    });
   </script>
 </body>
 </html>
