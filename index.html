@@ -128,6 +128,12 @@
       loadSongsFromFolder();
     };
 
+    document.addEventListener("keydown", (event) => {
+      if (event.key.toLowerCase() === "q") {
+        stopPlayback();
+      }
+    });
+
     async function loadSongsFromFolder() {
       try {
         const folderPath = '/mic1/tracks';
@@ -178,7 +184,7 @@
           button.textContent = `${trackMetadata.name} - ${trackMetadata.artists.map(artist => artist.name).join(", ")} [${(startTime / 1000).toFixed(1)}s]`;
         } else if (uri.startsWith('spotify:playlist:')) {
           const playlistMetadata = await getPlaylistMetadata(uri);
-          button.textContent = `${playlistMetadata.name} [${(startTime / 1000).toFixed(1)}s]`;
+          button.textContent = `Playlist: ${playlistMetadata.name} [${(startTime / 1000).toFixed(1)}s]`;
         }
 
         button.onclick = function () {
@@ -232,6 +238,13 @@
     }
 
     async function playSpotifyPlaylist(uri) {
+      await fetch("https://api.spotify.com/v1/me/player/shuffle?state=true", {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+        },
+      });
+
       const response = await fetch("https://api.spotify.com/v1/me/player/play", {
         method: "PUT",
         headers: {
@@ -241,7 +254,7 @@
         body: JSON.stringify({ context_uri: uri }),
       });
 
-      if (response.status === 204) updateStatus("Playlisten spelas!");
+      if (response.status === 204) updateStatus("Playlisten spelas i slumpmässig ordning!");
       else updateStatus("Kunde inte spela upp playlisten.");
     }
 
@@ -258,8 +271,7 @@
     }
 
     function updateStatus(message) {
-      const statusDiv = document.getElementById("status");
-      statusDiv.textContent = message;
+      document.getElementById('status').textContent = message;
     }
   </script>
 </body>
