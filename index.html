@@ -22,13 +22,21 @@
       color: white;
       font-size: 16px;
       border-radius: 5px;
+      display: inline-block;
+      text-align: center;
+      width: 160px;
     }
     section {
       margin-bottom: 30px;
     }
+    section.collapsed .song-list {
+      display: none;
+    }
     h2 {
       margin-top: 0;
       font-size: 20px;
+      cursor: pointer;
+      color: #333;
     }
     #status {
       font-size: 18px;
@@ -57,8 +65,8 @@
     const filenames = ['Warmup.txt', 'Intro.txt', 'Mål.txt', 'Spelpauser.txt', 'Utvisning.txt'];
     
     const colorPalette = [
-      '#FFDDC1', '#FFABAB', '#FFC3A0', '#FF677D', '#D4A5A5',
-      '#392F5A', '#31A2AC', '#61C0BF', '#6B4226', '#D9BF77'
+      '#D1E8E2', '#B6A9D9', '#D1CFE2', '#9BB7D4', '#BCC9E2',  // Ljusare blå, lila och grå nyanser
+      '#D6D6D6', '#B0D0D3', '#A7A3E7', '#A3D1EA', '#D1C8D0'
     ];
 
     async function authenticateSpotify() {
@@ -78,6 +86,7 @@
         accessToken = token;
         updateStatus("Inloggning lyckades!");
       }
+      loadSongsFromFolder();
     };
 
     async function loadSongsFromFolder() {
@@ -107,8 +116,12 @@
 
     async function createSection(sectionName, lines, sectionColor) {
       const section = document.createElement('section');
+      section.classList.add('collapsed');
       const header = document.createElement('h2');
       header.textContent = sectionName;
+      header.onclick = function() {
+        section.classList.toggle('collapsed');
+      };
 
       const content = document.createElement('div');
       content.classList.add('song-list');
@@ -125,7 +138,7 @@
         };
 
         // Sätt bakgrundsfärg för knappen baserat på sektionens färg
-        button.style.backgroundColor = lightenColor(sectionColor, 0.5);
+        button.style.backgroundColor = lightenColor(sectionColor, 0.3);
 
         content.appendChild(button);
       }
@@ -209,9 +222,6 @@
       const statusElement = document.getElementById('status');
       statusElement.textContent = message;
     }
-
-    // Ladda filerna när sidan är klar
-    loadSongsFromFolder();
   </script>
 </body>
 </html>
