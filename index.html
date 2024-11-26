@@ -127,7 +127,7 @@
       }
     }
 
-    // Ladda in låtar från filen songs.txt
+    // Ladda in låtar från filen songs.txt och hämta deras titlar
     async function loadSongs() {
       try {
         const response = await fetch("songs.txt");
@@ -141,20 +141,47 @@
         const songListElement = document.getElementById("songList");
         songListElement.innerHTML = ""; // Rensa listan
 
-        lines.forEach((line, index) => {
+        for (const line of lines) {
           const [uri, startTime] = line.split(";");
+          const trackId = uri.split(":")[2];
+
+          // Hämta låttitel från Spotify
+          const trackInfo = await fetchTrackInfo(trackId);
+
           const listItem = document.createElement("li");
           listItem.innerHTML = `
-            <span>Låt ${index + 1}: ${uri}</span>
+            <span>Låt: ${trackInfo ? trackInfo.name : uri}</span>
             <button onclick="playSpotifyTrack('${uri}', ${parseInt(startTime)})">Spela från ${startTime / 1000} sekunder</button>
           `;
           songListElement.appendChild(listItem);
-        });
+        }
 
         updateStatus("Låtlista laddad!");
       } catch (error) {
         updateStatus("Fel vid inläsning av låtlista.");
         console.error("Laddningsfel:", error);
+      }
+    }
+
+    // Hämta information om en låt från Spotify
+    async function fetchTrackInfo(trackId) {
+      try {
+        const response = await fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+          },
+        });
+
+        if (response.ok) {
+          return await response.json();
+        } else {
+          const error = await response.json();
+          console.error(`Fel vid hämtning av låtinfo: ${error.error.message}`);
+          return null;
+        }
+      } catch (error) {
+        console.error("Nätverksfel vid hämtning av låtinfo:", error);
+        return null;
       }
     }
   </script>
