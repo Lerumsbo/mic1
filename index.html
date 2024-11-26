@@ -47,6 +47,7 @@
     const SCOPES = "user-modify-playback-state user-read-playback-state";
 
     let accessToken = "";
+    let isPlaying = false; // Variabel för att hålla reda på uppspelningsstatus
 
     // Funktion för att uppdatera status på sidan
     function updateStatus(message) {
@@ -96,6 +97,7 @@
       });
 
       if (response.status === 204) {
+        isPlaying = true; // Uppspelning startad
         updateStatus("Låten spelas från angiven tid!");
       } else {
         const error = await response.json();
@@ -119,6 +121,7 @@
       });
 
       if (response.status === 204) {
+        isPlaying = false; // Uppspelning stoppad
         updateStatus("Uppspelning stoppad!");
       } else {
         const error = await response.json();
@@ -184,6 +187,22 @@
         return null;
       }
     }
+
+    // Hantera mellanslagstangent (start/pause) för uppspelning
+    window.addEventListener("keydown", function(event) {
+      if (event.code === "Space") {
+        if (isPlaying) {
+          stopPlayback(); // Om låten spelas, stoppa uppspelningen
+        } else {
+          const firstSongButton = document.querySelector("button");
+          if (firstSongButton) {
+            // Spela den första låten på listan om inget är spelande
+            firstSongButton.click();
+          }
+        }
+        event.preventDefault(); // Förhindra att mellanslag används för att scrolla
+      }
+    });
   </script>
 </body>
 </html>
