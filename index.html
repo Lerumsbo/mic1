@@ -10,60 +10,80 @@
       line-height: 1.6;
       padding: 20px;
     }
-    .song-list {
-      list-style-type: none;
-      padding: 0;
+
+    h1, p {
+      text-align: center;
     }
-    .song-list button {
-      margin: 10px;
+
+    button {
       padding: 10px;
+      font-size: 16px;
       cursor: pointer;
+      border-radius: 5px;
       border: none;
       color: white;
-      font-size: 16px;
-      border-radius: 5px;
-      display: inline-block;
-      text-align: center;
-      width: 160px;
       transition: background-color 0.3s ease;
     }
+
     section {
       margin-bottom: 30px;
       padding: 10px;
       border-radius: 8px;
       background-color: #f4f4f4;
     }
-    section.collapsed .song-list {
-      display: none;
-    }
-    h2 {
+
+    section h2 {
       margin-top: 0;
       font-size: 20px;
       cursor: pointer;
-      color: #333;
-      background-color: #f4f4f4; /* Very light gray for section headers */
-      padding: 5px;
+      padding: 10px;
+      background-color: #f4f4f4;
       border-radius: 5px;
+      text-align: left;
     }
+
+    .song-list {
+      list-style-type: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .song-list button {
+      margin: 10px;
+      width: 160px;
+      height: 50px;
+      text-align: center;
+    }
+
     #status {
       font-size: 18px;
       font-weight: bold;
-      margin-top: 20px;
+      margin: 20px 0;
+      text-align: center;
     }
 
-    /* Custom styles for the login and stop buttons */
-    button#login-btn, button#stop-btn {
+    /* Custom styles for login and stop buttons */
+    #login-btn, #stop-btn {
       padding: 12px 20px;
       font-size: 18px;
-      cursor: pointer;
-      border-radius: 5px;
-      border: none;
-      color: white;
-      background-color: #3498db;
-      transition: background-color 0.3s ease;
+      margin: 5px;
     }
-    button#login-btn:hover, button#stop-btn:hover {
+
+    #login-btn {
+      background-color: #3498db;
+    }
+
+    #stop-btn {
+      background-color: #e74c3c;
+    }
+
+    #login-btn:hover {
       background-color: #2980b9;
+    }
+
+    #stop-btn:hover {
+      background-color: #c0392b;
     }
   </style>
 </head>
@@ -81,12 +101,8 @@
     const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
     const REDIRECT_URI = "https://lerumsbo.github.io/mic1/index.html";
     const SCOPES = "user-modify-playback-state user-read-playback-state";
-
+    const sectionColors = ['#ADD8E6', '#D8BFD8', '#D3D3D3', '#E6E6FA', '#B0E0E6']; // Light color palette for buttons
     let accessToken = "";
-
-    const sectionColors = [
-      '#ADD8E6', '#D8BFD8', '#D3D3D3', '#E6E6FA', '#B0E0E6'  // Light colors for button backgrounds
-    ];
 
     const filenames = ['Warmup.txt', 'Intro.txt', 'Mål.txt', 'Spelpauser.txt', 'Utvisning.txt'];
 
@@ -125,7 +141,7 @@
 
           const text = await response.text();
           const lines = text.split("\n").filter(line => line.trim() !== "");
-          const sectionName = filename.split('.')[0]; // Filnamn utan extension som sektionens namn
+          const sectionName = filename.split('.')[0];
           const sectionElement = await createSection(sectionName, lines, sectionColors[index]);
           document.getElementById('sections').appendChild(sectionElement);
         }
@@ -135,31 +151,32 @@
       }
     }
 
-    async function createSection(sectionName, lines, sectionColor) {
+    async function createSection(sectionName, lines, buttonColor) {
       const section = document.createElement('section');
       section.classList.add('collapsed');
-      section.style.backgroundColor = '#f4f4f4';  // Very light gray background for section
 
       const header = document.createElement('h2');
       header.textContent = sectionName;
-      header.onclick = function() {
-        section.classList.toggle('collapsed');
+      header.onclick = function () {
+        const content = section.querySelector('.song-list');
+        content.style.display = content.style.display === "none" ? "flex" : "none";
       };
 
       const content = document.createElement('div');
       content.classList.add('song-list');
+      content.style.display = "none";
 
-      // Skapa knappar för varje rad i filen
       for (const line of lines) {
         const [uri, startTime] = line.split(';');
         const button = document.createElement('button');
-        
-        let trackMetadata;
+        button.style.backgroundColor = buttonColor;
+
         if (uri.startsWith('spotify:track:')) {
-          trackMetadata = await getTrackMetadata(uri);
+          const trackMetadata = await getTrackMetadata(uri);
           button.textContent = `${trackMetadata.name} (${trackMetadata.artists.map(artist => artist.name).join(", ")}) +${(startTime / 1000).toFixed(1)}s`;
         } else if (uri.startsWith('spotify:playlist:')) {
-          button.textContent = `Playlist: ${uri} +${(startTime / 1000).toFixed(1)}s`;
+          const playlistMetadata = await getPlaylistMetadata(uri);
+          button.textContent = `${playlistMetadata.name} +${(startTime / 1000).toFixed(1)}s`;
         }
 
         button.onclick = function () {
@@ -170,25 +187,12 @@
           }
         };
 
-        // Assign background color from the section color
-        const buttonColor = lightenColor(sectionColor, 0.4); // Lighten the section color for button background
-        button.style.backgroundColor = buttonColor;
-
         content.appendChild(button);
       }
 
       section.appendChild(header);
       section.appendChild(content);
-
       return section;
-    }
-
-    function lightenColor(color, percent) {
-      const num = parseInt(color.slice(1), 16);
-      const r = Math.min((num >> 16) + percent * 255, 255);
-      const g = Math.min((num >> 8 & 0x00FF) + percent * 255, 255);
-      const b = Math.min((num & 0x0000FF) + percent * 255, 255);
-      return `#${(1 << 24) + (r << 16) + (g << 8) + b}`.toString(16).slice(1);
     }
 
     async function getTrackMetadata(uri) {
@@ -196,72 +200,50 @@
         method: "GET",
         headers: {
           "Authorization": `Bearer ${accessToken}`,
-        }
+        },
       });
+      return response.json();
+    }
 
-      const data = await response.json();
-      return data;
+    async function getPlaylistMetadata(uri) {
+      const response = await fetch(`https://api.spotify.com/v1/playlists/${uri.split(":")[2]}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+        },
+      });
+      return response.json();
     }
 
     async function playSpotifyTrack(uri, startTimeMs) {
-      if (!accessToken) {
-        updateStatus("Du måste logga in först!");
-        return;
-      }
-
       const response = await fetch("https://api.spotify.com/v1/me/player/play", {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          uris: [uri],
-          position_ms: startTimeMs,
-        }),
+        body: JSON.stringify({ uris: [uri], position_ms: startTimeMs }),
       });
 
-      if (response.status === 204) {
-        updateStatus("Låten spelas från angiven tid!");
-      } else {
-        const error = await response.json();
-        updateStatus(`Kunde inte spela upp låten: ${error.error.message}`);
-        console.error("API-fel:", error);
-      }
+      if (response.status === 204) updateStatus("Låten spelas från angiven tid!");
+      else updateStatus("Kunde inte spela upp låten.");
     }
 
     async function playSpotifyPlaylist(uri) {
-      if (!accessToken) {
-        updateStatus("Du måste logga in först!");
-        return;
-      }
-
       const response = await fetch("https://api.spotify.com/v1/me/player/play", {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          uris: [uri],
-        }),
+        body: JSON.stringify({ context_uri: uri }),
       });
 
-      if (response.status === 204) {
-        updateStatus(`Playlisten ${uri} spelas!`);
-      } else {
-        const error = await response.json();
-        updateStatus(`Kunde inte spela upp playlisten: ${error.error.message}`);
-        console.error("API-fel:", error);
-      }
+      if (response.status === 204) updateStatus("Playlisten spelas!");
+      else updateStatus("Kunde inte spela upp playlisten.");
     }
 
     async function stopPlayback() {
-      if (!accessToken) {
-        updateStatus("Du måste logga in först!");
-        return;
-      }
-
       const response = await fetch("https://api.spotify.com/v1/me/player/pause", {
         method: "PUT",
         headers: {
@@ -269,13 +251,8 @@
         },
       });
 
-      if (response.status === 204) {
-        updateStatus("Uppspelning stoppad!");
-      } else {
-        const error = await response.json();
-        updateStatus(`Kunde inte stoppa uppspelningen: ${error.error.message}`);
-        console.error("API-fel:", error);
-      }
+      if (response.status === 204) updateStatus("Uppspelning stoppad!");
+      else updateStatus("Kunde inte stoppa uppspelningen.");
     }
 
     function updateStatus(message) {
