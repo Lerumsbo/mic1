@@ -157,8 +157,8 @@
           playSpotifyTrack(uri, parseInt(startTime));
         };
 
-        // Apply distinct lightened color for each button
-        const buttonColor = lightenColor(sectionColor, 0.3); // Lighten section color for button background
+        // Lighten section color for button background
+        const buttonColor = lightenColor(sectionColor, 0.4); // Lighten section color for button background
         button.style.backgroundColor = buttonColor;
 
         content.appendChild(button);
