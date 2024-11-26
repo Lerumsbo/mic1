@@ -29,6 +29,8 @@
     }
     section {
       margin-bottom: 30px;
+      padding: 10px;
+      border-radius: 8px;
     }
     section.collapsed .song-list {
       display: none;
@@ -45,7 +47,7 @@
       margin-top: 20px;
     }
 
-    /* Första stilförändringarna */
+    /* Custom styles for the login and stop buttons */
     button#login-btn, button#stop-btn {
       padding: 12px 20px;
       font-size: 18px;
@@ -80,9 +82,8 @@
 
     const filenames = ['Warmup.txt', 'Intro.txt', 'Mål.txt', 'Spelpauser.txt', 'Utvisning.txt'];
     
-    const colorPalette = [
-      '#D1E8E2', '#B6A9D9', '#D1CFE2', '#9BB7D4', '#BCC9E2',  // Ljusare blå, lila och grå nyanser
-      '#D6D6D6', '#B0D0D3', '#A7A3E7', '#A3D1EA', '#D1C8D0'
+    const sectionColors = [
+      '#ADD8E6', '#D8BFD8', '#D3D3D3', '#E6E6FA', '#B0E0E6'  // Ljusblått, ljuslila och ljusgrått
     ];
 
     async function authenticateSpotify() {
@@ -121,7 +122,7 @@
           const text = await response.text();
           const lines = text.split("\n").filter(line => line.trim() !== "");
           const sectionName = filename.split('.')[0]; // Filnamn utan extension som sektionens namn
-          const sectionElement = await createSection(sectionName, lines, colorPalette[index]);
+          const sectionElement = await createSection(sectionName, lines, sectionColors[index]);
           document.getElementById('sections').appendChild(sectionElement);
         }
       } catch (error) {
@@ -133,6 +134,9 @@
     async function createSection(sectionName, lines, sectionColor) {
       const section = document.createElement('section');
       section.classList.add('collapsed');
+      section.style.backgroundColor = sectionColor;
+      section.style.border = `1px solid ${darkenColor(sectionColor, 0.2)}`;
+
       const header = document.createElement('h2');
       header.textContent = sectionName;
       header.onclick = function() {
@@ -154,7 +158,7 @@
         };
 
         // Sätt bakgrundsfärg för knappen baserat på sektionens färg
-        button.style.backgroundColor = lightenColor(sectionColor, 0.5);
+        button.style.backgroundColor = lightenColor(sectionColor, 0.6);
 
         content.appendChild(button);
       }
@@ -167,10 +171,18 @@
 
     function lightenColor(color, percent) {
       const num = parseInt(color.slice(1), 16);
-      const r = (num >> 16) + percent * 255;
-      const g = (num >> 8 & 0x00FF) + percent * 255;
-      const b = (num & 0x0000FF) + percent * 255;
-      return `#${(1 << 24) + (Math.min(r, 255) << 16) + (Math.min(g, 255) << 8) + Math.min(b, 255)}`.slice(1);
+      const r = Math.min((num >> 16) + percent * 255, 255);
+      const g = Math.min((num >> 8 & 0x00FF) + percent * 255, 255);
+      const b = Math.min((num & 0x0000FF) + percent * 255, 255);
+      return `#${(1 << 24) + (r << 16) + (g << 8) + b}`.toString(16).slice(1);
+    }
+
+    function darkenColor(color, percent) {
+      const num = parseInt(color.slice(1), 16);
+      const r = Math.max((num >> 16) - percent * 255, 0);
+      const g = Math.max((num >> 8 & 0x00FF) - percent * 255, 0);
+      const b = Math.max((num & 0x0000FF) - percent * 255, 0);
+      return `#${(1 << 24) + (r << 16) + (g << 8) + b}`.toString(16).slice(1);
     }
 
     async function getTrackMetadata(uri) {
@@ -235,8 +247,8 @@
     }
 
     function updateStatus(message) {
-      const statusElement = document.getElementById('status');
-      statusElement.textContent = message;
+      const statusDiv = document.getElementById("status");
+      statusDiv.textContent = message;
     }
   </script>
 </body>
