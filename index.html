@@ -13,18 +13,18 @@
     .song-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px; /* Mellanrum mellan knappar */
+      gap: 10px;
       padding: 0;
     }
     .song-list button {
-      flex: 1 0 18%; /* Gör att varje knapp tar 18% av bredden, max 5 knappar per rad */
+      flex: 1 0 18%;
       padding: 20px;
       font-size: 14px;
       text-align: center;
       cursor: pointer;
       border: 1px solid #ddd;
       border-radius: 5px;
-      background-color: #c1edff;
+      background-color: #9ff4ff;
       transition: background-color 0.3s;
     }
     .song-list button:hover {
@@ -33,6 +33,21 @@
     .song-list button span {
       display: block;
       margin-bottom: 5px;
+    }
+    .section {
+      margin-top: 20px;
+    }
+    .section-header {
+      cursor: pointer;
+      background-color: #f0f0f0;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      margin-bottom: 5px;
+    }
+    .section-content {
+      display: none;
+      padding-left: 20px;
     }
     #status {
       margin-top: 20px;
@@ -49,9 +64,9 @@
   <button onclick="authenticateSpotify()">Logga in med Spotify</button>
   <button onclick="stopPlayback()">Stoppa uppspelning</button>
 
-  <div class="song-list" id="songList"></div>
-
   <div id="status">Status: Väntar på inloggning...</div>
+
+  <div id="sections"></div>
 
   <script>
     const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
@@ -59,14 +74,14 @@
     const SCOPES = "user-modify-playback-state user-read-playback-state";
 
     let accessToken = "";
-    let isPlaying = false; // Variabel för att hålla reda på uppspelningsstatus
+    let isPlaying = false;
 
-    // Funktion för att uppdatera status på sidan
+    // Uppdatera status på sidan
     function updateStatus(message) {
       document.getElementById("status").textContent = `Status: ${message}`;
     }
 
-    // Öppna autentiseringsfönster för Spotify
+    // Hantera autentisering med Spotify
     function authenticateSpotify() {
       const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
       window.location.href = authUrl;
@@ -85,7 +100,7 @@
       if (token) {
         accessToken = token;
         updateStatus("Inloggning lyckades!");
-        await loadSongs();
+        await loadSongs(['goal.txt', 'playlist.txt']); // Ladda flera filer här
       }
     };
 
@@ -109,7 +124,7 @@
       });
 
       if (response.status === 204) {
-        isPlaying = true; // Uppspelning startad
+        isPlaying = true;
         updateStatus("Låten spelas från angiven tid!");
       } else {
         const error = await response.json();
@@ -133,7 +148,7 @@
       });
 
       if (response.status === 204) {
-        isPlaying = false; // Uppspelning stoppad
+        isPlaying = false;
         updateStatus("Uppspelning stoppad!");
       } else {
         const error = await response.json();
@@ -142,65 +157,68 @@
       }
     }
 
-    // Ladda in låtar från filen songs.txt och hämta deras titlar
-    async function loadSongs() {
-      try {
-        const response = await fetch("songs.txt");
-        if (!response.ok) {
-          updateStatus("Kunde inte ladda låtlista.");
-          return;
+    // Ladda in låtar från flera filer
+    async function loadSongs(filenames) {
+      for (const filename of filenames) {
+        try {
+          const response = await fetch(filename);
+          if (!response.ok) {
+            updateStatus(`Kunde inte ladda ${filename}`);
+            continue;
+          }
+
+          const text = await response.text();
+          const lines = text.split("\n").filter(line => line.trim() !== "");
+          const sectionName = filename.split('.')[0]; // Filnamn utan extension som sektionens namn
+          const sectionElement = createSection(sectionName, lines);
+          document.getElementById('sections').appendChild(sectionElement);
+        } catch (error) {
+          updateStatus(`Fel vid inläsning av ${filename}`);
+          console.error("Laddningsfel:", error);
         }
-
-        const text = await response.text();
-        const lines = text.split("\n").filter(line => line.trim() !== "");
-        const songListElement = document.getElementById("songList");
-        songListElement.innerHTML = ""; // Rensa listan
-
-        for (const line of lines) {
-          const [uri, startTime] = line.split(";");
-          const trackId = uri.split(":")[2];
-
-          // Hämta låttitel från Spotify
-          const trackInfo = await fetchTrackInfo(trackId);
-
-          const listItem = document.createElement("button");
-          listItem.innerHTML = `
-            <span>${trackInfo ? trackInfo.name : uri}</span>
-            (+${startTime / 1000}s)
-          `;
-          listItem.onclick = function() {
-            playSpotifyTrack(uri, parseInt(startTime));
-          };
-          songListElement.appendChild(listItem);
-        }
-
-        updateStatus("Låtlista laddad!");
-      } catch (error) {
-        updateStatus("Fel vid inläsning av låtlista.");
-        console.error("Laddningsfel:", error);
       }
     }
 
-    // Hämta information om en låt från Spotify
-    async function fetchTrackInfo(trackId) {
-      try {
-        const response = await fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
-          headers: {
-            "Authorization": `Bearer ${accessToken}`,
-          },
-        });
+    // Skapa sektion för varje låtlista
+    function createSection(sectionName, songs) {
+      const section = document.createElement("div");
+      section.classList.add("section");
 
-        if (response.ok) {
-          return await response.json();
-        } else {
-          const error = await response.json();
-          console.error(`Fel vid hämtning av låtinfo: ${error.error.message}`);
-          return null;
-        }
-      } catch (error) {
-        console.error("Nätverksfel vid hämtning av låtinfo:", error);
-        return null;
-      }
+      const header = document.createElement("div");
+      header.classList.add("section-header");
+      header.textContent = sectionName;
+      header.onclick = function () {
+        const content = section.querySelector(".section-content");
+        content.style.display = (content.style.display === "block" ? "none" : "block");
+      };
+
+      const content = document.createElement("div");
+      content.classList.add("section-content");
+
+      const songListElement = document.createElement("div");
+      songListElement.classList.add("song-list");
+
+      songs.forEach(song => {
+        const [uri, startTime] = song.split(";");
+        const trackId = uri.split(":")[2];
+
+        const listItem = document.createElement("button");
+        listItem.innerHTML = `
+          <span>Spela ${uri}</span>
+          (+${startTime / 1000}s)
+        `;
+        listItem.onclick = function () {
+          playSpotifyTrack(uri, parseInt(startTime));
+        };
+
+        songListElement.appendChild(listItem);
+      });
+
+      content.appendChild(songListElement);
+      section.appendChild(header);
+      section.appendChild(content);
+
+      return section;
     }
   </script>
 </body>
