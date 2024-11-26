@@ -25,6 +25,7 @@
       display: inline-block;
       text-align: center;
       width: 160px;
+      transition: background-color 0.3s ease;
     }
     section {
       margin-bottom: 30px;
@@ -43,14 +44,29 @@
       font-weight: bold;
       margin-top: 20px;
     }
+
+    /* Första stilförändringarna */
+    button#login-btn, button#stop-btn {
+      padding: 12px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 5px;
+      border: none;
+      color: white;
+      background-color: #3498db;
+      transition: background-color 0.3s ease;
+    }
+    button#login-btn:hover, button#stop-btn:hover {
+      background-color: #2980b9;
+    }
   </style>
 </head>
 <body>
   <h1>Spotify Playlist</h1>
   <p>Klicka på en låt för att spela upp från en angiven starttid. Du måste logga in först.</p>
   
-  <button onclick="stopPlayback()">Stoppa uppspelning</button>
-  <button onclick="authenticateSpotify()">Logga in med Spotify</button>
+  <button id="stop-btn" onclick="stopPlayback()">Stoppa uppspelning</button>
+  <button id="login-btn" onclick="authenticateSpotify()">Logga in med Spotify</button>
   
   <div id="status"></div>
   <div id="sections"></div>
@@ -224,4 +240,4 @@
     }
   </script>
 </body>
-</html>
+</
