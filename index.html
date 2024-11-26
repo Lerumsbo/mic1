@@ -175,16 +175,23 @@
       }
     }
 
-    // Ladda låtar från alla .txt-filer i /tracks-mappen
+
+// Ladda låtar från alla .txt-filer i /mic1/tracks-mappen
 async function loadSongsFromFolder() {
   try {
-    // Här definieras folderPath till GitHub Pages URL som pekar på mappen /tracks i ditt repo
-    const folderPath = '/mic1/tracks';
+    // Uppdaterad folderPath som inkluderar /mic1
+    const folderPath = '/mic1/tracks'; 
 
-    // Lista alla filer i mappen /tracks (detta kan behöva vara en manuell lista för GitHub Pages)
+    // Lista alla filer i mappen /tracks (detta måste vara en manuell lista i GitHub Pages)
     const filenames = ['Warmup.txt', 'Intro.txt', 'Mål.txt', 'Spelpauser.txt', 'Utvisning.txt']; // Lägg till de faktiska filnamnen här
     
-    for (const filename of filenames) {
+    // Färgpalett för sektionerna
+    const colorPalette = [
+      '#FFDDC1', '#FFABAB', '#FFC3A0', '#FF677D', '#D4A5A5',
+      '#392F5A', '#31A2AC', '#61C0BF', '#6B4226', '#D9BF77'
+    ];
+
+    for (const [index, filename] of filenames.entries()) {
       const fileUrl = `${folderPath}/${filename}`;  // Bygg fullständig URL till filen
       const response = await fetch(fileUrl);
 
@@ -196,7 +203,7 @@ async function loadSongsFromFolder() {
       const text = await response.text();
       const lines = text.split("\n").filter(line => line.trim() !== "");
       const sectionName = filename.split('.')[0]; // Filnamn utan extension som sektionens namn
-      const sectionElement = await createSection(sectionName, lines);
+      const sectionElement = await createSection(sectionName, lines, colorPalette[index]);
       document.getElementById('sections').appendChild(sectionElement);
     }
   } catch (error) {
@@ -206,52 +213,39 @@ async function loadSongsFromFolder() {
 }
 
 
-    // Skapa sektion för varje låtlista
-    async function createSection(sectionName, songs) {
-      const section = document.createElement("div");
-      section.classList.add("section");
+// Skapa sektion för varje fil
+async function createSection(sectionName, lines, sectionColor) {
+  const section = document.createElement('section');
+  const header = document.createElement('h2');
+  header.textContent = sectionName;
 
-      const header = document.createElement("div");
-      header.classList.add("section-header");
-      header.textContent = sectionName;
-      header.onclick = function () {
-        const content = section.querySelector(".section-content");
-        content.style.display = (content.style.display === "block" ? "none" : "block");
-      };
+  const content = document.createElement('div');
+  content.classList.add('song-list');
 
-      const content = document.createElement("div");
-      content.classList.add("section-content");
+  // Skapa knappar för varje rad i filen
+  for (const line of lines) {
+    const [uri, startTime] = line.split(';');
+    const button = document.createElement('button');
+    
+    const trackMetadata = await getTrackMetadata(uri);
+    button.textContent = `${trackMetadata.name} (${trackMetadata.artists.map(artist => artist.name).join(", ")}) +${(startTime / 1000).toFixed(1)}s`;
+    button.onclick = function () {
+      playSpotifyTrack(uri, parseInt(startTime));
+    };
 
-      const songListElement = document.createElement("div");
-      songListElement.classList.add("song-list");
+    // Sätt bakgrundsfärg för knappen baserat på sektionens färg
+    button.style.backgroundColor = sectionColor;
 
-      // Skapa en bakgrundsfärg för sektionen (ljusare nyans av en färg)
-      const colors = ['#FFC107', '#4CAF50', '#2196F3', '#FF5722', '#9C27B0'];
-      section.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    // Lägg till knappen i sektionen
+    content.appendChild(button);
+  }
 
-      // Hämta metadata för varje låt
-      for (let song of songs) {
-        const [uri, startTime] = song.split(";");
-        const trackId = uri.split(":")[2];
+  // Lägg till sektionen i HTML-dokumentet
+  section.appendChild(header);
+  section.appendChild(content);
 
-        // Hämta låtens metadata från Spotify API
-        const trackMetadata = await getTrackMetadata(uri);
-
-        const listItem = document.createElement("button");
-        listItem.textContent = `${trackMetadata.name} (${trackMetadata.artists.map(artist => artist.name).join(", ")}) +${(startTime / 1000).toFixed(1)}s`;
-        listItem.onclick = function () {
-          playSpotifyTrack(uri, parseInt(startTime));
-        };
-
-        songListElement.appendChild(listItem);
-      }
-
-      content.appendChild(songListElement);
-      section.appendChild(header);
-      section.appendChild(content);
-
-      return section;
-    }
+  return section;
+}
 
     // Hämta metadata för en låt
     async function getTrackMetadata(uri) {
