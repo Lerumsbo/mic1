@@ -10,91 +10,229 @@
       line-height: 1.6;
       padding: 20px;
     }
-    .song-list {
-      list-style-type: none;
-      padding: 0;
+
+    h1, p {
+      text-align: center;
     }
-    .song-list li {
-      margin: 10px 0;
-    }
+
     button {
-      margin-left: 10px;
-      padding: 5px 10px;
+      padding: 10px;
+      font-size: 16px;
       cursor: pointer;
+      border-radius: 5px;
+      border: none;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    #status {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    section {
+      margin-bottom: 30px;
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #f4f4f4;
+    }
+
+    .input-section {
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    .input-section label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .input-section input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    #dialog {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    #dialog label {
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    #dialog select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    #dialog button {
+      margin-right: 10px;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
     }
   </style>
 </head>
 <body>
   <h1>Spotify Playlist</h1>
-  <p>Klicka på en låt för att spela upp från en angiven starttid. Du måste logga in först.</p>
+  <p>Klicka på en låt eller playlist för att spela upp från en angiven starttid. Du måste logga in först.</p>
   
-  <button onclick="authenticateSpotify()">Logga in med Spotify</button>
-  <ul class="song-list">
-    <li>
-      <span>Låt 1: "Song Name"</span>
-      <button onclick="playSpotifyTrack('spotify:track:2bPGTMB5sFfFYQ2YvSmup0', 7900)">Spela från 7,9 sekunder</button>
-    </li>
-    <li>
-      <span>Låt 2: "Another Song"</span>
-      <button onclick="playSpotifyTrack('spotify:track:1zHlj4dQ8ZAtrayhuDDmkY', 15000)">Spela från 15 sekunder</button>
-    </li>
-  </ul>
+  <button id="stop-btn" onclick="stopPlayback()">Stoppa uppspelning</button>
+  <button id="login-btn" onclick="authenticateSpotify()">Logga in med Spotify</button>
+  
+  <div id="status"></div>
+  <div id="sections"></div>
+
+  <!-- New Input Section -->
+  <section class="input-section">
+    <h2>Lägg till en ny låt</h2>
+    <label for="spotify-uri">Spotify URI:</label>
+    <input type="text" id="spotify-uri" placeholder="Skriv in Spotify URI här">
+
+    <label for="start-time">Starttid (i millisekunder):</label>
+    <input type="number" id="start-time" placeholder="Skriv in starttid i millisekunder">
+
+    <button onclick="playPauseEnteredURI()">Play/Pause</button>
+    <button onclick="openAddToFileDialog()">Lägg till i fil</button>
+  </section>
+
+  <!-- File Dialog -->
+  <div id="overlay"></div>
+  <div id="dialog">
+    <label for="filename">Välj fil:</label>
+    <select id="filename">
+      <!-- Options added dynamically -->
+    </select>
+    <button onclick="addURIToFile()">OK</button>
+    <button onclick="closeDialog()">Avbryt</button>
+  </div>
 
   <script>
     const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
-    const REDIRECT_URI = "http://localhost:8888/callback";
+    const REDIRECT_URI = "https://lerumsbo.github.io/mic1/index.html";
     const SCOPES = "user-modify-playback-state user-read-playback-state";
+    const filenames = ['Warmup.txt', 'Intro.txt', 'Mål.txt', 'Spelpauser.txt', 'Utvisning.txt'];
 
     let accessToken = "";
 
-    // Öppna autentiseringsfönster för Spotify
-    function authenticateSpotify() {
-      const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
-      window.location.href = authUrl;
-    }
-
-    // Hämta access token från URL:n
-    function getAccessTokenFromUrl() {
-      const hash = window.location.hash.substring(1);
-      const params = new URLSearchParams(hash);
-      return params.get("access_token");
-    }
-
-    // Spara access token vid inloggning
     window.onload = function () {
-      const token = getAccessTokenFromUrl();
+      const token = new URLSearchParams(window.location.hash.substring(1)).get("access_token");
       if (token) {
         accessToken = token;
-        alert("Inloggning lyckades!");
+        updateStatus("Inloggning lyckades!");
       }
+      populateFilenameOptions();
     };
 
-    // Spela en specifik låt från en viss starttid
-    async function playSpotifyTrack(uri, startTimeMs) {
-      if (!accessToken) {
-        alert("Du måste logga in först!");
+    function updateStatus(message) {
+      document.getElementById("status").textContent = message;
+    }
+
+    function playPauseEnteredURI() {
+      const uri = document.getElementById("spotify-uri").value.trim();
+      const startTime = parseInt(document.getElementById("start-time").value.trim(), 10) || 0;
+
+      if (!uri) {
+        updateStatus("Spotify URI krävs!");
         return;
       }
 
+      playSpotifyTrack(uri, startTime);
+    }
+
+    function openAddToFileDialog() {
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("dialog").style.display = "block";
+    }
+
+    function closeDialog() {
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("dialog").style.display = "none";
+    }
+
+    function populateFilenameOptions() {
+      const select = document.getElementById("filename");
+      filenames.forEach((file) => {
+        const option = document.createElement("option");
+        option.value = file;
+        option.textContent = file.split('.')[0];
+        select.appendChild(option);
+      });
+    }
+
+    async function addURIToFile() {
+      const uri = document.getElementById("spotify-uri").value.trim();
+      const startTime = parseInt(document.getElementById("start-time").value.trim(), 10) || 0;
+      const selectedFile = document.getElementById("filename").value;
+
+      if (!uri || !selectedFile) {
+        updateStatus("URI och fil krävs!");
+        return;
+      }
+
+      closeDialog();
+
+      try {
+        const response = await fetch(`/mic1/tracks/${selectedFile}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: `${uri};${startTime}\n`,
+        });
+
+        if (response.ok) {
+          updateStatus(`URI tillagd i filen ${selectedFile}!`);
+        } else {
+          updateStatus("Misslyckades med att lägga till URI.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        updateStatus("Ett fel inträffade vid sparandet.");
+      }
+    }
+
+    async function playSpotifyTrack(uri, startTimeMs) {
       const response = await fetch("https://api.spotify.com/v1/me/player/play", {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          uris: [uri],
-          position_ms: startTimeMs,
-        }),
+        body: JSON.stringify({ uris: [uri], position_ms: startTimeMs }),
       });
 
-      if (response.status === 204) {
-        alert("Låten spelas från angiven tid!");
-      } else {
-        const error = await response.json();
-        alert(`Kunde inte spela upp låten: ${error.error.message}`);
-        console.error("API-fel:", error);
-      }
+      if (response.status === 204) updateStatus("Spelas upp!");
+      else updateStatus("Kunde inte spela upp.");
     }
   </script>
 </body>
