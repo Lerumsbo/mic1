@@ -3,93 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spotify Playlist</title>
+  <title>Spotify Add Track</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       line-height: 1.6;
       padding: 20px;
+      background-color: #f7f7f7;
     }
 
     h1, p {
       text-align: center;
     }
 
-    button {
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .input-group input {
       padding: 10px;
       font-size: 16px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
       cursor: pointer;
-      border-radius: 5px;
       border: none;
+      border-radius: 5px;
+    }
+
+    button.play {
+      background-color: #4caf50;
       color: white;
-      transition: background-color 0.3s ease;
+    }
+
+    button.add {
+      background-color: #2196f3;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
     }
 
     #status {
-      font-size: 18px;
-      font-weight: bold;
-      margin: 20px 0;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555;
       text-align: center;
     }
 
-    section {
-      margin-bottom: 30px;
-      padding: 10px;
-      border-radius: 8px;
-      background-color: #f4f4f4;
-    }
-
-    .input-section {
-      margin: 20px 0;
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background-color: #f9f9f9;
-    }
-
-    .input-section label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-
-    .input-section input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-
-    #dialog {
+    #file-dialog {
       display: none;
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 1000;
-      background: white;
+      background-color: white;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
     }
 
-    #dialog label {
-      font-weight: bold;
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    #dialog select {
-      width: 100%;
+    #file-dialog select {
       padding: 10px;
       font-size: 16px;
-      margin-bottom: 20px;
     }
 
-    #dialog button {
-      margin-right: 10px;
+    #file-dialog button {
+      margin-top: 10px;
     }
 
     #overlay {
@@ -105,134 +107,144 @@
   </style>
 </head>
 <body>
-  <h1>Spotify Playlist</h1>
-  <p>Klicka på en låt eller playlist för att spela upp från en angiven starttid. Du måste logga in först.</p>
-  
-  <button id="stop-btn" onclick="stopPlayback()">Stoppa uppspelning</button>
-  <button id="login-btn" onclick="authenticateSpotify()">Logga in med Spotify</button>
-  
-  <div id="status"></div>
-  <div id="sections"></div>
+  <h1>Spotify Add Track</h1>
+  <p>Enter a Spotify URI and start time, then play or add it to a file.</p>
 
-  <!-- New Input Section -->
-  <section class="input-section">
-    <h2>Lägg till en ny låt</h2>
-    <label for="spotify-uri">Spotify URI:</label>
-    <input type="text" id="spotify-uri" placeholder="Skriv in Spotify URI här">
-
-    <label for="start-time">Starttid (i millisekunder):</label>
-    <input type="number" id="start-time" placeholder="Skriv in starttid i millisekunder">
-
-    <button onclick="playPauseEnteredURI()">Play/Pause</button>
-    <button onclick="openAddToFileDialog()">Lägg till i fil</button>
-  </section>
+  <div class="container">
+    <div class="input-group">
+      <label for="spotify-uri">Spotify URI:</label>
+      <input type="text" id="spotify-uri" placeholder="spotify:track:XXXXXX">
+    </div>
+    <div class="input-group">
+      <label for="start-time">Start Time (ms):</label>
+      <input type="number" id="start-time" placeholder="Enter start time in milliseconds">
+    </div>
+    <div class="buttons">
+      <button class="play" onclick="playPauseTrack()">Play/Pause</button>
+      <button class="add" onclick="openFileDialog()">Add to File</button>
+    </div>
+    <div id="status"></div>
+  </div>
 
   <!-- File Dialog -->
   <div id="overlay"></div>
-  <div id="dialog">
-    <label for="filename">Välj fil:</label>
-    <select id="filename">
-      <!-- Options added dynamically -->
+  <div id="file-dialog">
+    <h3>Select a file to add the track</h3>
+    <select id="file-select">
+      <option value="Warmup.txt">Warmup</option>
+      <option value="Intro.txt">Intro</option>
+      <option value="Mål.txt">Mål</option>
+      <option value="Spelpauser.txt">Spelpauser</option>
+      <option value="Utvisning.txt">Utvisning</option>
     </select>
-    <button onclick="addURIToFile()">OK</button>
-    <button onclick="closeDialog()">Avbryt</button>
+    <button onclick="saveToFile()">OK</button>
+    <button onclick="closeFileDialog()">Cancel</button>
   </div>
 
   <script>
     const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
-    const REDIRECT_URI = "https://lerumsbo.github.io/mic1/index.html";
+    const REDIRECT_URI = "https://lerumsbo.github.io/mic1/add-track.html";
     const SCOPES = "user-modify-playback-state user-read-playback-state";
-    const filenames = ['Warmup.txt', 'Intro.txt', 'Mål.txt', 'Spelpauser.txt', 'Utvisning.txt'];
 
     let accessToken = "";
 
+    // Authenticate with Spotify
+    function authenticateSpotify() {
+      const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
+      window.location.href = authUrl;
+    }
+
+    function getAccessTokenFromUrl() {
+      const hash = window.location.hash.substring(1);
+      const params = new URLSearchParams(hash);
+      return params.get("access_token");
+    }
+
     window.onload = function () {
-      const token = new URLSearchParams(window.location.hash.substring(1)).get("access_token");
+      const token = getAccessTokenFromUrl();
       if (token) {
         accessToken = token;
-        updateStatus("Inloggning lyckades!");
+        updateStatus("Logged in to Spotify!");
+      } else {
+        updateStatus("Please log in to Spotify.");
       }
-      populateFilenameOptions();
     };
 
     function updateStatus(message) {
       document.getElementById("status").textContent = message;
     }
 
-    function playPauseEnteredURI() {
+    async function playPauseTrack() {
       const uri = document.getElementById("spotify-uri").value.trim();
-      const startTime = parseInt(document.getElementById("start-time").value.trim(), 10) || 0;
+      const startTime = parseInt(document.getElementById("start-time").value, 10);
 
-      if (!uri) {
-        updateStatus("Spotify URI krävs!");
+      if (!uri || isNaN(startTime)) {
+        updateStatus("Please enter a valid URI and start time.");
         return;
       }
 
-      playSpotifyTrack(uri, startTime);
-    }
-
-    function openAddToFileDialog() {
-      document.getElementById("overlay").style.display = "block";
-      document.getElementById("dialog").style.display = "block";
-    }
-
-    function closeDialog() {
-      document.getElementById("overlay").style.display = "none";
-      document.getElementById("dialog").style.display = "none";
-    }
-
-    function populateFilenameOptions() {
-      const select = document.getElementById("filename");
-      filenames.forEach((file) => {
-        const option = document.createElement("option");
-        option.value = file;
-        option.textContent = file.split('.')[0];
-        select.appendChild(option);
-      });
-    }
-
-    async function addURIToFile() {
-      const uri = document.getElementById("spotify-uri").value.trim();
-      const startTime = parseInt(document.getElementById("start-time").value.trim(), 10) || 0;
-      const selectedFile = document.getElementById("filename").value;
-
-      if (!uri || !selectedFile) {
-        updateStatus("URI och fil krävs!");
+      if (!accessToken) {
+        updateStatus("You need to log in first.");
         return;
       }
 
-      closeDialog();
-
-      try {
-        const response = await fetch(`/mic1/tracks/${selectedFile}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: `${uri};${startTime}\n`,
-        });
-
-        if (response.ok) {
-          updateStatus(`URI tillagd i filen ${selectedFile}!`);
-        } else {
-          updateStatus("Misslyckades med att lägga till URI.");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        updateStatus("Ett fel inträffade vid sparandet.");
-      }
-    }
-
-    async function playSpotifyTrack(uri, startTimeMs) {
       const response = await fetch("https://api.spotify.com/v1/me/player/play", {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ uris: [uri], position_ms: startTimeMs }),
+        body: JSON.stringify({
+          uris: [uri],
+          position_ms: startTime,
+        }),
       });
 
-      if (response.status === 204) updateStatus("Spelas upp!");
-      else updateStatus("Kunde inte spela upp.");
+      if (response.status === 204) {
+        updateStatus("Playing/Pausing the track.");
+      } else {
+        const error = await response.json();
+        updateStatus(`Error: ${error.error.message}`);
+      }
+    }
+
+    function openFileDialog() {
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("file-dialog").style.display = "block";
+    }
+
+    function closeFileDialog() {
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("file-dialog").style.display = "none";
+    }
+
+    async function saveToFile() {
+      const fileName = document.getElementById("file-select").value;
+      const uri = document.getElementById("spotify-uri").value.trim();
+      const startTime = parseInt(document.getElementById("start-time").value, 10);
+
+      if (!uri || isNaN(startTime)) {
+        updateStatus("Please enter a valid URI and start time.");
+        closeFileDialog();
+        return;
+      }
+
+      try {
+        await fetch(`/mic1/tracks/${fileName}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ uri, startTime }),
+        });
+
+        updateStatus(`Added to ${fileName}.`);
+      } catch (error) {
+        updateStatus("Error saving to file.");
+        console.error(error);
+      }
+
+      closeFileDialog();
     }
   </script>
 </body>
