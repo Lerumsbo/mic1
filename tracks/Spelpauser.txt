@@ -1,12 +1,12 @@
 spotify:track:612fOj10d9HkwtVyvjh0eF;2500
 spotify:track:5vZ4IeUenK2cHub2d7yfWk;7500
-spotify:track:2xMS1khdU5FHX1KEiNTVdi;76000
+spotify:track:2xMS1khdU5FHX1KEiNTVdi;76500
 spotify:track:1yaISGEoawvX2l6cU7M13n;17000
 spotify:track:3dPQuX8Gs42Y7b454ybpMR;0
-spotify:track:21UjDoYP6WJrhIeWjie8Iv;29500
+spotify:track:21UjDoYP6WJrhIeWjie8Iv;29800
 spotify:track:3MrRksHupTVEQ7YbA0FsZK;53900
 spotify:track:5O6JuXxnhwG3W5YClY2mEb;46700
-spotify:track:4tl9dSWvuPhNrf9jiyqPE4;46000
+spotify:track:4tl9dSWvuPhNrf9jiyqPE4;45000
 spotify:track:57gyM43T0UpoEIv7Kpg25N;0
 spotify:playlist:5wXo0nQ6LhRk92V7IMLgmY;0
-spotify:track:2E6W2xMHWCF9ZMNKLalsCf;13000
+spotify:track:2E6W2xMHWCF9ZMNKLalsCf;13500
