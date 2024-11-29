@@ -1,41 +1,11 @@
 {
     "tracks": [
-      {
-        "spotifyURI": "spotify:track:1gkzmB8NwKDFgKvZDSG6qU",
-        "starttime": 63400,
-        "artist": "",
-        "title": ""
-      },
-      {
-        "spotifyURI": "spotify:track:5Xj9umTowUN098HtzgxSW9",
-        "starttime": 0,
-        "artist": "",
-        "title": ""
-      },
-      {
-        "spotifyURI": "spotify:track:3dPQuX8Gs42Y7b454ybpMR",
-        "starttime": 0,
-        "artist": "",
-        "title": ""
-      },
-      {
-        "spotifyURI": "spotify:track:21UjDoYP6WJrhIeWjie8Iv",
-        "starttime": 29500,
-        "artist": "",
-        "title": ""
-      },
-      {
-        "spotifyURI": "spotify:track:0picsemJCUPEpjkrhg7IGl",
-        "starttime": 123500,
-        "artist": "",
-        "title": ""
-      },
-      {
-        "spotifyURI": "spotify:track:08e3oeRV88CYNxDhwvH1lJ",
-        "starttime": 60500,
-        "artist": "",
-        "title": ""
-      }
+      { "spotifyURI": "spotify:track:1gkzmB8NwKDFgKvZDSG6qU", "starttime": 63400, "title": "En För Alla För En", "artist": "Tre Kronor" },
+      { "spotifyURI": "spotify:track:5Xj9umTowUN098HtzgxSW9", "starttime": 0, "title": "Düp Düp", "artist": "Partygang" },
+      { "spotifyURI": "spotify:track:3dPQuX8Gs42Y7b454ybpMR", "starttime": 0, "title": "Seven Nation Army", "artist": "The White Stripes" },
+      { "spotifyURI": "spotify:track:21UjDoYP6WJrhIeWjie8Iv", "starttime": 29500, "title": "Calabria - Firebeatz Remix", "artist": "Rune RK" },
+      { "spotifyURI": "spotify:track:0picsemJCUPEpjkrhg7IGl", "starttime": 123500, "title": "Mera mål", "artist": "Markoolio" },
+      { "spotifyURI": "spotify:track:08e3oeRV88CYNxDhwvH1lJ", "starttime": 60500, "title": "In med bollen", "artist": "Markoolio" }
     ]
   }
   

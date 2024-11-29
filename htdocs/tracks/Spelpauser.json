@@ -1,17 +1,16 @@
 {
     "tracks": [
-      { "spotifyURI": "spotify:track:612fOj10d9HkwtVyvjh0eF", "starttime": 34300, "title": "", "artist": "" },
-      { "spotifyURI": "spotify:track:5vZ4IeUenK2cHub2d7yfWk", "starttime": 7500, "title": "", "artist": "" },
-      { "spotifyURI": "spotify:track:2xMS1khdU5FHX1KEiNTVdi", "starttime": 76900, "title": "", "artist": "" },
-      { "spotifyURI": "spotify:track:1yaISGEoawvX2l6cU7M13n", "starttime": 17000, "title": "", "artist": "" },
-      { "spotifyURI": "spotify:track:3dPQuX8Gs42Y7b454ybpMR", "starttime": 0, "title": "", "artist": "" },
-      { "spotifyURI": "spotify:track:21UjDoYP6WJrhIeWjie8Iv", "starttime": 29800, "title": "", "artist": "" },
-      { "spotifyURI": "spotify:track:3MrRksHupTVEQ7YbA0FsZK", "starttime": 53800, "title": "", "artist": "" },
-      { "spotifyURI": "spotify:track:5O6JuXxnhwG3W5YClY2mEb", "starttime": 46700, "title": "", "artist": "" },
-      { "spotifyURI": "spotify:track:4tl9dSWvuPhNrf9jiyqPE4", "starttime": 46850, "title": "", "artist": "" },
-      { "spotifyURI": "spotify:track:57gyM43T0UpoEIv7Kpg25N", "starttime": 0, "title": "", "artist": "" },
-      { "spotifyURI": "spotify:track:2E6W2xMHWCF9ZMNKLalsCf", "starttime": 14100, "title": "", "artist": "" },
-      { "spotifyURI": "spotify:playlist:5wXo0nQ6LhRk92V7IMLgmY", "starttime": 0, "title": "", "artist": "" }
+      { "spotifyURI": "spotify:track:612fOj10d9HkwtVyvjh0eF", "starttime": 34300, "title": "Ra Ta Ta", "artist": "Mallorca Cowboys" },
+      { "spotifyURI": "spotify:track:5vZ4IeUenK2cHub2d7yfWk", "starttime": 7500, "title": "Radio", "artist": "Rammstein" },
+      { "spotifyURI": "spotify:track:2xMS1khdU5FHX1KEiNTVdi", "starttime": 76900, "title": "Tsunami", "artist": "DVBBS" },
+      { "spotifyURI": "spotify:track:1yaISGEoawvX2l6cU7M13n", "starttime": 17000, "title": "BOOM", "artist": "Tiësto" },
+      { "spotifyURI": "spotify:track:3dPQuX8Gs42Y7b454ybpMR", "starttime": 0, "title": "Seven Nation Army", "artist": "The White Stripes" },
+      { "spotifyURI": "spotify:track:21UjDoYP6WJrhIeWjie8Iv", "starttime": 29800, "title": "Calabria - Firebeatz Remix", "artist": "Rune RK" },
+      { "spotifyURI": "spotify:track:3MrRksHupTVEQ7YbA0FsZK", "starttime": 53800, "title": "The Final Countdown", "artist": "Europe" },
+      { "spotifyURI": "spotify:track:5O6JuXxnhwG3W5YClY2mEb", "starttime": 46700, "title": "He's Back (The Man Behind The Mask)", "artist": "Alice Cooper" },
+      { "spotifyURI": "spotify:track:4tl9dSWvuPhNrf9jiyqPE4", "starttime": 46850, "title": "Blade Theme - Original Edit", "artist": "Bryce" },
+      { "spotifyURI": "spotify:track:57gyM43T0UpoEIv7Kpg25N", "starttime": 0, "title": "Scatman - DJ Kadozer 2003 Radio Edit", "artist": "Scatman John" },
+      { "spotifyURI": "spotify:track:2E6W2xMHWCF9ZMNKLalsCf", "starttime": 14100, "title": "Bullet", "artist": "Infinite Mass" }
     ]
   }
   

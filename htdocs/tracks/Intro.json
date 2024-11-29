@@ -1,23 +1,8 @@
 {
     "tracks": [
-      {
-        "spotifyURI": "spotify:track:2bPGTMB5sFfFYQ2YvSmup0",
-        "starttime": 7900,
-        "artist": "",
-        "title": ""
-      },
-      {
-        "spotifyURI": "spotify:track:78UcxP3Xm0EOXneQUDsStA",
-        "starttime": 0,
-        "artist": "",
-        "title": ""
-      },
-      {
-        "spotifyURI": "spotify:track:0bVtevEgtDIeRjCJbK3Lmv",
-        "starttime": 0,
-        "artist": "",
-        "title": ""
-      }
+      { "spotifyURI": "spotify:track:2bPGTMB5sFfFYQ2YvSmup0", "starttime": 7900, "title": "Deutschland", "artist": "Rammstein" },
+      { "spotifyURI": "spotify:track:78UcxP3Xm0EOXneQUDsStA", "starttime": 0, "title": "Campione 2000 - Radio Version", "artist": "E-Type" },
+      { "spotifyURI": "spotify:track:0bVtevEgtDIeRjCJbK3Lmv", "starttime": 0, "title": "Welcome To The Jungle", "artist": "Guns N' Roses" }
     ]
   }
   
