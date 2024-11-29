@@ -1,3 +1,23 @@
-spotify:track:2bPGTMB5sFfFYQ2YvSmup0;7900
-spotify:track:78UcxP3Xm0EOXneQUDsStA;0
-spotify:track:0bVtevEgtDIeRjCJbK3Lmv;0
+{
+    "tracks": [
+      {
+        "spotifyURI": "spotify:track:2bPGTMB5sFfFYQ2YvSmup0",
+        "starttime": 7900,
+        "artist": "",
+        "title": ""
+      },
+      {
+        "spotifyURI": "spotify:track:78UcxP3Xm0EOXneQUDsStA",
+        "starttime": 0,
+        "artist": "",
+        "title": ""
+      },
+      {
+        "spotifyURI": "spotify:track:0bVtevEgtDIeRjCJbK3Lmv",
+        "starttime": 0,
+        "artist": "",
+        "title": ""
+      }
+    ]
+  }
+  
