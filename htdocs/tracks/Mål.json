@@ -1,6 +1,41 @@
-spotify:track:1gkzmB8NwKDFgKvZDSG6qU;63400
-spotify:track:5Xj9umTowUN098HtzgxSW9;0
-spotify:track:3dPQuX8Gs42Y7b454ybpMR;0
-spotify:track:21UjDoYP6WJrhIeWjie8Iv;29500
-spotify:track:0picsemJCUPEpjkrhg7IGl;123500
-spotify:track:08e3oeRV88CYNxDhwvH1lJ;60500
+{
+    "tracks": [
+      {
+        "spotifyURI": "spotify:track:1gkzmB8NwKDFgKvZDSG6qU",
+        "starttime": 63400,
+        "artist": "",
+        "title": ""
+      },
+      {
+        "spotifyURI": "spotify:track:5Xj9umTowUN098HtzgxSW9",
+        "starttime": 0,
+        "artist": "",
+        "title": ""
+      },
+      {
+        "spotifyURI": "spotify:track:3dPQuX8Gs42Y7b454ybpMR",
+        "starttime": 0,
+        "artist": "",
+        "title": ""
+      },
+      {
+        "spotifyURI": "spotify:track:21UjDoYP6WJrhIeWjie8Iv",
+        "starttime": 29500,
+        "artist": "",
+        "title": ""
+      },
+      {
+        "spotifyURI": "spotify:track:0picsemJCUPEpjkrhg7IGl",
+        "starttime": 123500,
+        "artist": "",
+        "title": ""
+      },
+      {
+        "spotifyURI": "spotify:track:08e3oeRV88CYNxDhwvH1lJ",
+        "starttime": 60500,
+        "artist": "",
+        "title": ""
+      }
+    ]
+  }
+  
