@@ -2,6 +2,7 @@ name: Deploy via git-ftp
 on: push
 jobs:
   deploy:
+    environment: Infinity
     name: Deploy
     runs-on: ubuntu-latest
     steps:
