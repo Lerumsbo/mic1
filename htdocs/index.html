@@ -49,18 +49,13 @@
       flex-wrap: wrap;
     }
 
-    .song-list button, .song-list a {
+    .song-list button {
       margin: 10px;
       width: 200px;
       height: 80px;
       text-align: center;
       line-height: 1.4;
-      text-decoration: none;
-      display: inline-block;
-      border-radius: 5px;
-      background-color: #87CEEB; /* Light blue default */
-      color: white;
-      text-align: center;
+      background-color: #87CEEB;
     }
 
     #status {
@@ -68,6 +63,28 @@
       font-weight: bold;
       margin: 20px 0;
       text-align: center;
+    }
+
+    #login-btn, #stop-btn {
+      padding: 12px 20px;
+      font-size: 18px;
+      margin: 5px;
+    }
+
+    #login-btn {
+      background-color: #3498db;
+    }
+
+    #stop-btn {
+      background-color: #e74c3c;
+    }
+
+    #login-btn:hover {
+      background-color: #2980b9;
+    }
+
+    #stop-btn:hover {
+      background-color: #c0392b;
     }
   </style>
 </head>
@@ -85,10 +102,10 @@
     const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
     const REDIRECT_URI = "http://floorballaudio.freesite.online/index.html";
     const SCOPES = "user-modify-playback-state user-read-playback-state";
-    const sectionColors = ['#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE']; // Slightly darker colors
+    const sectionColors = ['#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE'];
     let accessToken = "";
 
-    const filenames = ['Warmup.json', 'Intro.json', 'Mål.json', 'Spelpauser.json', 'Utvisning.json']; // JSON files
+    const filenames = ['Warmup.json', 'Intro.json', 'Mål.json', 'Spelpauser.json', 'Utvisning.json'];
 
     async function authenticateSpotify() {
       const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
@@ -108,63 +125,44 @@
         updateStatus("Inloggning lyckades!");
       }
       loadSongsFromFolder();
-      loadLocalTracks(); // Load local tracks
     };
 
     async function loadSongsFromFolder() {
-      try {
-        for (const [index, filename] of filenames.entries()) {
-          const fileUrl = `/tracks/${filename}`;
-          const response = await fetch(fileUrl);
+  try {
+    for (const [index, filename] of filenames.entries()) {
+      const fileUrl = `/tracks/${filename}`;
+      const response = await fetch(fileUrl);
 
-          if (!response.ok) {
-            console.error(`Kunde inte ladda filen: ${filename}`);
-            continue;
-          }
-
-          let json;
-          try {
-            json = await response.json();
-          } catch (error) {
-            console.error(`Ogiltig JSON i filen: ${filename}`, error);
-            continue;
-          }
-
-          if (!json || !json.tracks) {
-            console.error(`Inga spår hittades i filen: ${filename}`);
-            continue;
-          }
-
-          createSection(json, filename.split('.')[0], sectionColors[index]);
-        }
-      } catch (error) {
-        updateStatus("Fel vid inläsning av filer.");
-        console.error("Laddningsfel:", error);
+      if (!response.ok) {
+        console.error(`Kunde inte ladda filen: ${filename}`);
+        continue; // Hoppa över filen om den inte kan hämtas
       }
-    }
 
-    async function loadLocalTracks() {
+      let json;
       try {
-        const fileUrl = '/tracks/local.json';
-        const response = await fetch(fileUrl);
-
-        if (!response.ok) {
-          throw new Error(`Failed to load local tracks.`);
-        }
-
-        const json = await response.json();
-        if (json && json.tracks) {
-          createSection(json, "Local", "#FFD700"); // Gold color for local section
-        } else {
-          console.error("Inga lokala spår hittades i local.json");
-        }
+        json = await response.json(); // Försök att tolka JSON
       } catch (error) {
-        console.error("Fel vid inläsning av lokala spår:", error);
+        console.error(`Ogiltig JSON i filen: ${filename}`, error);
+        continue; // Hoppa över filen om JSON inte är giltig
       }
+
+      if (!json || !json.tracks) {
+        console.error(`Inga spår hittades i filen: ${filename}`);
+        continue; // Hoppa över om `tracks` saknas
+      }
+
+      createSection(json, filename.split('.')[0], sectionColors[index]);
     }
+  } catch (error) {
+    updateStatus("Fel vid inläsning av filer.");
+    console.error("Laddningsfel:", error);
+  }
+}
+
 
     function createSection(json, sectionName, color) {
       const sectionElement = document.createElement('section');
+
       const header = document.createElement('h2');
       header.textContent = sectionName;
       sectionElement.appendChild(header);
@@ -174,34 +172,19 @@
       content.style.display = "none";
 
       json.tracks.forEach(track => {
-        const { spotifyURI, starttime, artist, title, localFile } = track;
+        const { spotifyURI, starttime, artist, title } = track;
 
-        const button = localFile
-          ? document.createElement('a') // For local tracks
-          : document.createElement('button'); // For Spotify tracks
-
+        const button = document.createElement('button');
         button.style.backgroundColor = color;
 
         const formattedStartTime = !isNaN(starttime) && starttime !== 0 ? (starttime / 1000).toFixed(1) : '0.0';
-
-        const buttonText = localFile
-          ? `${title} - ${artist}` // Display title and artist for local files
-          : `${title} - ${artist} [${formattedStartTime}s]`; // For Spotify tracks
+        const buttonText = `${title || 'Unknown Title'} - ${artist || 'Unknown Artist'} [${formattedStartTime}s]`;
 
         button.textContent = buttonText;
 
-        if (localFile) {
-          button.href = `/tracks/${localFile}`;
-          button.target = "_blank"; // Open in a new tab or media player
-        } else {
-          button.onclick = function () {
-            if (spotifyURI.startsWith('spotify:track:')) {
-              playSpotifyTrack(spotifyURI, parseInt(starttime));
-            } else if (spotifyURI.startsWith('spotify:playlist:')) {
-              playSpotifyPlaylist(spotifyURI);
-            }
-          };
-        }
+        button.onclick = function () {
+          playSpotifyTrack(spotifyURI, parseInt(starttime));
+        };
 
         content.appendChild(button);
       });
@@ -225,20 +208,6 @@
         body: JSON.stringify({
           uris: [spotifyURI],
           position_ms: startTime
-        })
-      });
-    }
-
-    function playSpotifyPlaylist(spotifyURI) {
-      const playUrl = `https://api.spotify.com/v1/me/player/play`;
-      fetch(playUrl, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          context_uri: spotifyURI
         })
       });
     }
