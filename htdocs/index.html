@@ -55,7 +55,7 @@
       height: 80px;
       text-align: center;
       line-height: 1.4;
-      background-color: #87CEEB; /* Light blue default */
+      background-color: #87CEEB;
     }
 
     #status {
@@ -65,7 +65,6 @@
       text-align: center;
     }
 
-    /* Custom styles for login and stop buttons */
     #login-btn, #stop-btn {
       padding: 12px 20px;
       font-size: 18px;
@@ -103,10 +102,10 @@
     const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
     const REDIRECT_URI = "http://floorballaudio.freesite.online/index.html";
     const SCOPES = "user-modify-playback-state user-read-playback-state";
-    const sectionColors = ['#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE']; // Slightly darker colors
+    const sectionColors = ['#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE'];
     let accessToken = "";
 
-    const filenames = ['Warmup.json', 'Intro.json', 'Mål.json', 'Spelpauser.json', 'Utvisning.json']; // JSON files
+    const filenames = ['Warmup.json', 'Intro.json', 'Mål.json', 'Spelpauser.json', 'Utvisning.json'];
 
     async function authenticateSpotify() {
       const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
@@ -128,82 +127,73 @@
       loadSongsFromFolder();
     };
 
-    document.addEventListener("keydown", (event) => {
-      if (event.key.toLowerCase() === "q") {
-        stopPlayback();
-      }
-    });
+async function loadSongsFromFolder() {
+  try {
+    for (const [index, filename] of filenames.entries()) {
+      const fileUrl = `/tracks/${filename}`;
+      const response = await fetch(fileUrl);
 
-    async function loadSongsFromFolder() {
+      if (!response.ok) {
+        console.error(`Kunde inte ladda filen: ${filename}`);
+        continue; // Hoppa över filen om den inte kan hämtas
+      }
+
+      let json;
       try {
-        const folderPath = '/tracks'; // Path to JSON files
-        
-        for (const [index, filename] of filenames.entries()) {
-          const fileUrl = `${folderPath}/${filename}`;
-          const response = await fetch(fileUrl);
-
-          if (!response.ok) {
-            throw new Error(`Failed to load file: ${filename}`);
-          }
-
-          const sectionName = filename.split('.')[0];
-          const sectionElement = document.createElement('section');
-          sectionElement.classList.add('collapsed');
-
-          const header = document.createElement('h2');
-          header.textContent = sectionName;
-          sectionElement.appendChild(header);
-
-          const content = document.createElement('div');
-          content.classList.add('song-list');
-          content.style.display = "none"; // Initially hidden
-
-          const json = await response.json();
-          
-          if (json && json.tracks) {
-            json.tracks.forEach(track => {
-              const { spotifyURI, starttime, artist, title } = track;
-
-              const button = document.createElement('button');
-              button.style.backgroundColor = sectionColors[index];
-
-              // Ensure starttime is displayed properly, fallback to 0 if NaN
-              const formattedStartTime = !isNaN(starttime) && starttime !== 0 ? (starttime / 1000).toFixed(1) : '0.0';
-
-              // Check if artist or title is empty and display URI if so
-              const buttonText = (artist && title) ? `${title} - ${artist} [${formattedStartTime}s]` : `${spotifyURI} [${formattedStartTime}s]`;
-
-              button.textContent = buttonText;
-
-              button.onclick = function () {
-                if (spotifyURI.startsWith('spotify:track:')) {
-                  playSpotifyTrack(spotifyURI, parseInt(starttime));
-                } else if (spotifyURI.startsWith('spotify:playlist:')) {
-                  playSpotifyPlaylist(spotifyURI);
-                }
-              };
-
-              content.appendChild(button);
-            });
-          } else {
-            // If tracks are not found in the JSON, show an error message
-            const errorMessage = document.createElement('p');
-            errorMessage.textContent = `No tracks found in ${filename}`;
-            content.appendChild(errorMessage);
-          }
-
-          sectionElement.appendChild(content);
-          document.getElementById('sections').appendChild(sectionElement);
-
-          // Add event listener to toggle visibility of the section content
-          header.addEventListener('click', () => {
-            content.style.display = content.style.display === "none" ? "flex" : "none";
-          });
-        }
+        json = await response.json(); // Försök att tolka JSON
       } catch (error) {
-        updateStatus("Fel vid inläsning av filer.");
-        console.error("Laddningsfel:", error);
+        console.error(`Ogiltig JSON i filen: ${filename}`, error);
+        continue; // Hoppa över filen om JSON inte är giltig
       }
+
+      if (!json || !json.tracks) {
+        console.error(`Inga spår hittades i filen: ${filename}`);
+        continue; // Hoppa över om `tracks` saknas
+      }
+
+      createSection(json, filename.split('.')[0], sectionColors[index]);
+    }
+  } catch (error) {
+    updateStatus("Fel vid inläsning av filer.");
+    console.error("Laddningsfel:", error);
+  }
+}
+
+    function createSection(json, sectionName, color) {
+      const sectionElement = document.createElement('section');
+
+      const header = document.createElement('h2');
+      header.textContent = sectionName;
+      sectionElement.appendChild(header);
+
+      const content = document.createElement('div');
+      content.classList.add('song-list');
+      content.style.display = "none";
+
+      json.tracks.forEach(track => {
+        const { spotifyURI, starttime, artist, title } = track;
+
+        const button = document.createElement('button');
+        button.style.backgroundColor = color;
+
+        const formattedStartTime = !isNaN(starttime) && starttime !== 0 ? (starttime / 1000).toFixed(1) : '0.0';
+        const buttonText = `${title || 'Unknown Title'} - ${artist || 'Unknown Artist'} [${formattedStartTime}s]`;
+
+        button.textContent = buttonText;
+
+        button.onclick = function () {
+          playSpotifyTrack(spotifyURI, parseInt(starttime));
+        };
+
+        content.appendChild(button);
+      });
+
+      sectionElement.appendChild(content);
+      document.getElementById('sections').appendChild(sectionElement);
+
+      header.addEventListener('click', () => {
+        content.style.display = content.style.display === "none" ? "flex" : "none";
+      });
     }
 
     function playSpotifyTrack(spotifyURI, startTime) {
@@ -217,20 +207,6 @@
         body: JSON.stringify({
           uris: [spotifyURI],
           position_ms: startTime
-        })
-      });
-    }
-
-    function playSpotifyPlaylist(spotifyURI) {
-      const playUrl = `https://api.spotify.com/v1/me/player/play`;
-      fetch(playUrl, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          context_uri: spotifyURI
         })
       });
     }
