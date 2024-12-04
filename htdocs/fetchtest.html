@@ -75,13 +75,14 @@
   <div id="status" style="margin-top: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #fff; min-height: 20px;"></div>
 
 
-  <div class="input-container">
-    <input type="text" id="uri-input" class="input-field" placeholder="Spotify URI">
-    <input type="text" id="start-time-input" class="input-field" placeholder="Starttid (ms)">
-    <button onclick="playTrack()">Play</button>
-    <button onclick="stopTrack()">Stoppa</button>
-    <button onclick="saveTrackToList()">Spara i lista</button>
-  </div>
+<div class="input-container">
+  <input type="text" id="uri-input" class="input-field" placeholder="Spotify URI">
+  <input type="text" id="start-time-input" class="input-field" placeholder="Starttid (ms)">
+  <button onclick="getCurrentPlayingTrack()">Hämta nuvarande låt</button>
+  <button onclick="playTrack()">Play</button>
+  <button onclick="stopTrack()">Stoppa</button>
+  <button onclick="saveTrackToList()">Spara i lista</button>
+</div>
 
   <div id="output">
     <h3>Resultat:</h3>
@@ -145,48 +146,95 @@
       window.location.href = authUrl;
     }
 
-    async function saveTrackToList() {
-    const uri = document.getElementById("uri-input").value.trim();
-    const startTime = parseInt(document.getElementById("start-time-input").value.trim());
+async function saveTrackToList() {
+  const uri = document.getElementById("uri-input").value.trim();
+  const startTime = parseInt(document.getElementById("start-time-input").value.trim());
 
-    if (!uri) {
-        document.getElementById("status").textContent = "Ange en giltig Spotify URI.";
-        return;
+  if (!uri) {
+    document.getElementById("status").textContent = "Ange en giltig Spotify URI.";
+    return;
+  }
+
+  if (!accessToken) {
+    document.getElementById("status").textContent = "Du måste logga in på Spotify först.";
+    return;
+  }
+
+  try {
+    const trackId = uri.split(":")[2];
+    const response = await fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Spotify API returnerade ett fel: ${response.status}`);
     }
 
-    if (!accessToken) {
-        document.getElementById("status").textContent = "Du måste logga in på Spotify först.";
-        return;
+    const data = await response.json();
+    const trackInfo = {
+      spotifyURI: uri,
+      starttime: isNaN(startTime) ? 0 : startTime,
+      artist: data.artists[0]?.name || "Okänd artist",
+      title: data.name || "Okänd titel"
+    };
+
+    trackList.push(trackInfo);
+    updateTrackTable();
+    document.getElementById("status").textContent = "Låt tillagd i listan.";
+
+    // LÄGG TILL: Rensa fält
+    document.getElementById("uri-input").value = "";
+    document.getElementById("start-time-input").value = "";
+  } catch (error) {
+    console.error("Fel vid hämtning av låtinfo:", error);
+    document.getElementById("status").textContent = "Kunde inte hämta låtinfo. Kontrollera URI eller nätverksanslutningen.";
+  }
+}
+
+async function getCurrentPlayingTrack() {
+  if (!accessToken) {
+    document.getElementById("status").textContent = "Du måste logga in på Spotify först.";
+    return;
+  }
+
+  const apiUrl = "https://api.spotify.com/v1/me/player/currently-playing";
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Spotify API returnerade ett fel: ${response.status}`);
     }
 
-    try {
-        const trackId = uri.split(":")[2];
-        const response = await fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
-        headers: {
-            "Authorization": `Bearer ${accessToken}`
-        }
-        });
+    const data = await response.json();
 
-        if (!response.ok) {
-        throw new Error(`Spotify API returnerade ett fel: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const trackInfo = {
-        spotifyURI: uri,
-        starttime: isNaN(startTime) ? 0 : startTime,
-        artist: data.artists[0]?.name || "Okänd artist",
-        title: data.name || "Okänd titel"
-        };
-
-        trackList.push(trackInfo);
-        updateTrackTable();
-        document.getElementById("status").textContent = "Låt tillagd i listan.";
-    } catch (error) {
-        console.error("Fel vid hämtning av låtinfo:", error);
-        document.getElementById("status").textContent = "Kunde inte hämta låtinfo. Kontrollera URI eller nätverksanslutningen.";
+    if (!data || !data.item) {
+      document.getElementById("status").textContent = "Ingen låt spelas för tillfället.";
+      return;
     }
-    }
+
+    const uri = data.item.uri;
+    const progressMs = data.progress_ms;
+    const trackTitle = data.item.name;
+    const trackArtist = data.item.artists.map(artist => artist.name).join(", ");
+
+    // Fyll i URI och starttid
+    document.getElementById("uri-input").value = uri;
+    document.getElementById("start-time-input").value = progressMs;
+
+    // Uppdatera statusfältet med låttitel och artist
+    document.getElementById("status").textContent = `Nuvarande låt: ${trackTitle} av ${trackArtist}.`;
+  } catch (error) {
+    console.error("Fel vid hämtning av nuvarande låt:", error);
+    document.getElementById("status").textContent = "Kunde inte hämta nuvarande låt.";
+  }
+}
 
 
     function updateTrackTable() {
