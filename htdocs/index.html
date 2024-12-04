@@ -110,7 +110,7 @@
 </head>
 <body>
   <h1>Spotify Playlist</h1>
-  <p>Klicka på en låt eller playlist för att spela upp. Du måste logga in först.</p>
+  <p>Klicka på en låt eller spellista för att spela upp. Du måste logga in först.</p>
 
   <div class="fixed-header">
     <button id="stop-btn" onclick="stopPlayback()">Stoppa uppspelning</button>
@@ -128,7 +128,7 @@
     const sectionColors = ['#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE'];
     let accessToken = "";
 
-    const filenames = ['Warmup.json', 'Intro.json', 'Mål.json', 'Spelpauser.json', 'Utvisning.json', 'playlists.json'];
+    const filenames = ['Warmup.json', 'Intro.json', 'Mål.json', 'Spelpauser.json', 'Utvisning.json', 'playlists.json', 'Local.json'];
 
     async function authenticateSpotify() {
       const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
@@ -151,7 +151,7 @@
     };
 
     async function loadSongsFromFolder() {
-      document.getElementById('sections').innerHTML = ""; // Rensa sektioner
+      document.getElementById('sections').innerHTML = "";
       try {
         for (const [index, filename] of filenames.entries()) {
           const fileUrl = `/tracks/${filename}`;
@@ -171,7 +171,7 @@
             continue;
           }
 
-          if (!json || (!json.tracks && !json.playlists)) {
+          if (!json) {
             console.error(`Ogiltigt innehåll i filen: ${filename}`);
             continue;
           }
@@ -183,6 +183,10 @@
           if (json.playlists) {
             createPlaylistSection(json.playlists, 'Spellistor', '#FFD700');
           }
+
+          if (filename === 'Local.json' && json.local) {
+            createSection(json.local, 'Lokala Låtar', '#32CD32');
+          }
         }
       } catch (error) {
         updateStatus("Fel vid inläsning av filer.");
@@ -190,9 +194,15 @@
       }
     }
 
-    function createSection(tracks, sectionName, color) {
-      const sectionElement = document.createElement('section');
+    function formatTime(ms) {
+      const minutes = Math.floor(ms / 60000);
+      const seconds = Math.floor((ms % 60000) / 1000);
+      return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
 
+    function createSection(tracks, sectionName, color) {
+      console.log(`Skapar sektion:  ${sectionName}`);
+      const sectionElement = document.createElement('section');
       const header = document.createElement('h2');
       header.textContent = sectionName;
       sectionElement.appendChild(header);
@@ -202,15 +212,27 @@
       content.style.display = "none";
 
       tracks.forEach(track => {
-        const { spotifyURI, artist, title } = track;
+        const { spotifyURI, artist, title, starttime } = track;
 
         const button = document.createElement('button');
         button.style.backgroundColor = color;
-        button.textContent = `${title || 'Unknown Title'} - ${artist || 'Unknown Artist'}`;
+        button.textContent = `${title || 'Unknown Title'} - ${artist || 'Unknown Artist'}${starttime ? ` [${formatTime(starttime)}]` : ''}`;
 
-        button.onclick = function () {
-          playSpotifyTrack(spotifyURI);
-        };
+        if (spotifyURI) {
+          if (spotifyURI.startsWith("spotify:")) {
+            button.onclick = function () {
+              playSpotifyTrack(spotifyURI, starttime);
+            };
+          } else if (spotifyURI.endsWith('.mp3')) {
+            // Local file handling
+            const localUrl = `/tracks/${spotifyURI}`;
+            button.onclick = function (event) {
+              event.preventDefault(); // Prevent default link behavior
+              console.log(`Opening local file: ${localUrl}`);
+              window.open(localUrl, '_blank'); // Open the track in a new tab
+            };
+          }
+        }
 
         content.appendChild(button);
       });
@@ -225,7 +247,6 @@
 
     function createPlaylistSection(playlists, sectionName, color) {
       const sectionElement = document.createElement('section');
-
       const header = document.createElement('h2');
       header.textContent = sectionName;
       sectionElement.appendChild(header);
@@ -239,10 +260,10 @@
 
         const button = document.createElement('button');
         button.style.backgroundColor = color;
-        button.textContent = name || 'Unknown Playlist';
+        button.textContent = name || 'Unnamed Playlist';
 
         button.onclick = function () {
-          playSpotifyPlaylist(spotifyURI);
+          playPlaylist(spotifyURI);
         };
 
         content.appendChild(button);
@@ -256,46 +277,45 @@
       });
     }
 
-    function playSpotifyTrack(spotifyURI) {
-      const playUrl = `https://api.spotify.com/v1/me/player/play`;
-      fetch(playUrl, {
+    function playSpotifyTrack(spotifyURI, starttime) {
+      console.log(`Now playing: ${spotifyURI} by ${starttime} [Start Time: ${formatTime(starttime)}]`);
+      fetch(`https://api.spotify.com/v1/me/player/play`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          uris: [spotifyURI]
-        })
-      });
+          uris: [spotifyURI],
+          position_ms: starttime || 0,
+        }),
+      }).catch(error => console.error('Error playing track:', error));
     }
 
-    function playSpotifyPlaylist(spotifyURI) {
-      const playUrl = `https://api.spotify.com/v1/me/player/play`;
-      fetch(playUrl, {
+    function playPlaylist(spotifyURI) {
+      fetch(`https://api.spotify.com/v1/me/player/play`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          context_uri: spotifyURI
-        })
-      });
+          context_uri: spotifyURI,
+        }),
+      }).catch(error => console.error('Error playing playlist:', error));
     }
 
     function stopPlayback() {
-      const stopUrl = `https://api.spotify.com/v1/me/player/pause`;
-      fetch(stopUrl, {
+      fetch('https://api.spotify.com/v1/me/player/pause', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-        }
-      });
+        },
+      }).catch(error => console.error('Error stopping playback:', error));
     }
 
-    function updateStatus(message) {
-      document.getElementById('status').textContent = message;
+    function updateStatus(status) {
+      document.getElementById('status').textContent = status;
     }
   </script>
 </body>

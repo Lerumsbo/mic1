@@ -1,5 +1,6 @@
 {
   "tracks": [
-    { "spotifyURI": "Måljingel_lång.mp3", "starttime": 0, "title": "Modomåljingel", "artist": "NA" }
+    { "spotifyURI": "Måljingel_lång.mp3", "starttime": 0, "title": "Modomåljingel lång", "artist": "NA" },
+    { "spotifyURI": "Modomåljingel.mp3", "starttime": 0, "title": "Modomåljingel kort", "artist": "NA" }
   ]
 }
