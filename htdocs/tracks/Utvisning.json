@@ -1,0 +1,22 @@
+{
+    "tracks": [
+        {
+            "spotifyURI": "spotify:track:1jqBju1B8zyuC8EPvkEjlE",
+            "starttime": 0,
+            "artist": "Twisted Sister",
+            "title": "We're Not Gonna Take It - 2024 Remaster"
+        },
+        {
+            "spotifyURI": "spotify:track:2RaA6kIcvomt77qlIgGhCT",
+            "starttime": 35000,
+            "artist": "Judas Priest",
+            "title": "Breaking the Law"
+        },
+        {
+            "spotifyURI": "spotify:track:3Y6XWs8xMlCngyIxNOFnsp",
+            "starttime": 10500,
+            "artist": "KRS-One",
+            "title": "Sound of da Police"
+        }
+    ]
+}

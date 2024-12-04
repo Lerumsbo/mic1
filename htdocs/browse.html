@@ -1,5 +1,3 @@
-browse
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,16 +83,21 @@ browse
 
   <div id="status"></div>
 
+  <!-- Spotify login -->
+  <div class="button-container">
+    <button id="spotify-login-btn" onclick="spotifyLogin()">Logga in med Spotify</button>
+  </div>
+
   <div class="track-inputs">
     <input type="text" id="uri-input" class="input-field" placeholder="Spotify URI">
-    <input type="text" id="start-time-input" class="input-field" placeholder="Starttid (ms)">
+    <input type="text" id="start-time-input" class="input-field" placeholder="Starttid (ms)" value="0">
     <button onclick="addTrack()">Lägg till</button>
     <button onclick="playSpotifyTrackFromInput()">Play</button>
     <button onclick="stopPlayback()">Stoppa</button>
   </div>
 
   <h3>Låtar att spara:</h3>
-  <ul id="track-list"></ul>
+  <div id="track-table"></div>
 
   <h3>Välj fil att öppna och visa låtar:</h3>
   <div class="button-container" id="file-buttons">
@@ -129,102 +132,38 @@ browse
       if (token) {
         accessToken = token;
         document.getElementById("status").textContent = "Inloggad på Spotify!";
+        document.getElementById("spotify-login-btn").style.display = "none"; // Hide login button after login
       } else {
         document.getElementById("status").textContent = "Logga in för att använda Spotify-funktioner.";
       }
       createFileButtons();
     };
 
-    function saveUpdatedTracksToFile() {
-      const fileName = document.getElementById("file-select").value;
-
-      if (!fileName || trackList.length === 0) {
-        document.getElementById("status").textContent = "Välj en fil och lägg till låtar innan du sparar.";
-        return;
-      }
-
-      console.log("Tracklist som skickas:", JSON.stringify(trackList));
-
-      fetch('save_to_file.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          filename: fileName,
-          tracks: trackList // Skicka hela tracklistan
-        }),
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          document.getElementById("status").textContent = "Låtar sparade till filen!";
-        } else {
-          throw new Error("Servern rapporterade ett fel vid sparning av fil.");
-        }
-      })
-      .catch(error => {
-        console.error("Fel vid sparning av fil:", error);
-        document.getElementById("status").textContent = "Ett fel inträffade vid sparning. Kontrollera serveranslutningen.";
+    function displayTrackList(tracks) {
+      const table = document.createElement("table");
+      table.innerHTML = `
+        <tr>
+          <th>Spotify URI</th>
+          <th>Artist</th>
+          <th>Title</th>
+          <th>Starttid (ms)</th>
+          <th>Åtgärder</th>
+        </tr>
+      `;
+      tracks.forEach(track => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${track.spotifyURI}</td>
+          <td>${track.artist || "N/A"}</td>
+          <td>${track.title || "N/A"}</td>
+          <td>${track.starttime}</td>
+          <td><button onclick="playTrack('${track.spotifyURI}', ${track.starttime})">Play</button></td>
+        `;
+        table.appendChild(row);
       });
-    }
-
-    function createFileButtons() {
-      const files = ['Warmup.json', 'Intro.json', 'Mål.json', 'Spelpauser.json', 'Utvisning.json'];
-      const buttonContainer = document.getElementById("file-buttons");
-      buttonContainer.innerHTML = "";
-      files.forEach(file => {
-        const button = document.createElement('button');
-        button.textContent = file;
-        button.onclick = function() {
-          loadFileContent(file);
-        };
-        buttonContainer.appendChild(button);
-      });
-    }
-
-    function addTrack() {
-      const uri = document.getElementById("uri-input").value.trim();
-      const startTime = parseInt(document.getElementById("start-time-input").value.trim());
-
-      if (!uri || isNaN(startTime)) {
-        document.getElementById("status").textContent = "Ange giltig URI och starttid.";
-        return;
-      }
-
-      const track = { spotifyURI: uri, starttime: startTime, artist: null, title: null };
-      trackList.push(track);
-
-      updateTrackList();
-      document.getElementById("uri-input").value = "";
-      document.getElementById("start-time-input").value = "";
-      document.getElementById("status").textContent = "Lägg till fler låtar eller spara till fil.";
-    }
-
-    function updateTrackList() {
-      const trackListElement = document.getElementById("track-list");
-      trackListElement.innerHTML = trackList.map(track =>
-        `<li>${track.spotifyURI} - ${track.starttime}ms</li>`
-      ).join("");
-    }
-
-    function loadFileContent(filename) {
-      fetch(`get_file_content.php?filename=${filename}`)
-        .then(response => response.json())
-        .then(data => {
-          const trackListElement = document.getElementById("file-content");
-          trackListElement.innerHTML = "";
-
-          if (data.success && Array.isArray(data.tracks)) {
-            enrichTracksWithSpotifyData(data.tracks, filename);
-          } else {
-            console.error("Innehållet är inte en giltig lista.");
-            throw new Error("Innehållet är inte en giltig lista.");
-          }
-        })
-        .catch(error => {
-          console.error("Fel vid parsning av filinnehåll:", error);
-          document.getElementById("file-content").innerHTML =
-            "<p>Ett fel inträffade vid inläsning av filen. Kontrollera filens format.</p>";
-        });
+      const contentDiv = document.getElementById("file-content");
+      contentDiv.innerHTML = "";
+      contentDiv.appendChild(table);
     }
 
     function enrichTracksWithSpotifyData(tracks, filename) {
@@ -254,7 +193,119 @@ browse
       });
     }
 
-    function displayTrackList(tracks) {
+    function loadFileContent(filename) {
+      fetch(`get_file_content.php?filename=${filename}`)
+        .then(response => response.json())
+        .then(data => {
+          const trackTableDiv = document.getElementById("file-content");
+          trackTableDiv.innerHTML = "";
+
+          if (data.success && Array.isArray(data.tracks)) {
+            enrichTracksWithSpotifyData(data.tracks, filename);
+          } else {
+            console.error("Innehållet är inte en giltig lista.");
+            throw new Error("Innehållet är inte en giltig lista.");
+          }
+        })
+        .catch(error => {
+          console.error("Fel vid parsning av filinnehåll:", error);
+          document.getElementById("file-content").innerHTML =
+            "<p>Ett fel inträffade vid inläsning av filen. Kontrollera filens format.</p>";
+        });
+    }
+    function spotifyLogin() {
+      const clientId = "52ec9869958e47e2898e85242e0f061a";
+      const redirectUri = "http://floorballaudio.freesite.online/browse.html"; // Use your redirect URI
+      const scope = "user-library-read playlist-modify-public";
+      const url = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`;
+      window.location.href = url;
+    }
+
+    function saveUpdatedTracksToFile() {
+      const fileName = document.getElementById("file-select").value;
+
+      if (!fileName || trackList.length === 0) {
+        document.getElementById("status").textContent = "Välj en fil och lägg till låtar innan du sparar.";
+        return;
+      }
+
+      console.log("Tracklist som skickas:", JSON.stringify(trackList));
+
+      fetch('save_to_file.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filename: fileName,
+          tracks: trackList // Skicka hela tracklistan
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById("status").textContent = "Låtar sparade till filen!";
+          trackList = []; // Töm tracklistan efter sparning
+          updateTrackTable();
+        } else {
+          throw new Error("Servern rapporterade ett fel vid sparning av fil.");
+        }
+      })
+      .catch(error => {
+        console.error("Fel vid sparning av fil:", error);
+        document.getElementById("status").textContent = "Ett fel inträffade vid sparning. Kontrollera serveranslutningen.";
+      });
+    }
+
+    function createFileButtons() {
+      const files = ['Warmup.json', 'Intro.json', 'Mål.json', 'Spelpauser.json', 'Utvisning.json'];
+      const buttonContainer = document.getElementById("file-buttons");
+      buttonContainer.innerHTML = "";
+      files.forEach(file => {
+        const button = document.createElement('button');
+        button.textContent = file;
+        button.onclick = function() {
+          loadFileContent(file);
+        };
+        buttonContainer.appendChild(button);
+      });
+    }
+
+    function addTrack() {
+      const uri = document.getElementById("uri-input").value.trim();
+      const startTime = parseInt(document.getElementById("start-time-input").value.trim()) || 0;
+
+      if (!uri || isNaN(startTime)) {
+        document.getElementById("status").textContent = "Ange giltig URI och starttid.";
+        return;
+      }
+
+      const track = { spotifyURI: uri, starttime: startTime, artist: null, title: null };
+      trackList.push(track);
+
+      // Fetch artist and title from Spotify and update track list
+      fetchSpotifyTrackDetails(track);
+
+      updateTrackTable();
+      document.getElementById("uri-input").value = "";
+      document.getElementById("start-time-input").value = "0";
+      document.getElementById("status").textContent = "Lägg till fler låtar eller spara till fil.";
+    }
+
+    function fetchSpotifyTrackDetails(track) {
+      const trackId = track.spotifyURI.split(':')[2];
+      fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
+        headers: { "Authorization": `Bearer ${accessToken}` }
+      })
+      .then(response => response.json())
+      .then(data => {
+        track.artist = data.artists[0].name;
+        track.title = data.name;
+      })
+      .catch(error => {
+        console.error(`Fel vid hämtning av Spotify-data för ${track.spotifyURI}:`, error);
+      });
+    }
+
+    function updateTrackTable() {
       const table = document.createElement("table");
       table.innerHTML = `
         <tr>
@@ -265,32 +316,20 @@ browse
           <th>Åtgärder</th>
         </tr>
       `;
-      tracks.forEach(track => {
+      trackList.forEach(track => {
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>${track.spotifyURI}</td>
           <td>${track.artist || "N/A"}</td>
           <td>${track.title || "N/A"}</td>
           <td>${track.starttime}</td>
-          <td>
-            <button onclick="playTrack('${track.spotifyURI}', ${track.starttime})">Play</button>
-          </td>
+          <td><button onclick="playTrack('${track.spotifyURI}', ${track.starttime})">Play</button></td>
         `;
         table.appendChild(row);
       });
-      const contentDiv = document.getElementById("file-content");
-      contentDiv.innerHTML = "";
-      contentDiv.appendChild(table);
-    }
-
-    function playSpotifyTrackFromInput() {
-      const uri = document.getElementById("uri-input").value.trim();
-      const startTime = parseInt(document.getElementById("start-time-input").value.trim());
-      if (uri && !isNaN(startTime)) {
-        playTrack(uri, startTime);
-      } else {
-        document.getElementById("status").textContent = "Ange giltig URI och starttid.";
-      }
+      const trackTableDiv = document.getElementById("track-table");
+      trackTableDiv.innerHTML = "";
+      trackTableDiv.appendChild(table);
     }
 
     function playTrack(uri, startTime) {
@@ -316,6 +355,37 @@ browse
         console.error("Fel vid uppspelning:", error);
       });
     }
+
+    function playSpotifyTrackFromInput() {
+      const uri = document.getElementById("uri-input").value.trim();
+      const startTime = parseInt(document.getElementById("start-time-input").value.trim()) || 0;
+
+      if (!uri) {
+        document.getElementById("status").textContent = "Ange en Spotify URI först.";
+        return;
+      }
+
+      playTrack(uri, startTime);
+    }
+
+    function stopPlayback() {
+      fetch('https://api.spotify.com/v1/me/player/pause', {
+        method: 'PUT',
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          document.getElementById("status").textContent = "Stoppade uppspelning.";
+        }
+      })
+      .catch(error => {
+        console.error("Fel vid stopp av uppspelning:", error);
+      });
+    }
+
   </script>
 
 </body>
