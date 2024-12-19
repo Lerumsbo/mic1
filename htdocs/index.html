@@ -225,18 +225,12 @@
             };
           } else if (spotifyURI.endsWith('.mp3')) {
             // Local file handling
-            fetch('/path/to/local.json')
-              .then(response => response.json())
-              .then(data => {
-                const starttime = data.starttime || 0; // Default to 0 if starttime is not found
-                const localUrl = `/tracks/${spotifyURI}?start=${starttime}`;
-                button.onclick = function (event) {
-                  event.preventDefault(); // Prevent default link behavior
-                  console.log(`Opening local file: ${localUrl}`);
-                  window.open(localUrl, '_blank'); // Open the track in a new tab
-                };
-              })
-              .catch(error => console.error('Error fetching starttime:', error));
+            const localUrl = `/tracks/${spotifyURI}`;
+            button.onclick = function (event) {
+              event.preventDefault(); // Prevent default link behavior
+              console.log(`Opening local file: ${localUrl}`);
+              window.open(localUrl, '_blank'); // Open the track in a new tab
+            };
           }
         }
 
