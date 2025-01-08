@@ -17,6 +17,12 @@
             "starttime": 10500,
             "artist": "KRS-One",
             "title": "Sound of da Police"
+        },
+        {
+            "spotifyURI": "spotify:track:0qeKzbUsW0V4ZWRJrHNiD3",
+            "starttime": 48800,
+            "artist": "Inner Circle",
+            "title": "Bad Boys (Theme from COPS)"
         }
     ]
 }

@@ -128,7 +128,7 @@
     const sectionColors = ['#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE'];
     let accessToken = "";
 
-    const filenames = ['Warmup.json', 'Intro.json', 'Mål.json', 'Spelpauser.json', 'Utvisning.json', 'playlists.json', 'Local.json'];
+    const filenames = ['Warmup.json', 'Intro.json', 'Mål.json', 'Spelpauser.json', 'Utvisning.json', 'playlists.json', 'Local.json', 'Publik.json', 'After.json'];
 
     async function authenticateSpotify() {
       const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
