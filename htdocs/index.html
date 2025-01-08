@@ -225,6 +225,7 @@
         if (spotifyURI) {
           if (spotifyURI.startsWith("spotify:")) {
             button.onclick = function () {
+              button.style.borderColor = 'red';
               playSpotifyTrack(spotifyURI, starttime);
             };
           } else if (spotifyURI.endsWith('.mp3')) {
