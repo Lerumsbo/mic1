@@ -1,0 +1,34 @@
+{
+    "tracks": [
+        {
+            "spotifyURI": "spotify:track:1jqBju1B8zyuC8EPvkEjlE",
+            "starttime": 0,
+            "artist": "Twisted Sister",
+            "title": "We're Not Gonna Take It - 2024 Remaster"
+        },
+        {
+            "spotifyURI": "spotify:track:1EY9N7ZO5aC7tbQhj7ewBX",
+            "starttime": 7650,
+            "artist": "LOK",
+            "title": "Lok st\u00e5r n\u00e4r de andra faller"
+        },
+        {
+            "spotifyURI": "spotify:track:1jDJFeK9x3OZboIAHsY9k2",
+            "starttime": 105679,
+            "artist": "Elton John",
+            "title": "I'm Still Standing"
+        },
+        {
+            "spotifyURI": "spotify:track:5O6JuXxnhwG3W5YClY2mEb",
+            "starttime": 46700,
+            "title": "He's Back (The Man Behind The Mask)",
+            "artist": "Alice Cooper"
+        },
+        {
+            "spotifyURI": "spotify:track:6MWkewqqntx7y6AyOqEoXM",
+            "starttime": 67009,
+            "artist": "AC\/DC",
+            "title": "T.N.T. - Live - 1991"
+        }
+    ]
+}
