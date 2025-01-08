@@ -128,7 +128,7 @@
     const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
     const REDIRECT_URI = "http://floorballaudio.freesite.online/index.html";
     const SCOPES = "user-modify-playback-state user-read-playback-state";
-    const sectionColors = ['#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE'];
+    const sectionColors = ['#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE','#5F9EA0', '#6A5ACD', '#708090', '#4682B4'];
     let accessToken = "";
 
     const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Warmup.json', 'Utvisning.json', 'Mål.json', 'Publik.json', 'Spelpauser.json', 'Local.json'];
@@ -247,9 +247,6 @@
       header.addEventListener('click', () => {
         content.style.display = content.style.display === "none" ? "flex" : "none";
       });
-
-      button.addEventListener('click', () => {
-      button.style.borderColor = 'red';}
     }
 
     function createPlaylistSection(playlists, sectionName, color) {
