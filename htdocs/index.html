@@ -67,8 +67,11 @@
       height: 80px;
       text-align: center;
       line-height: 1.4;
-      background-color: #87CEEB;
-    }
+      background-color: #555; /* Standardfärg som kan skrivas över */
+      color: white; /* Vit text */
+      border: 2px solid transparent; /* För att hantera röd gräns senare */
+}
+
 
     #status {
       font-size: 18px;
@@ -243,6 +246,7 @@
 
       header.addEventListener('click', () => {
         content.style.display = content.style.display === "none" ? "flex" : "none";
+        button.style.borderColor = 'red';
       });
     }
 
