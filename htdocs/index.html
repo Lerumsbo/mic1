@@ -246,8 +246,10 @@
 
       header.addEventListener('click', () => {
         content.style.display = content.style.display === "none" ? "flex" : "none";
-        button.style.borderColor = 'red';
       });
+
+      button.addEventListener('click', () => {
+      button.style.borderColor = 'red';}
     }
 
     function createPlaylistSection(playlists, sectionName, color) {
