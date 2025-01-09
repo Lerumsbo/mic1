@@ -29,6 +29,48 @@
             "starttime": 67009,
             "artist": "AC\/DC",
             "title": "T.N.T. - Live - 1991"
+        },
+        {
+            "spotifyURI": "spotify:track:2OKWlT1R99aAGWBB7v5Vso",
+            "starttime": 9295,
+            "artist": "Bonfire",
+            "title": "Eye of the Tiger"
+        },
+        {
+            "spotifyURI": "spotify:track:0Ra3DxdKaqmMhUy2enFfb4",
+            "starttime": 0,
+            "artist": "Amaranthe",
+            "title": "Drop Dead Cynical"
+        },
+        {
+            "spotifyURI": "spotify:track:22HYEJveCvykVDHDiEEmjZ",
+            "starttime": 33400,
+            "artist": "Chumbawamba",
+            "title": "Tubthumping"
+        },
+        {
+            "spotifyURI": "spotify:track:41Ef0PikCCRBcIM8O0t5HK",
+            "starttime": 15931,
+            "artist": "E-Type",
+            "title": "Life"
+        },
+        {
+            "spotifyURI": "spotify:track:1BBIW3lDfwK9PXOFOedZmo",
+            "starttime": 122400,
+            "artist": "E-Type",
+            "title": "This Is The Way - Radio Edit"
+        },
+        {
+            "spotifyURI": "spotify:track:1nThB5NAb6HgmmtxB1ANel",
+            "starttime": 103000,
+            "artist": "E-Type",
+            "title": "True Believer"
+        },
+        {
+            "spotifyURI": "spotify:track:0SLtqCrXBRrnkxSOMA3X4W",
+            "starttime": 39000,
+            "artist": "Robbie Williams",
+            "title": "Let Me Entertain You"
         }
     ]
 }

@@ -17,6 +17,24 @@
             "starttime": 45000,
             "artist": "The Black & White Brothers",
             "title": "Put Your Hands Up - DJ Tonka Full Version"
-        }     
+        },
+        {
+            "spotifyURI": "spotify:track:0bz67HYKfiuUj1xhsK5ofT",
+            "starttime": 0,
+            "artist": "Joe Satriani",
+            "title": "Crowd Chant"
+        },
+        {
+            "spotifyURI": "spotify:track:0bz67HYKfiuUj1xhsK5ofT",
+            "starttime": 8000,
+            "artist": "Joe Satriani",
+            "title": "Crowd Chant"
+        },
+        {
+            "spotifyURI": "spotify:track:0bz67HYKfiuUj1xhsK5ofT",
+            "starttime": 24100,
+            "artist": "Joe Satriani",
+            "title": "Crowd Chant"
+        }
     ]
 }
