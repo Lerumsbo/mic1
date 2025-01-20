@@ -35,6 +35,7 @@
       display: flex;
       justify-content: center;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     section {
@@ -114,6 +115,13 @@
       margin: 5px;
       padding: 10px;
     }
+
+    .file-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
   </style>
 </head>
 <body>
@@ -126,6 +134,8 @@
     <button id="refresh-btn" onclick="loadSongsFromFolder()">Ladda om JSON</button>
     <select id="deviceSelect" class="device-select"></select>
   </div>
+
+  <div class="file-buttons" id="file-buttons"></div>
 
   <div id="status"></div>
   <div id="sections"></div>
@@ -180,6 +190,10 @@
           deviceSelect.appendChild(option);
         });
         selectedDevice = availableDevices.length > 0 ? availableDevices[0].id : null;
+
+        deviceSelect.addEventListener('change', function() {
+          selectedDevice = deviceSelect.value;
+        });
       } catch (error) {
         console.error("Error fetching devices:", error);
       }
@@ -193,6 +207,8 @@
 
     async function loadSongsFromFolder() {
       document.getElementById('sections').innerHTML = "";
+      document.getElementById('file-buttons').innerHTML = "";  // Reset file buttons
+
       try {
         for (const [index, filename] of filenames.entries()) {
           const fileUrl = `/tracks/${filename}`;
@@ -227,8 +243,10 @@
 
           if (filename === 'Local.json' && json.local) {
             createSection(json.local, 'Lokala Låtar', '#32CD32');
+            createLocalFileButton(json.local);
           }
         }
+        createFileButtons();
       } catch (error) {
         updateStatus("Fel vid inläsning av filer.");
         console.error("Laddningsfel:", error);
@@ -312,12 +330,61 @@
       });
     }
 
+    function createLocalFileButton(localFiles) {
+      const randomFile = localFiles[Math.floor(Math.random() * localFiles.length)];
+      const button = document.createElement('button');
+      button.textContent = `Random Local File: ${randomFile}`;
+      button.onclick = function () {
+        const localUrl = `/tracks/${randomFile}`;
+        window.open(localUrl, '_blank');
+      };
+      document.getElementById('file-buttons').appendChild(button);
+    }
+
+    function createFileButtons() {
+      filenames.forEach(filename => {
+        if (filename !== 'Local.json') {
+          const button = document.createElement('button');
+          button.textContent = filename.split('.')[0];
+          button.onclick = function () {
+            loadAndPlayRandomTrack(filename);
+          };
+          document.getElementById('file-buttons').appendChild(button);
+        }
+      });
+    }
+
+    async function loadAndPlayRandomTrack(filename) {
+      const fileUrl = `/tracks/${filename}`;
+      const response = await fetch(fileUrl);
+
+      if (!response.ok) {
+        console.error(`Kunde inte ladda filen: ${filename}`);
+        return;
+      }
+
+      let json;
+      try {
+        const text = await response.text();
+        json = JSON.parse(text);
+      } catch (error) {
+        console.error(`Ogiltig JSON i filen: ${filename}`, error);
+        return;
+      }
+
+      if (json.tracks) {
+        const randomTrack = json.tracks[Math.floor(Math.random() * json.tracks.length)];
+        const { spotifyURI, starttime } = randomTrack;
+        playSpotifyTrack(spotifyURI, starttime);
+      }
+    }
+
     function playSpotifyTrack(spotifyURI, starttime) {
       if (!selectedDevice) {
         alert("No device selected!");
         return;
       }
-      console.log(`Now playing: ${spotifyURI} [Start Time: ${formatTime(starttime)}] on device ${selectedDevice}`);
+      console.log(`Now playing: ${spotifyURI} [Start Time: ${formatTime(starttime)}]`);
       fetch(`https://api.spotify.com/v1/me/player/play?device_id=${selectedDevice}`, {
         method: 'PUT',
         headers: {
@@ -346,7 +413,7 @@
         alert("No device selected!");
         return;
       }
-      console.log(`Now playing playlist: ${playlistURI} on device ${selectedDevice}`);
+      console.log(`Now playing playlist: ${playlistURI}`);
       fetch(`https://api.spotify.com/v1/me/player/play?device_id=${selectedDevice}`, {
         method: 'PUT',
         headers: {
