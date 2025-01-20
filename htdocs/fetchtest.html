@@ -74,15 +74,14 @@
   </div>
   <div id="status" style="margin-top: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #fff; min-height: 20px;"></div>
 
-
-<div class="input-container">
-  <input type="text" id="uri-input" class="input-field" placeholder="Spotify URI">
-  <input type="text" id="start-time-input" class="input-field" placeholder="Starttid (ms)">
-  <button onclick="getCurrentPlayingTrack()">Hämta nuvarande låt</button>
-  <button onclick="playTrack()">Play</button>
-  <button onclick="stopTrack()">Stoppa</button>
-  <button onclick="saveTrackToList()">Spara i lista</button>
-</div>
+  <div class="input-container">
+    <input type="text" id="uri-input" class="input-field" placeholder="Spotify URI">
+    <input type="text" id="start-time-input" class="input-field" placeholder="Starttid (ms)">
+    <button onclick="getCurrentPlayingTrack()">Hämta nuvarande låt</button>
+    <button onclick="playTrack()">Play</button>
+    <button onclick="stopTrack()">Stoppa</button>
+    <button onclick="saveTrackToList()">Spara i lista</button>
+  </div>
 
   <div id="output">
     <h3>Resultat:</h3>
@@ -96,6 +95,7 @@
           <th>Spela</th>
           <th>Stoppa</th>
           <th>Ta bort</th>
+          <th>Finns i filer</th>
         </tr>
       </thead>
       <tbody>
@@ -111,11 +111,11 @@
       <option value="Intro.json">Intro.json</option>
       <option value="Mål.json">Mål.json</option>
       <option value="Spelpauser.json">Spelpauser.json</option>
-      <option value="Spelpauser2.json">Spelpauser2.json</option>      
+      <option value="Spelpauser2.json">Spelpauser2.json</option>
       <option value="Utvisning.json">Utvisning.json</option>
       <option value="Pepp.json">Pepp.json</option>
       <option value="After.json">After.json</option>
-      <option value="Publik.json">Publik.json</option>      
+      <option value="Publik.json">Publik.json</option>
     </select>
     <button onclick="saveTracksToFile()">Spara till fil</button>
   </div>
@@ -150,7 +150,80 @@
       window.location.href = authUrl;
     }
 
-async function saveTrackToList() {
+    async function getCurrentPlayingTrack() {
+      if (!accessToken) {
+        document.getElementById("status").textContent = "Du måste logga in på Spotify först.";
+        return;
+      }
+
+      const apiUrl = "https://api.spotify.com/v1/me/player/currently-playing";
+
+      try {
+        const response = await fetch(apiUrl, {
+          headers: {
+            "Authorization": `Bearer ${accessToken}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Spotify API returnerade ett fel: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data || !data.item) {
+          document.getElementById("status").textContent = "Ingen låt spelas för tillfället.";
+          return;
+        }
+
+        const uri = data.item.uri;
+        const progressMs = data.progress_ms;
+        const trackTitle = data.item.name;
+        const trackArtist = data.item.artists.map(artist => artist.name).join(", ");
+
+        // Fyll i URI och starttid
+        document.getElementById("uri-input").value = uri;
+        document.getElementById("start-time-input").value = progressMs;
+
+        // Check if track is in any files
+        const filesContainingTrack = await checkTrackInFiles(uri);
+
+        // Display status
+        const fileNames = filesContainingTrack.length > 0 ? filesContainingTrack.join(", ") : "Inga";
+        document.getElementById("status").textContent = `Nuvarande låt: ${trackTitle} av ${trackArtist}. Finns i filer: ${fileNames}`;
+      } catch (error) {
+        console.error("Fel vid hämtning av nuvarande låt:", error);
+        document.getElementById("status").textContent = "Kunde inte hämta nuvarande låt.";
+      }
+    }
+
+    async function checkTrackInFiles(uri) {
+      const files = [
+        "Warmup.json", "Intro.json", "Mål.json",
+        "Spelpauser.json", "Spelpauser2.json", 
+        "Utvisning.json", "Pepp.json", "After.json", "Publik.json"
+      ];
+      const filesContainingTrack = [];
+
+      for (const file of files) {
+        try {
+          const response = await fetch(file);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.some(track => track.spotifyURI === uri)) {
+              filesContainingTrack.push(file);
+            }
+          }
+        } catch (error) {
+          console.error(`Kunde inte läsa filen ${file}:`, error);
+        }
+      }
+
+      return filesContainingTrack;
+    }
+
+    // Remaining functions: saveTrackToList(), playTrack(), stopTrack(), saveTracksToFile() unchanged.
+  async function saveTrackToList() {
   const uri = document.getElementById("uri-input").value.trim();
   const startTime = parseInt(document.getElementById("start-time-input").value.trim());
 
@@ -196,86 +269,7 @@ async function saveTrackToList() {
     document.getElementById("status").textContent = "Kunde inte hämta låtinfo. Kontrollera URI eller nätverksanslutningen.";
   }
 }
-
-async function getCurrentPlayingTrack() {
-  if (!accessToken) {
-    document.getElementById("status").textContent = "Du måste logga in på Spotify först.";
-    return;
-  }
-
-  const apiUrl = "https://api.spotify.com/v1/me/player/currently-playing";
-
-  try {
-    const response = await fetch(apiUrl, {
-      headers: {
-        "Authorization": `Bearer ${accessToken}`
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`Spotify API returnerade ett fel: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    if (!data || !data.item) {
-      document.getElementById("status").textContent = "Ingen låt spelas för tillfället.";
-      return;
-    }
-
-    const uri = data.item.uri;
-    const progressMs = data.progress_ms;
-    const trackTitle = data.item.name;
-    const trackArtist = data.item.artists.map(artist => artist.name).join(", ");
-
-    // Fyll i URI och starttid
-    document.getElementById("uri-input").value = uri;
-    document.getElementById("start-time-input").value = progressMs;
-
-    // Uppdatera statusfältet med låttitel och artist
-    document.getElementById("status").textContent = `Nuvarande låt: ${trackTitle} av ${trackArtist}.`;
-  } catch (error) {
-    console.error("Fel vid hämtning av nuvarande låt:", error);
-    document.getElementById("status").textContent = "Kunde inte hämta nuvarande låt.";
-  }
-}
-
-
-    function updateTrackTable() {
-      const tableBody = document.getElementById("track-table").getElementsByTagName('tbody')[0];
-      tableBody.innerHTML = ""; // Clear current table rows
-
-      trackList.forEach((track, index) => {
-        const row = tableBody.insertRow();
-        
-        row.insertCell(0).textContent = track.spotifyURI;
-        row.insertCell(1).textContent = track.title;
-        row.insertCell(2).textContent = track.artist;
-        row.insertCell(3).textContent = track.starttime;
-
-        const playButton = document.createElement('button');
-        playButton.textContent = 'Play';
-        playButton.onclick = () => playSpotifyTrack(track.spotifyURI, track.starttime);
-        row.insertCell(4).appendChild(playButton);
-
-        const stopButton = document.createElement('button');
-        stopButton.textContent = 'Stoppa';
-        stopButton.onclick = stopTrack;
-        row.insertCell(5).appendChild(stopButton);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'X';
-        deleteButton.onclick = () => deleteTrack(index);
-        row.insertCell(6).appendChild(deleteButton);
-      });
-    }
-
-    function deleteTrack(index) {
-      trackList.splice(index, 1);
-      updateTrackTable();
-    }
-
-    function playSpotifyTrack(spotifyURI, startTime) {
+function playSpotifyTrack(spotifyURI, startTime) {
       const playUrl = `https://api.spotify.com/v1/me/player/play`;
 
       fetch(playUrl, {
@@ -376,8 +370,6 @@ function saveTracksToFile() {
     document.getElementById("status").textContent = "Kunde inte spara låtarna till fil.";
   });
 }
-
-
   </script>
 </body>
 </html>

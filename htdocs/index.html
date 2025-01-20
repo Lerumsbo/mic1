@@ -284,7 +284,7 @@
 
     function playSpotifyTrack(spotifyURI, starttime) {
       console.log(`Now playing: ${spotifyURI} by ${starttime} [Start Time: ${formatTime(starttime)}]`);
-      fetch(`https://api.spotify.com/v1/me/player/play`, {
+      fetch(`https://api.spotify.com/v1/me/player/play?device_id=e38bcc655ad151bcdfa64cdef3d5bd0854dcc3fe`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${accessToken}`,

@@ -23,6 +23,12 @@
             "starttime": 48800,
             "artist": "Inner Circle",
             "title": "Bad Boys (Theme from COPS)"
+        },
+        {
+            "spotifyURI": "spotify:track:5oKlSLcbGzGtNQXHIRFHDp",
+            "starttime": 0,
+            "artist": "Juice Music",
+            "title": "Dont Worry, Be Happy"
         }
     ]
 }

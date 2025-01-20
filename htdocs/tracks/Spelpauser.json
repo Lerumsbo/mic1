@@ -203,6 +203,84 @@
             "starttime": 9526,
             "artist": "Dr. Dre",
             "title": "The Next Episode - Instrumental"
+        },
+        {
+            "spotifyURI": "spotify:track:1wMoaYl7HCU9thAkhBt383",
+            "starttime": 29900,
+            "artist": "Brings",
+            "title": "Polka, Polka, Polka - Club Mix"
+        },
+        {
+            "spotifyURI": "spotify:track:45sGyAtAxD6efaN0bJAFgh",
+            "starttime": 28800,
+            "artist": "Deorro",
+            "title": "Bailar (feat. Elvis Crespo) - Radio Edit"
+        },
+        {
+            "spotifyURI": "spotify:track:45Ia1U4KtIjAPPU7Wv1Sea",
+            "starttime": 0,
+            "artist": "Lenny Kravitz",
+            "title": "Are You Gonna Go My Way"
+        },
+        {
+            "spotifyURI": "spotify:track:3xqvEHM6VeogAdq0bMnLPU",
+            "starttime": 265509,
+            "artist": "The KLF",
+            "title": "Last Train To Trancentral - Live From The Lost Continent (12\u201d A Side)"
+        },
+        {
+            "spotifyURI": "spotify:track:0PdM2a6oIjqepoEfcJo0RO",
+            "starttime": 5900,
+            "artist": "Def Leppard",
+            "title": "Pour Some Sugar On Me - Remastered 2017"
+        },
+        {
+            "spotifyURI": "spotify:track:3SFXsFpeGmBTtQvKiwYMDA",
+            "starttime": 4000,
+            "artist": "The Offspring",
+            "title": "Pretty Fly (For A White Guy)"
+        },
+        {
+            "spotifyURI": "spotify:track:39shmbIHICJ2Wxnk1fPSdz",
+            "starttime": 8500,
+            "artist": "The Clash",
+            "title": "Should I Stay or Should I Go - Remastered"
+        },
+        {
+            "spotifyURI": "spotify:track:07q0QVgO56EorrSGHC48y3",
+            "starttime": 7500,
+            "artist": "KISS",
+            "title": "I Was Made For Lovin' You"
+        },
+        {
+            "spotifyURI": "spotify:track:4Y7XAxTANhu3lmnLAzhWJW",
+            "starttime": 31000,
+            "artist": "Pitbull",
+            "title": "Fireball (feat. John Ryan)"
+        },
+        {
+            "spotifyURI": "spotify:track:7cbfAGvFhqwlJw92d1e3u4",
+            "starttime": 0,
+            "artist": "Mustasch",
+            "title": "Contagious"
+        },
+        {
+            "spotifyURI": "spotify:track:6WQ5SWSofH093Zf10DiC7E",
+            "starttime": 84900,
+            "artist": "Peter Wackel",
+            "title": "Ladioo - Arena-Hitmix"
+        },
+        {
+            "spotifyURI": "spotify:track:7K65IhPnd2LTMPdRFHR7cv",
+            "starttime": 74900,
+            "artist": "Dimitri Vegas & Like Mike",
+            "title": "Mammoth"
+        },
+        {
+            "spotifyURI": "spotify:track:00pnGo0SqrkQFPnDJKBW96",
+            "starttime": 34600,
+            "artist": "Videokids",
+            "title": "Woodpeckers from Space"
         }
     ]
 }

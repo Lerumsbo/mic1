@@ -35,6 +35,18 @@
             "starttime": 0,
             "artist": "Steel Panther",
             "title": "Eyes Of A Panther"
+        },
+        {
+            "spotifyURI": "spotify:track:3VqHuw0wFlIHcIPWkhIbdQ",
+            "starttime": 16079,
+            "artist": "Metallica",
+            "title": "Enter Sandman (Remastered)"
+        },
+        {
+            "spotifyURI": "spotify:track:4Yqy0GpeDEXLibWJCZyQew",
+            "starttime": 0,
+            "artist": "M\u00f6tley Cr\u00fce",
+            "title": "Kickstart My Heart"
         }
     ]
 }
