@@ -198,6 +198,7 @@
     }
 
     async function checkTrackInFiles(uri) {
+  // Define the list of JSON files in the /tracks folder
   const fileNames = [
     "Warmup.json",
     "Intro.json",
@@ -210,34 +211,41 @@
     "Publik.json",
   ];
 
-  let containingFiles = [];
+  // Initialize an array to store filenames containing the URI
+  const containingFiles = [];
+
+  // Loop through each file and check for the given URI
   for (const fileName of fileNames) {
-    const filePath = `/tracks/${fileName}`; // Adjusted to local server path
     try {
-      const response = await fetch(filePath); // Fetching from server
+      // Read the JSON file from the /tracks directory
+      const response = await fetch(`/tracks/${fileName}`);
       if (!response.ok) {
-        console.warn(`Could not load file: ${filePath}`);
+        console.warn(`Could not load file: ${fileName}`);
         continue;
       }
 
+      // Parse the JSON data
       const fileData = await response.json();
 
-      // Ensure the fileData is an array and iterate to check the URI
-      if (Array.isArray(fileData)) {
-        const match = fileData.some(
-          (track) => track.spotifyURI && track.spotifyURI === uri
+      // Ensure the fileData has a "tracks" array and check for the URI
+      if (fileData.tracks && Array.isArray(fileData.tracks)) {
+        const match = fileData.tracks.some(
+          (track) => track.spotifyURI === uri
         );
+
+        // If a match is found, add the filename to the result array
         if (match) {
           containingFiles.push(fileName);
         }
       } else {
-        console.warn(`File ${fileName} does not contain an array.`);
+        console.warn(`File ${fileName} does not have a valid "tracks" array.`);
       }
     } catch (error) {
-      console.error(`Error reading file ${filePath}:`, error);
+      console.error(`Error reading file ${fileName}:`, error);
     }
   }
 
+  // Return the list of filenames containing the URI
   return containingFiles;
 }
 
