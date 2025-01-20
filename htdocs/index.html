@@ -122,6 +122,20 @@
       flex-wrap: wrap;
     }
 
+    .random-track-btn {
+      background-color: black;
+      color: white;
+      padding: 10px;
+      font-size: 16px;
+      margin: 5px;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .random-track-btn:hover {
+      background-color: #333;
+    }
   </style>
 </head>
 <body>
@@ -169,6 +183,7 @@
         updateStatus("Inloggning lyckades!");
       }
       fetchSpotifyDevices();
+      createRandomTrackButtons();  // Add random track buttons to header
       loadSongsFromFolder();
     };
 
@@ -293,90 +308,50 @@
       sectionElement.appendChild(content);
       document.getElementById('sections').prepend(sectionElement);
 
-      header.addEventListener('click', () => {
-        content.style.display = content.style.display === "none" ? "flex" : "none";
+      header.addEventListener('click', function () {
+        content.style.display = content.style.display === 'none' ? 'block' : 'none';
       });
-    }
-
-    function createPlaylistSection(playlists, sectionName, color) {
-      const sectionElement = document.createElement('section');
-      const header = document.createElement('h2');
-      header.textContent = sectionName;
-      sectionElement.appendChild(header);
-
-      const content = document.createElement('div');
-      content.classList.add('song-list');
-      content.style.display = "none";
-
-      playlists.forEach(playlist => {
-        const { spotifyURI, name } = playlist;
-
-        const button = document.createElement('button');
-        button.style.backgroundColor = color;
-        button.textContent = name || 'Unnamed Playlist';
-
-        button.onclick = function () {
-          playPlaylist(spotifyURI);
-        };
-
-        content.appendChild(button);
-      });
-
-      sectionElement.appendChild(content);
-      document.getElementById('sections').prepend(sectionElement);
-
-      header.addEventListener('click', () => {
-        content.style.display = content.style.display === "none" ? "flex" : "none";
-      });
-    }
-
-    function createLocalFileButton(localFiles) {
-      const randomFile = localFiles[Math.floor(Math.random() * localFiles.length)];
-      const button = document.createElement('button');
-      button.textContent = `Random Local File: ${randomFile}`;
-      button.onclick = function () {
-        const localUrl = `/tracks/${randomFile}`;
-        window.open(localUrl, '_blank');
-      };
-      document.getElementById('file-buttons').appendChild(button);
     }
 
     function createFileButtons() {
-      filenames.forEach(filename => {
-        if (filename !== 'Local.json') {
-          const button = document.createElement('button');
-          button.textContent = filename.split('.')[0];
-          button.onclick = function () {
-            loadAndPlayRandomTrack(filename);
-          };
-          document.getElementById('file-buttons').appendChild(button);
-        }
+      const fileButtonsContainer = document.getElementById('file-buttons');
+      filenames.forEach((filename) => {
+        const button = document.createElement('button');
+        button.textContent = filename.split('.')[0];
+        button.onclick = () => loadAndPlayRandomTrack(filename);
+        fileButtonsContainer.appendChild(button);
       });
     }
 
-    async function loadAndPlayRandomTrack(filename) {
-      const fileUrl = `/tracks/${filename}`;
-      const response = await fetch(fileUrl);
+    function createRandomTrackButtons() {
+      const header = document.querySelector('.fixed-header');
 
-      if (!response.ok) {
-        console.error(`Kunde inte ladda filen: ${filename}`);
-        return;
-      }
+      filenames.forEach((filename) => {
+        const button = document.createElement('button');
+        button.textContent = filename.split('.')[0];
+        button.classList.add('random-track-btn');
+        button.onclick = () => loadAndPlayRandomTrack(filename);
+        header.appendChild(button);
+      });
 
-      let json;
-      try {
-        const text = await response.text();
-        json = JSON.parse(text);
-      } catch (error) {
-        console.error(`Ogiltig JSON i filen: ${filename}`, error);
-        return;
-      }
+      // Add the local button
+      const localButton = document.createElement('button');
+      localButton.textContent = 'Local Tracks';
+      localButton.classList.add('random-track-btn');
+      localButton.onclick = () => loadAndPlayRandomTrack('Local.json');
+      header.appendChild(localButton);
+    }
 
-      if (json.tracks) {
-        const randomTrack = json.tracks[Math.floor(Math.random() * json.tracks.length)];
-        const { spotifyURI, starttime } = randomTrack;
-        playSpotifyTrack(spotifyURI, starttime);
-      }
+    function loadAndPlayRandomTrack(filename) {
+      fetch(`/tracks/${filename}`)
+        .then(response => response.json())
+        .then(data => {
+          const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
+          if (randomTrack) {
+            playSpotifyTrack(randomTrack.spotifyURI, randomTrack.starttime);
+          }
+        })
+        .catch(err => console.error("Error loading random track:", err));
     }
 
     function playSpotifyTrack(spotifyURI, starttime) {
@@ -385,44 +360,20 @@
         return;
       }
       console.log(`Now playing: ${spotifyURI} [Start Time: ${formatTime(starttime)} on device: ${selectedDevice}]`);
+
       fetch(`https://api.spotify.com/v1/me/player/play?device_id=${selectedDevice}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ uris: [spotifyURI] })
-      })
-      .then(() => {
-        if (starttime) {
-            fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${starttime * 1000}`, {
-              method: 'PUT',
-              headers: { 'Authorization': `Bearer ${accessToken}` }
-            });
-
-        }
+        body: JSON.stringify({
+          uris: [spotifyURI],
+          position_ms: starttime || 0 // Use starttime (in milliseconds), default to 0 if undefined
+        })
       })
       .catch(error => {
         console.error('Error playing track:', error);
-      });
-    }
-
-    function playPlaylist(playlistURI) {
-      if (!selectedDevice) {
-        alert("No device selected!");
-        return;
-      }
-      console.log(`Now playing playlist: ${playlistURI}`);
-      fetch(`https://api.spotify.com/v1/me/player/play?device_id=${selectedDevice}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ context_uri: playlistURI })
-      })
-      .catch(error => {
-        console.error('Error playing playlist:', error);
       });
     }
 
@@ -438,8 +389,8 @@
       });
     }
 
-    function updateStatus(statusMessage) {
-      document.getElementById('status').textContent = statusMessage;
+    function updateStatus(statusText) {
+      document.getElementById("status").textContent = statusText;
     }
   </script>
 </body>
