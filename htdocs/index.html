@@ -261,7 +261,7 @@
             createLocalFileButton(json.local);
           }
         }
-        createFileButtons();
+        
       } catch (error) {
         updateStatus("Fel vid inläsning av filer.");
         console.error("Laddningsfel:", error);
@@ -344,16 +344,6 @@
 
       header.addEventListener('click', function () {
         content.style.display = content.style.display === 'none' ? 'block' : 'none';
-      });
-    }
-
-    function createFileButtons() {
-      const fileButtonsContainer = document.getElementById('file-buttons');
-      filenames.forEach((filename) => {
-        const button = document.createElement('button');
-        button.textContent = filename.split('.')[0];
-        button.onclick = () => loadAndPlayRandomTrack(filename);
-        fileButtonsContainer.appendChild(button);
       });
     }
 
