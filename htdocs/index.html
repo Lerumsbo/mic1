@@ -317,7 +317,7 @@
         alert("No device selected!");
         return;
       }
-      console.log(`Now playing: ${spotifyURI} by ${starttime} [Start Time: ${formatTime(starttime)}]`);
+      console.log(`Now playing: ${spotifyURI} [Start Time: ${formatTime(starttime)}] on device ${selectedDevice}`);
       fetch(`https://api.spotify.com/v1/me/player/play?device_id=${selectedDevice}`, {
         method: 'PUT',
         headers: {
@@ -346,7 +346,7 @@
         alert("No device selected!");
         return;
       }
-      console.log(`Now playing playlist: ${playlistURI}`);
+      console.log(`Now playing playlist: ${playlistURI} on device ${selectedDevice}`);
       fetch(`https://api.spotify.com/v1/me/player/play?device_id=${selectedDevice}`, {
         method: 'PUT',
         headers: {
