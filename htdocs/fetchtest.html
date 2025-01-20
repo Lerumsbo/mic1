@@ -198,29 +198,48 @@
     }
 
     async function checkTrackInFiles(uri) {
-      const files = [
-        "Warmup.json", "Intro.json", "Mål.json",
-        "Spelpauser.json", "Spelpauser2.json", 
-        "Utvisning.json", "Pepp.json", "After.json", "Publik.json"
-      ];
-      const filesContainingTrack = [];
+  const fileNames = [
+    "Warmup.json",
+    "Intro.json",
+    "Mål.json",
+    "Spelpauser.json",
+    "Spelpauser2.json",
+    "Utvisning.json",
+    "Pepp.json",
+    "After.json",
+    "Publik.json",
+  ];
 
-      for (const file of files) {
-        try {
-          const response = await fetch(file);
-          if (response.ok) {
-            const data = await response.json();
-            if (data.some(track => track.spotifyURI === uri)) {
-              filesContainingTrack.push(file);
-            }
-          }
-        } catch (error) {
-          console.error(`Kunde inte läsa filen ${file}:`, error);
-        }
+  let containingFiles = [];
+  for (const fileName of fileNames) {
+    const filePath = `/tracks/${fileName}`; // Adjusted to local server path
+    try {
+      const response = await fetch(filePath); // Fetching from server
+      if (!response.ok) {
+        console.warn(`Could not load file: ${filePath}`);
+        continue;
       }
 
-      return filesContainingTrack;
+      const fileData = await response.json();
+
+      // Ensure the fileData is an array and iterate to check the URI
+      if (Array.isArray(fileData)) {
+        const match = fileData.some(
+          (track) => track.spotifyURI && track.spotifyURI === uri
+        );
+        if (match) {
+          containingFiles.push(fileName);
+        }
+      } else {
+        console.warn(`File ${fileName} does not contain an array.`);
+      }
+    } catch (error) {
+      console.error(`Error reading file ${filePath}:`, error);
     }
+  }
+
+  return containingFiles;
+}
 
     // Remaining functions: saveTrackToList(), playTrack(), stopTrack(), saveTracksToFile() unchanged.
   async function saveTrackToList() {
