@@ -358,24 +358,34 @@
         header.appendChild(button);
       });
 
-      // Add the local button
-      const localButton = document.createElement('button');
-      localButton.textContent = 'Local Tracks';
-      localButton.classList.add('random-track-btn');
-      localButton.onclick = () => loadAndPlayRandomTrack('Local.json');
-      header.appendChild(localButton);
     }
 
-    function loadAndPlayRandomTrack(filename) {
-      fetch(`/tracks/${filename}`)
-        .then(response => response.json())
-        .then(data => {
+  function loadAndPlayRandomTrack(filename) {
+    fetch(`/tracks/${filename}`)
+      .then(response => response.json())
+      .then(data => {
+        // Check if the file is Local.json
+        if (filename === 'Local.json') {
+            console.log(`Opening random local file`);
+            const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
+            console.log(`randomTrack: ${randomTrack}`);
+            if (randomTrack) {
+            const localUrl = `/tracks/${randomTrack.spotifyURI}`;
+            console.log(`Opening local file: ${localUrl}`);
+            window.open(localUrl, '_blank');
+            }
+        } else {
+          // For other files (Spotify tracks)
           const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
           if (randomTrack) {
-            playSpotifyTrack(randomTrack.spotifyURI, randomTrack.starttime);
+            const { spotifyURI, starttime } = randomTrack;
+            if (spotifyURI) {
+              playSpotifyTrack(spotifyURI, starttime);
+            }
           }
-        })
-        .catch(err => console.error("Error loading random track:", err));
+        }
+      })
+      .catch(err => console.error("Error loading random track:", err));
     }
 
     function playSpotifyTrack(spotifyURI, starttime) {
