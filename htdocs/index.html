@@ -3,152 +3,179 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spotify Playlist</title>
+  <title>Floorball audio</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      padding: 20px;
-    }
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  padding: 20px;
+}
 
-    h1, p {
-      text-align: center;
-    }
+h1, p {
+  text-align: center;
+}
 
-    button {
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 5px;
-      border: none;
-      color: white;
-      transition: background-color 0.3s ease;
-    }
+button {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  transition: background-color 0.3s ease;
+}
 
-    .fixed-header {
-      position: sticky;
-      top: 0;
-      background-color: #ffffff;
-      padding: 10px;
-      border-bottom: 2px solid #ccc;
-      z-index: 1000;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+.fixed-header {
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+  padding: 10px;
+  border-bottom: 2px solid #ccc;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
-    section {
-      margin-bottom: 30px;
-      padding: 10px;
-      border-radius: 8px;
-      background-color: #f4f4f4;
-    }
+section {
+  margin-bottom: 30px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f4f4f4;
+}
 
-    section h2 {
-      margin-top: 0;
-      font-size: 20px;
-      cursor: pointer;
-      padding: 10px;
-      background-color: #f4f4f4;
-      border-radius: 5px;
-      text-align: left;
-    }
+section h2 {
+  margin-top: 0;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 10px;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  text-align: left;
+}
 
-    .song-list {
-      list-style-type: none;
-      padding: 0;
-      display: flex;
-      flex-wrap: wrap;
-    }
+/* Ensure song-list is a flex container */
+.song-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0;
+  justify-content: space-between;
+}
 
-    .song-list button {
-      margin: 10px;
-      width: 200px;
-      height: 80px;
-      text-align: center;
-      line-height: 1.4;
-      background-color: #555;
-      color: white;
-      border: 2px solid transparent;
-    }
+.song-list button {
+  width: 48%; /* 2 buttons per row */
+  height: 100px;
+  text-align: center;
+  line-height: 1.4;
+  background-color: #555;
+  color: white;
+  border: 2px solid transparent;
+  overflow: hidden;
+  white-space: pre-line;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
 
-    #status {
-      font-size: 18px;
-      font-weight: bold;
-      margin: 20px 0;
-      text-align: center;
-    }
+/* For smaller screens (mobile), buttons will stack vertically with full width */
+@media (max-width: 600px) {
+  .song-list button {
+    width: 100% !important;
+  }
+}
 
-    #login-btn, #stop-btn, #refresh-btn {
-      padding: 12px 20px;
-      font-size: 18px;
-      margin: 5px;
-    }
+#status {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px 0;
+  text-align: center;
+}
 
-    #login-btn {
-      background-color: #3498db;
-    }
+#login-btn, #stop-btn, #refresh-btn, #collapse-all-btn {
+  padding: 12px 20px;
+  font-size: 18px;
+  margin: 5px;
+}
 
-    #stop-btn {
-      background-color: #e74c3c;
-    }
+#login-btn {
+  background-color: #3498db;
+}
 
-    #refresh-btn {
-      background-color: #2ecc71;
-    }
+#stop-btn {
+  background-color: #e74c3c;
+}
 
-    #login-btn:hover {
-      background-color: #2980b9;
-    }
+#refresh-btn {
+  background-color: #2ecc71;
+}
 
-    #stop-btn:hover {
-      background-color: #c0392b;
-    }
+#collapse-all-btn {
+  background-color: #000000;
+}
 
-    #refresh-btn:hover {
-      background-color: #27ae60;
-    }
+#login-btn:hover {
+  background-color: #2980b9;
+}
 
-    .device-select {
-      color: black;
-      margin: 5px;
-      padding: 10px;
-    }
+#stop-btn:hover {
+  background-color: #c0392b;
+}
 
-    .file-buttons {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+#refresh-btn:hover {
+  background-color: #27ae60;
+}
 
-    .random-track-btn {
-      background-color: black;
-      color: white;
-      padding: 10px;
-      font-size: 16px;
-      margin: 5px;
-      cursor: pointer;
-      border: none;
-      transition: background-color 0.3s ease;
-    }
+#collapse-all-btn:hover {
+  background-color: #AAAAAA;
+}
 
-    .random-track-btn:hover {
-      background-color: #333;
-    }
+.device-select {
+  color: black;
+  margin: 5px;
+  padding: 10px;
+}
+
+.file-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.random-track-btn {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  margin: 5px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.random-track-btn:hover {
+  background-color: #333;
+}
+
+
+
+
   </style>
 </head>
 <body>
-  <h1>Spotify Playlist</h1>
-  <p>Klicka på en låt eller spellista för att spela upp. Du måste logga in först.</p>
 
   <div class="fixed-header">
-    <button id="stop-btn" onclick="stopPlayback()">Stoppa uppspelning</button>
-    <button id="login-btn" onclick="authenticateSpotify()">Logga in med Spotify</button>
-    <button id="refresh-btn" onclick="loadSongsFromFolder()">Ladda om JSON</button>
+    <button id="stop-btn" onclick="stopPlayback()">Stop</button>
+    <button id="login-btn" onclick="authenticateSpotify()">Log in</button>
+    <button id="refresh-btn" onclick="loadSongsFromFolder()">Reload</button>
+    <button id="collapse-all-btn" onclick="collapseAllSections()">Collapse All</button>
     <select id="deviceSelect" class="device-select"></select>
   </div>
-
+  
   <div class="file-buttons" id="file-buttons"></div>
 
   <div id="status"></div>
@@ -220,6 +247,12 @@
       return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
 
+    function collapseAllSections() {
+      const sections = document.querySelectorAll(".song-list");
+      sections.forEach(section => {
+        section.style.display = "none";
+      });
+    }
     async function loadSongsFromFolder() {
       document.getElementById('sections').innerHTML = "";
       document.getElementById('file-buttons').innerHTML = "";  // Reset file buttons
@@ -269,7 +302,6 @@
     }
 
     function createSection(tracks, sectionName, color) {
-      console.log(`Skapar sektion:  ${sectionName}`);
       const sectionElement = document.createElement('section');
       const header = document.createElement('h2');
       header.textContent = sectionName;
@@ -284,7 +316,7 @@
 
         const button = document.createElement('button');
         button.style.backgroundColor = color;
-        button.textContent = `${title || 'Unknown Title'} - ${artist || 'Unknown Artist'}${starttime ? ` [${formatTime(starttime)}]` : ''}`;
+        button.textContent = `${title || 'Unknown Title'}\n${artist || 'Unknown Artist'}\n${formatTime(starttime || 0)}`;
 
         if (spotifyURI) {
           if (spotifyURI.startsWith("spotify:")) {
@@ -296,7 +328,6 @@
             const localUrl = `/tracks/${spotifyURI}`;
             button.onclick = function (event) {
               event.preventDefault();
-              console.log(`Opening local file: ${localUrl}`);
               window.open(localUrl, '_blank');
             };
           }
@@ -357,35 +388,29 @@
         button.onclick = () => loadAndPlayRandomTrack(filename);
         header.appendChild(button);
       });
-
     }
 
-  function loadAndPlayRandomTrack(filename) {
-    fetch(`/tracks/${filename}`)
-      .then(response => response.json())
-      .then(data => {
-        // Check if the file is Local.json
-        if (filename === 'Local.json') {
-            console.log(`Opening random local file`);
+    function loadAndPlayRandomTrack(filename) {
+      fetch(`/tracks/${filename}`)
+        .then(response => response.json())
+        .then(data => {
+          if (filename === 'Local.json') {
             const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
-            console.log(`randomTrack: ${randomTrack}`);
             if (randomTrack) {
-            const localUrl = `/tracks/${randomTrack.spotifyURI}`;
-            console.log(`Opening local file: ${localUrl}`);
-            window.open(localUrl, '_blank');
+              const localUrl = `/tracks/${randomTrack.spotifyURI}`;
+              window.open(localUrl, '_blank');
             }
-        } else {
-          // For other files (Spotify tracks)
-          const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
-          if (randomTrack) {
-            const { spotifyURI, starttime } = randomTrack;
-            if (spotifyURI) {
-              playSpotifyTrack(spotifyURI, starttime);
+          } else {
+            const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
+            if (randomTrack) {
+              const { spotifyURI, starttime } = randomTrack;
+              if (spotifyURI) {
+                playSpotifyTrack(spotifyURI, starttime);
+              }
             }
           }
-        }
-      })
-      .catch(err => console.error("Error loading random track:", err));
+        })
+        .catch(err => console.error("Error loading random track:", err));
     }
 
     function playSpotifyTrack(spotifyURI, starttime) {
@@ -393,8 +418,6 @@
         alert("No device selected!");
         return;
       }
-      console.log(`Now playing: ${spotifyURI} [Start Time: ${formatTime(starttime)} on device: ${selectedDevice}]`);
-
       fetch(`https://api.spotify.com/v1/me/player/play?device_id=${selectedDevice}`, {
         method: 'PUT',
         headers: {
@@ -403,28 +426,24 @@
         },
         body: JSON.stringify({
           uris: [spotifyURI],
-          position_ms: starttime || 0 // Use starttime (in milliseconds), default to 0 if undefined
+          position_ms: starttime || 0
         })
-      })
-      .catch(error => {
-        console.error('Error playing track:', error);
       });
     }
 
     function stopPlayback() {
-      fetch(`https://api.spotify.com/v1/me/player/pause`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      })
-      .catch(error => {
-        console.error('Error stopping playback:', error);
-      });
+      if (selectedDevice) {
+        fetch(`https://api.spotify.com/v1/me/player/pause?device_id=${selectedDevice}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        });
+      }
     }
 
-    function updateStatus(statusText) {
-      document.getElementById("status").textContent = statusText;
+    function updateStatus(message) {
+      document.getElementById('status').textContent = message;
     }
   </script>
 </body>
