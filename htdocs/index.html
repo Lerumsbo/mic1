@@ -55,29 +55,41 @@ section h2 {
   text-align: left;
 }
 
-/* Ensure song-list is a flex container */
-    .song-list {
-      list-style-type: none;
-      padding: 0;
-      display: flex;
-      flex-wrap: wrap;
-      vertical-align: top;
-    }
 
-    .song-list button {
-      vertical-align: top;
-      margin: 10px;
-      width: 200px;
-      height: 80px;
-      text-align: center;
-      line-height: 1.4;
-      background-color: #555;
-      color: white;
-      border: 2px solid transparent;
-    }
+.song-list {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    vertical-align: top;
+}
+
+.song-list button {
+    vertical-align: top;
+    margin: 10px;
+    width: 160px;
+    height: 80px;
+    text-align: center;
+    line-height: 1.4;
+    background-color: #555;
+    color: white;
+    border: 2px solid transparent;
+}
 
 
+.header-buttons {
+    display: flex;
+    justify-content: center;
+     gap: 10px;
+     flex-wrap: wrap;
+  }
 
+.random-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
 
 
 #status {
@@ -160,11 +172,14 @@ section h2 {
 <body>
 
   <div class="fixed-header">
-    <button id="stop-btn" onclick="stopPlayback()">Stop</button>
-    <button id="login-btn" onclick="authenticateSpotify()">Log in</button>
-    <button id="refresh-btn" onclick="loadSongsFromFolder()">Reload</button>
-    <button id="collapse-all-btn" onclick="collapseAllSections()">Collapse All</button>
-    <select id="deviceSelect" class="device-select"></select>
+    <div class="header-buttons">
+      <button id="stop-btn" onclick="stopPlayback()">Stop</button>
+      <button id="login-btn" onclick="authenticateSpotify()">Log in</button>
+      <button id="refresh-btn" onclick="loadSongsFromFolder()">Reload</button>
+      <button id="collapse-all-btn" onclick="collapseAllSections()">Collapse All</button>
+      <select id="deviceSelect" class="device-select"></select>
+    </div>
+    <div class="random-buttons" id="random-buttons"></div>
   </div>
   
   <div class="file-buttons" id="file-buttons"></div>
@@ -354,7 +369,7 @@ section h2 {
 
         if (spotifyURI) {
           button.onclick = function () {
-            playSpotifyTrack(spotifyURI);
+            playPlaylist(spotifyURI);
           };
         }
 
@@ -370,9 +385,13 @@ section h2 {
     }
 
     function createRandomTrackButtons() {
-      const header = document.querySelector('.fixed-header');
+      const header = document.querySelector('.random-buttons');
 
       filenames.forEach((filename) => {
+         if (filename === 'playlists.json') {
+            // Skip creating a button for playlists.json
+            return;
+        }
         const button = document.createElement('button');
         button.textContent = filename.split('.')[0];
         button.classList.add('random-track-btn');
@@ -419,6 +438,25 @@ section h2 {
           uris: [spotifyURI],
           position_ms: starttime || 0
         })
+      });
+    }
+
+    function playPlaylist(playlistURI) {
+      if (!selectedDevice) {
+        alert("No device selected!");
+        return;
+      }
+      console.log(`Now playing playlist: ${playlistURI}`);
+      fetch(`https://api.spotify.com/v1/me/player/play?device_id=${selectedDevice}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ context_uri: playlistURI })
+      })
+      .catch(error => {
+        console.error('Error playing playlist:', error);
       });
     }
 
