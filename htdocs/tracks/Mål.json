@@ -41,6 +41,12 @@
             "starttime": 0,
             "artist": "Fred Coury",
             "title": "Power Ride 2010 (La Kings Goal Song)"
+        },
+        {
+            "spotifyURI": "spotify:track:1BSwv4ckeRBwuIsYXRG5QV",
+            "starttime": 64300,
+            "artist": "Scooter",
+            "title": "J'adore Hardcore"
         }
     ]
 }
