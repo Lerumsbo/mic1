@@ -249,8 +249,41 @@
   // Return the list of filenames containing the URI
   return containingFiles;
 }
+function updateTrackTable() {
+      const tableBody = document.getElementById("track-table").getElementsByTagName('tbody')[0];
+      tableBody.innerHTML = ""; // Clear current table rows
 
-    // Remaining functions: saveTrackToList(), playTrack(), stopTrack(), saveTracksToFile() unchanged.
+      trackList.forEach((track, index) => {
+        const row = tableBody.insertRow();
+        
+        row.insertCell(0).textContent = track.spotifyURI;
+        row.insertCell(1).textContent = track.title;
+        row.insertCell(2).textContent = track.artist;
+        row.insertCell(3).textContent = track.starttime;
+
+        const playButton = document.createElement('button');
+        playButton.textContent = 'Play';
+        playButton.onclick = () => playSpotifyTrack(track.spotifyURI, track.starttime);
+        row.insertCell(4).appendChild(playButton);
+
+        const stopButton = document.createElement('button');
+        stopButton.textContent = 'Stoppa';
+        stopButton.onclick = stopTrack;
+        row.insertCell(5).appendChild(stopButton);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'X';
+        deleteButton.onclick = () => deleteTrack(index);
+        row.insertCell(6).appendChild(deleteButton);
+      });
+    }
+
+
+    function deleteTrack(index) {
+      trackList.splice(index, 1);
+      updateTrackTable();
+    }
+        
   async function saveTrackToList() {
   const uri = document.getElementById("uri-input").value.trim();
   const startTime = parseInt(document.getElementById("start-time-input").value.trim());
