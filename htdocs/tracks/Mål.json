@@ -47,6 +47,12 @@
             "starttime": 64300,
             "artist": "Scooter",
             "title": "J'adore Hardcore"
+        },
+        {
+            "spotifyURI": "spotify:track:0q4UKXgdbcMbIYoI4Ltao5",
+            "starttime": 0,
+            "artist": "Rally",
+            "title": "De Va La G\u00f6tt!"
         }
     ]
 }

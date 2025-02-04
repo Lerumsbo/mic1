@@ -77,6 +77,24 @@
             "starttime": 47000,
             "artist": "Snook",
             "title": "Mister Cool"
+        },
+        {
+            "spotifyURI": "spotify:track:10AwlsmVEASSiWORkKcgRo",
+            "starttime": 73467,
+            "artist": "Ted G\u00e4rdestad",
+            "title": "Satellit"
+        },
+        {
+            "spotifyURI": "spotify:track:5J2UfqBylH8jDQZJnxby81",
+            "starttime": 45800,
+            "artist": "Sean Banan",
+            "title": "Sean den f\u00f6rste Banan"
+        },
+        {
+            "spotifyURI": "spotify:track:4ClMpsy7FExBFQVGUBrGWH",
+            "starttime": 0,
+            "artist": "Sports All-Stars",
+            "title": "Chicago Bulls Intro Theme - Sirius"
         }
     ]
 }

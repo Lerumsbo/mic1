@@ -1,0 +1,25 @@
+{
+  "playlists": [
+    {
+      "spotifyURI": "spotify:playlist:4PuvWFu5qzArGdwJXl192o",
+      "name": "Warmup nov"
+    },
+    {
+      "spotifyURI": "spotify:playlist:2tu1XqswMKAeMqkwUxJL2n",
+      "name": "Hockeylåtar"
+    },
+    {
+      "spotifyURI": "spotify:playlist:6N7K0RVYk9iSZoajeSCdQo",
+      "name": "Gothia 2025"
+    },
+    {
+      "spotifyURI": "spotify:playlist:2fajkyxcNO17mrjCTcoLUL",
+      "name": "SM-finalerna 24"
+    },
+    {
+      "spotifyURI": "spotify:playlist:6Z0YliCo3iAMhZGkzE4Xiv",
+      "name": "FBC Event 23-24"
+    } 
+    
+  ]
+}

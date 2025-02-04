@@ -125,6 +125,60 @@
             "starttime": 7650,
             "artist": "LOK",
             "title": "Lok st\u00e5r n\u00e4r de andra faller"
+        },
+        {
+            "spotifyURI": "spotify:track:1LHZMWefF9502NPfArRfvP",
+            "starttime": 0,
+            "artist": "Five Finger Death Punch",
+            "title": "Lift Me Up (feat. Rob Halford of Judas Priest)"
+        },
+        {
+            "spotifyURI": "spotify:track:1PhLYngBKbeDtdmDzCg3Pb",
+            "starttime": 21326,
+            "artist": "Metallica",
+            "title": "Sad But True"
+        },
+        {
+            "spotifyURI": "spotify:track:11KSXTdg8h7l2a8fjAC0Vs",
+            "starttime": 3500,
+            "artist": "KISS",
+            "title": "Heaven's On Fire"
+        },
+        {
+            "spotifyURI": "spotify:track:2PsTKHRRAeAq7mDDx8Qkfh",
+            "starttime": 0,
+            "artist": "Otu",
+            "title": "Smells Like Teen Spirit (In the style of Metallica)"
+        },
+        {
+            "spotifyURI": "spotify:track:7cVHb0tVpEb58JCBrUmAW7",
+            "starttime": 0,
+            "artist": "Otu",
+            "title": "The Final Countdown (In the style of Metallica)"
+        },
+        {
+            "spotifyURI": "spotify:track:5LO0T2Sr2hrGsKc30ied4S",
+            "starttime": 0,
+            "artist": "Otu",
+            "title": "Stayin' Alive (In the style of AC\/DC)"
+        },
+        {
+            "spotifyURI": "spotify:track:2PsTKHRRAeAq7mDDx8Qkfh",
+            "starttime": 0,
+            "artist": "Otu",
+            "title": "Smells Like Teen Spirit (In the style of Metallica)"
+        },
+        {
+            "spotifyURI": "spotify:track:6SyutgkQfLKfcsWvmh02k2",
+            "starttime": 12000,
+            "artist": "Marilyn Manson",
+            "title": "Personal Jesus"
+        },
+        {
+            "spotifyURI": "spotify:track:05RgAMGypEvqhNs5hPCbMS",
+            "starttime": 0,
+            "artist": "Van Halen",
+            "title": "Panama - 2015 Remaster"
         }
     ]
 }
