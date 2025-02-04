@@ -239,6 +239,18 @@
             "starttime": 0,
             "artist": "Armin van Buuren",
             "title": "Great Spirit (Mixed)"
+        },
+        {
+            "spotifyURI": "spotify:track:7JOPGSoDQbtVHTyk2GW4E3",
+            "starttime": 0,
+            "artist": "Modern Talking",
+            "title": "Brother Louie"
+        },
+        {
+            "spotifyURI": "spotify:track:41Ef0PikCCRBcIM8O0t5HK",
+            "starttime": 16000,
+            "artist": "E-Type",
+            "title": "Life"
         }
     ]
 }

@@ -71,6 +71,12 @@
             "starttime": 26800,
             "artist": "Gary Glitter",
             "title": "I'm the Leader of the Gang (I Am)"
+        },
+        {
+            "spotifyURI": "spotify:track:4tl9dSWvuPhNrf9jiyqPE4",
+            "starttime": 0,
+            "artist": "Bryce",
+            "title": "Blade Theme - Original Edit"
         }
     ]
 }

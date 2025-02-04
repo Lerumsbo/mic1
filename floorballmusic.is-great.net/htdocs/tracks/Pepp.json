@@ -49,12 +49,6 @@
             "title": "Tubthumping"
         },
         {
-            "spotifyURI": "spotify:track:41Ef0PikCCRBcIM8O0t5HK",
-            "starttime": 15931,
-            "artist": "E-Type",
-            "title": "Life"
-        },
-        {
             "spotifyURI": "spotify:track:1BBIW3lDfwK9PXOFOedZmo",
             "starttime": 122400,
             "artist": "E-Type",
@@ -95,6 +89,12 @@
             "starttime": 0,
             "artist": "Sports All-Stars",
             "title": "Chicago Bulls Intro Theme - Sirius"
+        },
+        {
+            "spotifyURI": "spotify:track:41Ef0PikCCRBcIM8O0t5HK",
+            "starttime": 57500,
+            "artist": "E-Type",
+            "title": "Life"
         }
     ]
 }

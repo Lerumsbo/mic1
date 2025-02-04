@@ -388,8 +388,8 @@ section h2 {
       const header = document.querySelector('.random-buttons');
 
       filenames.forEach((filename) => {
-         if (filename === 'playlists.json') {
-            // Skip creating a button for playlists.json
+         if (filename === 'playlists.json' || filename === 'Local.json') {
+            // Skip creating a random button for these
             return;
         }
         const button = document.createElement('button');
