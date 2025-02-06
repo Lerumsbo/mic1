@@ -109,8 +109,15 @@
     <option value="Warmup.json">Warmup.json</option>
     <option value="Intro.json">Intro.json</option>
     <option value="Mål.json">Mål.json</option>
+    <option value="Heavy.json">Heavy.json</option>
     <option value="Spelpauser.json">Spelpauser.json</option>
+    <option value="Spelpauser2.json">Spelpauser2.json</option>
     <option value="Utvisning.json">Utvisning.json</option>
+    <option value="Pepp.json">Pepp.json</option>
+    <option value="After.json">After.json</option>
+    <option value="Publik.json">Publik.json</option>
+    <option value="Periodpaus.json">Periodpaus.json</option>
+    <option value="Pregame.json">Pregame.json</option>
   </select>
   <button onclick="saveUpdatedTracksToFile()">Spara till fil</button>
 
@@ -215,7 +222,7 @@
     }
     function spotifyLogin() {
       const clientId = "52ec9869958e47e2898e85242e0f061a";
-      const redirectUri = "http://floorballaudio.freesite.online/browse.html"; // Use your redirect URI
+      const redirectUri = "http://floorballmusic.is-great.net/fetchtest.html"; 
       const scope = "user-library-read playlist-modify-public";
       const url = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}`;
       window.location.href = url;
@@ -256,7 +263,7 @@
     }
 
     function createFileButtons() {
-      const files = ['Warmup.json', 'Intro.json', 'Mål.json', 'Spelpauser.json', 'Utvisning.json'];
+      const files = ['After.json', 'Intro.json', 'Periodpaus.json', 'Warmup.json', 'Pregame.json', 'Mål.json', 'Utvisning.json', 'Publik.json','Pepp.json', 'Spelpauser2.json', 'Heavy.json', 'Spelpauser.json', 'Local.json', 'Hgoal.json', 'Agoal.json'];;
       const buttonContainer = document.getElementById("file-buttons");
       buttonContainer.innerHTML = "";
       files.forEach(file => {
