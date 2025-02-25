@@ -354,27 +354,17 @@ function createRandomTrackButtons() {
 }
 
 function loadAndPlayRandomTrack(filename) {
-  fetch(`/tracks/${filename}`)
-    .then(response => response.json())
-    .then(data => {
-      if (filename === 'Local.json' || filename === 'Hgoal.json') {
-        const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
-        if (randomTrack) {
-          const localUrl = `/tracks/${randomTrack.spotifyURI}`;
-          window.open(localUrl, '_blank');
-        }
-      } else {
-        const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
-        if (randomTrack) {
-          const { spotifyURI, starttime } = randomTrack;
-          if (spotifyURI) {
-            playSpotifyTrack(spotifyURI, starttime);
-          }
-        }
-      }
-    })
-    .catch(err => console.error("Error loading random track:", err));
+    fetch(`/tracks/${filename}`)
+        .then(response => response.json())
+        .then(data => {
+            const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
+            if (randomTrack) {
+                playTrack(randomTrack); // Use the unified playTrack function
+            }
+        })
+        .catch(err => console.error("Error loading random track:", err));
 }
+
 
 function playSpotifyTrack(spotifyURI, starttime) {
   if (!selectedDevice) {
