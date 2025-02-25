@@ -233,6 +233,60 @@
             "starttime": 31208,
             "artist": "K\u00e4\u00e4rij\u00e4",
             "title": "Cha Cha Cha"
+        },
+        {
+            "spotifyURI": "spotify:track:3lLQHqHJtOXWeJfqguiOd1",
+            "starttime": 113100,
+            "artist": "Armin van Buuren",
+            "title": "Tell Me Why"
+        },
+        {
+            "spotifyURI": "spotify:track:1TfqLAPs4K3s2rJMoCokcS",
+            "starttime": 0,
+            "artist": "Eurythmics",
+            "title": "Sweet Dreams (Are Made of This) - 2005 Remaster"
+        },
+        {
+            "spotifyURI": "spotify:track:6wdviVWctiZnY6tVn6bh6A",
+            "starttime": 2419,
+            "artist": "Michael Jackson",
+            "title": "Black or White - Single Version"
+        },
+        {
+            "spotifyURI": "spotify:track:2Nz6aF1umHh5Et6I5H581L",
+            "starttime": 0,
+            "artist": "Blue Swede",
+            "title": "Hooked On A Feeling"
+        },
+        {
+            "spotifyURI": "spotify:track:07ABETRdek3ACMpRPvQuaT",
+            "starttime": 2100,
+            "artist": "Pet Shop Boys",
+            "title": "Always on My Mind"
+        },
+        {
+            "spotifyURI": "spotify:track:3S2R0EVwBSAVMd5UMgKTL0",
+            "starttime": 37852,
+            "artist": "Michael Jackson",
+            "title": "Thriller"
+        },
+        {
+            "spotifyURI": "spotify:track:08onVqQ8YicJ98Ycm1qoLf",
+            "starttime": 8900,
+            "artist": "Foreigner",
+            "title": "Urgent"
+        },
+        {
+            "spotifyURI": "spotify:track:37ZJ0p5Jm13JPevGcx4SkF",
+            "starttime": 21400,
+            "artist": "Bon Jovi",
+            "title": "Livin' On A Prayer"
+        },
+        {
+            "spotifyURI": "spotify:track:2gThkoApt6B7ajBWZRLAVv",
+            "starttime": 49300,
+            "artist": "KAJ",
+            "title": "Bara Bada Bastu"
         }
     ]
 }

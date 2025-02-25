@@ -77,6 +77,18 @@
             "starttime": 0,
             "artist": "Bryce",
             "title": "Blade Theme - Original Edit"
+        },
+        {
+            "spotifyURI": "spotify:track:45sGyAtAxD6efaN0bJAFgh",
+            "starttime": 28900,
+            "artist": "Deorro",
+            "title": "Bailar (feat. Elvis Crespo) - Radio Edit"
+        },
+        {
+            "spotifyURI": "spotify:track:1axWNDK6nZVqX7nxVxX19e",
+            "starttime": 0,
+            "artist": "Mora Tr\u00e4sk",
+            "title": "Klappa h\u00e4nderna"
         }
     ]
 }

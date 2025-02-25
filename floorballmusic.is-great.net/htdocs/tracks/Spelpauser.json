@@ -251,6 +251,114 @@
             "starttime": 16000,
             "artist": "E-Type",
             "title": "Life"
+        },
+        {
+            "spotifyURI": "spotify:track:2wUlYDGGXlSvm2NkGj0Qio",
+            "starttime": 201700,
+            "artist": "Depeche Mode",
+            "title": "Personal Jesus"
+        },
+        {
+            "spotifyURI": "spotify:track:29uKzagduhFDTWPCjqaGOg",
+            "starttime": 0,
+            "artist": "ZZ Top",
+            "title": "Gimme All Your Lovin'"
+        },
+        {
+            "spotifyURI": "spotify:track:1B75hgRqe7A4fwee3g3Wmu",
+            "starttime": 0,
+            "artist": "MC Hammer",
+            "title": "U Can't Touch This"
+        },
+        {
+            "spotifyURI": "spotify:track:3850dYVgOFIXJh5U4BFEWH",
+            "starttime": 44936,
+            "artist": "Madonna",
+            "title": "Hung Up"
+        },
+        {
+            "spotifyURI": "spotify:track:3GR5Qd34nif6bskCrhTZue",
+            "starttime": 0,
+            "artist": "Alphaville",
+            "title": "Sounds Like a Melody"
+        },
+        {
+            "spotifyURI": "spotify:track:1Q1KSWWpyBFRj5QA9Vw3zD",
+            "starttime": 0,
+            "artist": "Queen",
+            "title": "Radio Ga Ga"
+        },
+        {
+            "spotifyURI": "spotify:track:0Z7O8GMQShj9TJrm2yX1R6",
+            "starttime": 0,
+            "artist": "Van Halen",
+            "title": "Jump - 2004 Remaster"
+        },
+        {
+            "spotifyURI": "spotify:track:1oTHteQbmJw15rPxPVXUTv",
+            "starttime": 4500,
+            "artist": "Cypress Hill",
+            "title": "Insane in the Brain"
+        },
+        {
+            "spotifyURI": "spotify:track:2fuCquhmrzHpu5xcA1ci9x",
+            "starttime": 0,
+            "artist": "Queen",
+            "title": "Under Pressure - Remastered 2011"
+        },
+        {
+            "spotifyURI": "spotify:track:3QRM0qZB7oMYavveH0iEqx",
+            "starttime": 4600,
+            "artist": "iNi Kamoze",
+            "title": "Here Comes the Hotstepper - Heartical Mix"
+        },
+        {
+            "spotifyURI": "spotify:track:0qxYx4F3vm1AOnfux6dDxP",
+            "starttime": 0,
+            "artist": "Paul Simon",
+            "title": "You Can Call Me Al"
+        },
+        {
+            "spotifyURI": "spotify:track:3BovdzfaX4jb5KFQwoPfAw",
+            "starttime": 24200,
+            "artist": "Michael Jackson",
+            "title": "Beat It"
+        },
+        {
+            "spotifyURI": "spotify:track:4Q9WS9ARvL7rkokSbnhM96",
+            "starttime": 0,
+            "artist": "KISS",
+            "title": "Detroit Rock City"
+        },
+        {
+            "spotifyURI": "spotify:track:70YvYr2hGlS01bKRIho1HM",
+            "starttime": 0,
+            "artist": "ZZ Top",
+            "title": "La Grange - 2005 Remaster"
+        },
+        {
+            "spotifyURI": "spotify:track:341ShRaeysVdxLetlI391K",
+            "starttime": 134400,
+            "artist": "Notaker",
+            "title": "Infinite"
+        },
+        {
+            "spotifyURI": "spotify:track:6EnNjWkk1YX3fsTXtwO773",
+            "starttime": 136400,
+            "artist": "Hasse Andersson",
+            "title": "Guld och gr\u00f6na skogar"
+        },
+        {
+            "spotifyURI": "spotify:track:0SccUtcZfXuSGZYfiMQh9w",
+            "starttime": 30000,
+            "artist": "Syntheticsax",
+            "title": "Oig (Radio Edit)"
+        },
+        {
+            "spotifyURI": "spotify:track:5TX4QkyawyBAjNjwF2qBzG",
+            "starttime": 63000,
+            "artist": "In-Grid",
+            "title": "Tu Es Foutu - Radio Edit"
         }
     ]
 }
