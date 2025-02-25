@@ -174,6 +174,23 @@ async function loadSongsFromFolder() {
     });
   }
 
+  function playTrack(track) {
+    const { spotifyURI, starttime } = track;
+  
+    if (!spotifyURI) {
+      console.error("Ingen URI tillgänglig för spår:", track);
+      return;
+    }
+  
+    if (spotifyURI.startsWith("spotify:")) {
+      playSpotifyTrack(spotifyURI, starttime);
+    } else if (spotifyURI.endsWith('.mp3')) {
+      playLocalTrack(spotifyURI);
+    } else {
+      console.error("Okänt format:", spotifyURI);
+    }
+  }
+
 function createPlaylistSection(playlists, sectionName, color) {
   const sectionElement = document.createElement('section');
   const header = document.createElement('h2');
