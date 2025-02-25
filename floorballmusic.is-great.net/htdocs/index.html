@@ -357,24 +357,24 @@ function addDisplayNameToHeader() {
       }
     }
 
-    function createSection(tracks, sectionName, color) {
-      const sectionElement = document.createElement('section');
-      const header = document.createElement('h2');
-      header.textContent = sectionName;
-      sectionElement.appendChild(header);
+function createSection(tracks, sectionName, color) {
+  const sectionElement = document.createElement('section');
+  const header = document.createElement('h2');
+  header.textContent = sectionName;
+  sectionElement.appendChild(header);
 
-      const content = document.createElement('div');
-      content.classList.add('song-list');
-      content.style.display = "none";
+  const content = document.createElement('div');
+  content.classList.add('song-list');
+  content.style.display = "none";
 
-      tracks.forEach(track => {
-        const { spotifyURI, artist, title, starttime } = track;
+  tracks.forEach(track => {
+    const { spotifyURI, artist, title, starttime } = track;
 
-        const button = document.createElement('button');
-        button.style.backgroundColor = color;
-        button.textContent = `${title || 'Unknown Title'}\n${artist || 'Unknown Artist'}\n${formatTime(starttime || 0)}`;
+    const button = document.createElement('button');
+    button.style.backgroundColor = color;
+    button.textContent = `${title || 'Unknown Title'}\n${artist || 'Unknown Artist'}\n${formatTime(starttime || 0)}`;
 
-let currentPlayer = null; // Håller reda på den aktuella spelaren
+    let currentPlayer = null; // Håller reda på den aktuella spelaren
 
 if (spotifyURI) {
   if (spotifyURI.startsWith("spotify:")) {

@@ -136,7 +136,7 @@ async function loadSongsFromFolder() {
         const json = await response.json();
         if (!json) continue;
   
-        if (json.tracks) {
+        if  (json.tracks && filename !='Hgoal.json' && filename !='Agoal.json') {
           createSection(json.tracks, filename.split('.')[0], sectionColors[index % sectionColors.length]);
         }
         if (json.playlists) {
@@ -226,45 +226,90 @@ function createPlaylistSection(playlists, sectionName, color) {
 }
 
   
-  function playLocalTrack(filePath) {
+let currentPlayer = null; // Håller reda på aktuell spelare
+
+function playLocalTrack(filePath) {
     const localUrl = `/tracks/${filePath}`;
-    let currentPlayer = document.getElementById('local-audio-player');
-  
-    if (!currentPlayer) {
-      currentPlayer = document.createElement('div');
-      currentPlayer.id = 'local-audio-player';
-      currentPlayer.style.position = 'absolute';
-      currentPlayer.style.top = '220px';
-      currentPlayer.style.left = '10px';
-      currentPlayer.style.width = '120px';
-      currentPlayer.style.padding = '10px';
-      currentPlayer.style.backgroundColor = '#AAAAAA';
-      currentPlayer.style.borderRadius = '5px';
-      currentPlayer.style.zIndex = 1000;
-  
-      const audioElement = document.createElement('audio');
-      audioElement.controls = true;
-      audioElement.style.width = '100%';
-      currentPlayer.appendChild(audioElement);
-  
-      const closeButton = document.createElement('button');
-      closeButton.textContent = 'Close';
-      closeButton.style.backgroundColor = '#A67';
-      closeButton.style.color = '#fff';
-      closeButton.style.border = 'none';
-      closeButton.onclick = function () {
-        audioElement.pause();
-        document.body.removeChild(currentPlayer);
-      };
-  
-      currentPlayer.appendChild(closeButton);
-      document.body.appendChild(currentPlayer);
+
+    // Om spelaren redan finns, byt ljudkälla och spela
+    if (currentPlayer) {
+        currentPlayer.audioElement.pause();
+        currentPlayer.audioElement.currentTime = 0;
+        currentPlayer.audioElement.src = localUrl;
+        currentPlayer.audioElement.play();
+
+        // Uppdatera play/pause-knappen
+        currentPlayer.playPauseButton.textContent = 'Pause';
+    } else {
+        // Skapa en ny spelare om ingen finns
+        currentPlayer = {
+            playerDiv: document.createElement('div'),
+            audioElement: document.createElement('audio'),
+            playPauseButton: document.createElement('button')
+        };
+
+        // Styla spelaren
+        Object.assign(currentPlayer.playerDiv.style, {
+            position: 'absolute',
+            top: '220px',
+            left: '10px',
+            width: '120px',
+            padding: '10px',
+            backgroundColor: '#AAAAAA',
+            borderRadius: '5px',
+            zIndex: 1000
+        });
+
+        // Lägg till ljudet
+        currentPlayer.audioElement.src = localUrl;
+        currentPlayer.audioElement.autoplay = true;
+        currentPlayer.audioElement.controls = false; // Ingen standardkontroll
+        currentPlayer.audioElement.style.width = '100%';
+        currentPlayer.playerDiv.appendChild(currentPlayer.audioElement);
+
+        // Play/Pause-knapp
+        Object.assign(currentPlayer.playPauseButton.style, {
+            backgroundColor: '#2c7',
+            color: '#fff',
+            border: 'none',
+            marginTop: '5px'
+        });
+        currentPlayer.playPauseButton.textContent = 'Pause';
+        currentPlayer.playPauseButton.onclick = function () {
+            if (currentPlayer.audioElement.paused) {
+                currentPlayer.audioElement.play();
+                currentPlayer.playPauseButton.textContent = 'Pause';
+            } else {
+                currentPlayer.audioElement.pause();
+                currentPlayer.playPauseButton.textContent = 'Play';
+            }
+        };
+        currentPlayer.playerDiv.appendChild(currentPlayer.playPauseButton);
+
+        // Stäng-knapp
+        const closeButton = document.createElement('button');
+        Object.assign(closeButton.style, {
+            backgroundColor: '#A67',
+            color: '#fff',
+            border: 'none',
+            position: 'absolute',
+            marginTop: '5px',
+            right: '10px'
+        });
+        closeButton.textContent = 'Close';
+        closeButton.onclick = function () {
+            currentPlayer.audioElement.pause();
+            currentPlayer.audioElement.currentTime = 0;
+            document.body.removeChild(currentPlayer.playerDiv);
+            currentPlayer = null; // Återställ
+        };
+        currentPlayer.playerDiv.appendChild(closeButton);
+
+        // Lägg till spelaren på sidan
+        document.body.appendChild(currentPlayer.playerDiv);
     }
-  
-    const audioElement = currentPlayer.querySelector('audio');
-    audioElement.src = localUrl;
-    audioElement.play();
-  }
+}
+
   
   function createPlaylistSection(playlists, sectionName, color) {
     const sectionElement = document.createElement('section');
