@@ -1,61 +1,60 @@
-const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
-const REDIRECT_URI = "http://floorballmusic.is-great.net/musicboard.html";
-const SCOPES = "user-modify-playback-state user-read-playback-state user-read-private user-read-email user-top-read";
-const sectionColors = ['#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE','#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE','#5F9EA0', '#6A5ACD', '#708090'];
-let accessToken = "";
-let availableDevices = [];
-let selectedDevice = null;
-let displayName = "";
-let filenames = ['playlists.json', 'After.json', 'Intro.json', 'Periodpaus.json', 'Warmup.json', 'Pregame.json', 'Mål.json', 'Utvisning.json', 'Publik.json','Pepp.json', 'Spelpauser2.json', 'Heavy.json', 'Spelpauser.json', 'Local.json', 'Hgoal.json', 'Agoal.json'];
+    const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
+    const REDIRECT_URI = "http://floorballmusic.is-great.net/index.html";
+    const SCOPES = "user-modify-playback-state user-read-playback-state user-read-private user-read-email user-top-read";
+    const sectionColors = ['#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE','#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE','#5F9EA0', '#6A5ACD', '#708090'];
+    let accessToken = "";
+    let availableDevices = [];
+    let selectedDevice = null;
+    let displayName = "";
 
-// Function to authenticate the user
-async function authenticateSpotify() {
-  const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
-  window.location.href = authUrl;
-}
+    const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Periodpaus.json', 'Warmup.json', 'Pregame.json', 'Mål.json', 'Utvisning.json', 'Publik.json','Pepp.json', 'Spelpauser2.json', 'Heavy.json', 'Spelpauser.json', 'Local.json', 'Hgoal.json', 'Agoal.json'];
 
-// Function to get the access token from the URL
-function getAccessTokenFromUrl() {
-  const hash = window.location.hash.substring(1);
-  const params = new URLSearchParams(hash);
-  return params.get("access_token");
-}
+    async function authenticateSpotify() {
+      const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
+      window.location.href = authUrl;
+    }
 
-// Load data and initialize functions when the page is loaded
-window.onload = function () {
-  createRandomTrackButtons();  // Add random track buttons to header
-  loadSongsFromFolder();
-  const token = getAccessTokenFromUrl();
-  if (token) {
-    accessToken = token;
-    fetchSpotifyUserData(); // Fetch and display Spotify user info
-  }
-  fetchSpotifyDevices();
-};
+    function getAccessTokenFromUrl() {
+      const hash = window.location.hash.substring(1);
+      const params = new URLSearchParams(hash);
+      return params.get("access_token");
+    }
 
-// Fetch user data from Spotify
-async function fetchSpotifyUserData() {
-  try {
-    const response = await fetch("https://api.spotify.com/v1/me", {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
+    window.onload = function () {
+      createRandomTrackButtons();  // Add random track buttons to header
+      loadSongsFromFolder();
+      const token = getAccessTokenFromUrl();
+      if (token) {
+        accessToken = token;
+//        updateStatus("Inloggning lyckades!");
+        fetchSpotifyUserData(); // Fetch and display Spotify user info
       }
-    });
-    const userData = await response.json();
-    displayName = userData.display_name || "Unknown User";
-    addDisplayNameToHeader();
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-  }
-}
+      fetchSpotifyDevices();
+    };
 
-// Display the user's display name in the header
+    async function fetchSpotifyUserData() {
+      try {
+        const response = await fetch("https://api.spotify.com/v1/me", {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        });
+        const userData = await response.json();
+        displayName = userData.display_name || "Unknown User";
+        //updateStatus(`Inloggning lyckades! Welcome, ${displayName}`);
+        addDisplayNameToHeader();
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+
 function addDisplayNameToHeader() {
   const header = document.createElement('h2');
   header.textContent = displayName;
   header.style.cursor = 'pointer';
 
   header.addEventListener('click', function() {
+    // Check if Clipboard API is available
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(accessToken).then(() => {
         alert("Spotify token copied to clipboard!");
@@ -63,6 +62,7 @@ function addDisplayNameToHeader() {
         alert("Failed to copy token to clipboard.");
       });
     } else {
+      // Fallback to document.execCommand if Clipboard API isn't available
       const textArea = document.createElement('textarea');
       textArea.value = accessToken;
       document.body.appendChild(textArea);
@@ -84,147 +84,355 @@ function addDisplayNameToHeader() {
   document.getElementById('status').appendChild(header);
 }
 
-// Fetch devices available for playback
-async function fetchSpotifyDevices() {
-  try {
-    const response = await fetch("https://api.spotify.com/v1/me/player/devices", {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
+
+
+    async function fetchSpotifyDevices() {
+      try {
+        const response = await fetch("https://api.spotify.com/v1/me/player/devices", {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        });
+        const data = await response.json();
+        availableDevices = data.devices || [];
+        const deviceSelect = document.getElementById("deviceSelect");
+        deviceSelect.innerHTML = "";
+        availableDevices.forEach(device => {
+          const option = document.createElement("option");
+          option.value = device.id;
+          option.textContent = device.name;
+          deviceSelect.appendChild(option);
+        });
+        selectedDevice = availableDevices.length > 0 ? availableDevices[0].id : null;
+
+        deviceSelect.addEventListener('change', function() {
+          selectedDevice = deviceSelect.value;
+        });
+      } catch (error) {
+        console.error("Error fetching devices:", error);
       }
-    });
-    const data = await response.json();
-    availableDevices = data.devices || [];
-    const deviceSelect = document.getElementById("deviceSelect");
-    deviceSelect.innerHTML = "";
-    availableDevices.forEach(device => {
-      const option = document.createElement("option");
-      option.value = device.id;
-      option.textContent = device.name;
-      deviceSelect.appendChild(option);
-    });
-    selectedDevice = availableDevices.length > 0 ? availableDevices[0].id : null;
+    }
 
-    deviceSelect.addEventListener('change', function() {
-      selectedDevice = deviceSelect.value;
-    });
-  } catch (error) {
-    console.error("Error fetching devices:", error);
-  }
-}
+    function formatTime(ms) {
+      const minutes = Math.floor(ms / 60000);
+      const seconds = Math.floor((ms % 60000) / 1000);
+      return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
 
-// Stop playback on the selected device
-function stopPlayback() {
-  if (selectedDevice) {
-    fetch(`https://api.spotify.com/v1/me/player/pause`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+    function collapseAllSections() {
+      const sections = document.querySelectorAll(".song-list");
+      sections.forEach(section => {
+        section.style.display = "none";
+      });
+    }
+
+    async function loadSongsFromFolder() {
+      document.getElementById('sections').innerHTML = "";
+      document.getElementById('file-buttons').innerHTML = "";  // Reset file buttons
+
+      try {
+        for (const [index, filename] of filenames.entries()) {
+          const fileUrl = `/tracks/${filename}`;
+          const response = await fetch(fileUrl);
+
+          if (!response.ok) {
+            console.error(`Kunde inte ladda filen: ${filename}`);
+            continue;
+          }
+
+          let json;
+          try {
+            const text = await response.text();
+            json = JSON.parse(text);
+          } catch (error) {
+            console.error(`Ogiltig JSON i filen: ${filename}`, error);
+            continue;
+          }
+
+          if (!json) {
+            console.error(`Ogiltigt innehåll i filen: ${filename}`);
+            continue;
+          }
+
+          if (json.tracks && filename !='Hgoal.json' && filename !='Agoal.json') {
+            createSection(json.tracks, filename.split('.')[0], sectionColors[index]);
+          }
+
+          if (json.playlists) {
+            createPlaylistSection(json.playlists, 'Spellistor', '#FFD700');
+          }
+
+          if (filename === 'Local.json' && json.local) {
+            createSection(json.local, 'Lokala Låtar', '#32CD32');
+            createLocalFileButton(json.local);
+          }
+        }
+        
+      } catch (error) {
+        updateStatus("Fel vid inläsning av filer.");
+        console.error("Laddningsfel:", error);
       }
-    }).catch(error => {
-      console.error("Error stopping playback:", error);
-    });
+    }
+
+    function createSection(tracks, sectionName, color) {
+      const sectionElement = document.createElement('section');
+      const header = document.createElement('h2');
+      header.textContent = sectionName;
+      sectionElement.appendChild(header);
+
+      const content = document.createElement('div');
+      content.classList.add('song-list');
+      content.style.display = "none";
+
+      tracks.forEach(track => {
+        const { spotifyURI, artist, title, starttime } = track;
+
+        const button = document.createElement('button');
+        button.style.backgroundColor = color;
+        button.textContent = `${title || 'Unknown Title'}\n${artist || 'Unknown Artist'}\n${formatTime(starttime || 0)}`;
+
+let currentPlayer = null; // Håller reda på den aktuella spelaren
+
+if (spotifyURI) {
+  if (spotifyURI.startsWith("spotify:")) {
+    button.onclick = function () {
+      button.style.borderColor = 'red';
+      playSpotifyTrack(spotifyURI, starttime);
+    };
+  } else if (spotifyURI.endsWith('.mp3')) {
+    const localUrl = `/tracks/${spotifyURI}`;
+    button.onclick = function (event) {
+      event.preventDefault();
+
+      // Kontrollera att filen finns på servern
+      fetch(localUrl).then(response => {
+        if (!response.ok) {
+          console.error("Fil kunde inte hittas:", localUrl);
+          alert("Filen finns inte.");
+          return;
+        }
+
+        // Om en spelare redan finns, ersätt ljudkällan och spela den nya filen
+        if (currentPlayer) {
+          currentPlayer.audioElement.pause(); // Stoppa aktuell fil
+          currentPlayer.audioElement.currentTime = 0; // Återställ till början
+          currentPlayer.audioElement.src = localUrl; // Uppdatera ljudkällan
+          currentPlayer.audioElement.play(); // Börja spela den nya låten
+
+          // Uppdatera play/pause-knappen
+          const playPauseButton = currentPlayer.playerDiv.querySelector('button');
+          playPauseButton.textContent = 'Pause';
+        } else {
+          // Om ingen spelare finns, skapa en ny spelare
+          currentPlayer = {
+            playerDiv: document.createElement('div'),
+            audioElement: document.createElement('audio'),
+          };
+
+          // Styla spelaren
+          currentPlayer.playerDiv.style.position = 'absolute';
+          currentPlayer.playerDiv.style.top = '220px'; // Precis under headern
+          currentPlayer.playerDiv.style.left = '10px';
+          currentPlayer.playerDiv.style.width = '120px';
+          currentPlayer.playerDiv.style.padding = '10px';
+          currentPlayer.playerDiv.style.backgroundColor = '#AAAAAA';
+          currentPlayer.playerDiv.style.borderRadius = '5px';
+          currentPlayer.playerDiv.style.zIndex = 1000;
+
+          // Lägg till ljudet
+          currentPlayer.audioElement.src = localUrl;
+          currentPlayer.audioElement.autoplay = true;
+          currentPlayer.audioElement.controls = false; // Ingen standardkontroll
+          currentPlayer.audioElement.style.width = '100%';
+          currentPlayer.playerDiv.appendChild(currentPlayer.audioElement);
+
+          // Lägg till egna kontroller (play/pause)
+          const playPauseButton = document.createElement('button');
+          playPauseButton.style.backgroundColor = '#2c7'; // Färg på knappen
+          playPauseButton.style.color = '#fff'; // Textfärg (vit text)
+          playPauseButton.style.border = 'none'; // Ingen kantlinje
+          playPauseButton.textContent = 'Play';
+          playPauseButton.style.marginTop = '5px';
+          playPauseButton.onclick = function () {
+            if (currentPlayer.audioElement.paused) {
+              currentPlayer.audioElement.play();
+              playPauseButton.textContent = 'Pause';
+            } else {
+              currentPlayer.audioElement.pause();
+              playPauseButton.textContent = 'Play';
+            }
+          };
+          currentPlayer.playerDiv.appendChild(playPauseButton);
+
+          // Lägg till stängknapp
+          const closeButton = document.createElement('button');
+          closeButton.style.backgroundColor = '#A67'; // Färg på knappen
+          closeButton.style.color = '#fff'; // Textfärg (vit text)
+          closeButton.style.border = 'none'; // Ingen kantlinje
+          closeButton.textContent = 'Close';
+          closeButton.style.position = 'absolute';
+          closeButton.style.marginTop = '5px';
+          closeButton.style.right = '10px';
+          closeButton.onclick = function () {
+            currentPlayer.audioElement.pause();
+            currentPlayer.audioElement.currentTime = 0;
+            document.body.removeChild(currentPlayer.playerDiv); // Ta bort spelaren
+            currentPlayer = null; // Sätt currentPlayer till null när spelaren stängs
+          };
+          currentPlayer.playerDiv.appendChild(closeButton);
+
+          // Lägg till spelaren på sidan
+          document.body.appendChild(currentPlayer.playerDiv);
+        }
+      }).catch(error => {
+        console.error("Fel vid laddning av filen:", error);
+        alert("Det uppstod ett problem med att ladda filen.");
+      });
+    };
   }
 }
 
-// Load songs and playlists from a folder (Example implementation)
-function loadSongsFromFolder() {
-  // Example implementation: Load your songs here
-}
 
-// Generate random track buttons in the header
-function createRandomTrackButtons() {
-  const randomButtonsContainer = document.getElementById('random-buttons');
-  randomButtonsContainer.innerHTML = '';
 
-  for (let i = 0; i < 5; i++) {
-    const button = document.createElement('button');
-    button.textContent = `Random Track ${i + 1}`;
-    button.classList.add('random-track-btn');
-    button.addEventListener('click', function() {
-      playRandomTrack();
-    });
-    randomButtonsContainer.appendChild(button);
-  }
-}
 
-// Play a random track from the playlist (currently just logs to the console)
-function playRandomTrack() {
-  console.log("Playing a random track...");
-  // Logic to play a random track from your playlist or a predefined track
-}
 
-// Function to load and display sections from the playlist files
-function loadSectionData(filename) {
-  // Logic to load data from a file and display sections
-}
 
-// Collapse all sections when the button is clicked
-function collapseAllSections() {
-  const sections = document.querySelectorAll('section');
-  sections.forEach(section => {
-    const content = section.querySelector('.song-list');
-    content.style.display = 'none';
-  });
-}
 
-// Create buttons for each song in the playlist
-function createTrackButtons(tracks, sectionName) {
-  const section = document.getElementById('sections');
-  const sectionElement = document.createElement('section');
-  sectionElement.style.backgroundColor = sectionColors[section.childElementCount % sectionColors.length];
+        content.appendChild(button);
+      });
 
-  const header = document.createElement('h2');
-  header.textContent = sectionName;
-  header.style.cursor = 'pointer';
-  header.addEventListener('click', function() {
-    const content = sectionElement.querySelector('.song-list');
-    const displayStyle = content.style.display === 'none' ? 'block' : 'none';
-    content.style.display = displayStyle;
-  });
-  sectionElement.appendChild(header);
+      sectionElement.appendChild(content);
+      document.getElementById('sections').prepend(sectionElement);
 
-  const songList = document.createElement('ul');
-  songList.classList.add('song-list');
-  sectionElement.appendChild(songList);
+      header.addEventListener('click', function () {
+        content.style.display = content.style.display === 'none' ? 'block' : 'none';
+      });
+    }
 
-  tracks.forEach(track => {
-    const listItem = document.createElement('li');
-    const button = document.createElement('button');
-    button.textContent = track.name;
-    button.classList.add('song-button');
-    button.addEventListener('click', () => playSong(track));
-    listItem.appendChild(button);
-    songList.appendChild(listItem);
-  });
+    function createPlaylistSection(playlists, sectionName, color) {
+      const sectionElement = document.createElement('section');
+      const header = document.createElement('h2');
+      header.textContent = sectionName;
+      sectionElement.appendChild(header);
 
-  section.appendChild(sectionElement);
-}
+      const content = document.createElement('div');
+      content.classList.add('song-list');
+      content.style.display = "none";
 
-// Play a specific song (add logic to play through Spotify API)
-function playSong(track) {
-  console.log(`Playing song: ${track.name}`);
-  // Logic to play the song using the Spotify API
-}
+      playlists.forEach(playlist => {
+        const { spotifyURI, name } = playlist;
 
-// Function to load data from the selected playlist file
-function loadPlaylist(filename) {
-  fetch(filename)
-    .then(response => response.json())
-    .then(data => {
-      createTrackButtons(data.tracks, filename);
-    })
-    .catch(error => console.error("Error loading playlist:", error));
-}
+        const button = document.createElement('button');
+        button.style.backgroundColor = color;
+        button.textContent = name || 'Unknown Playlist';
 
-// Load all the playlists on initial page load
-filenames.forEach(filename => loadPlaylist(filename));
+        if (spotifyURI) {
+          button.onclick = function () {
+            playPlaylist(spotifyURI);
+          };
+        }
 
-// Display all sections when the button is clicked
-function displayAllSections() {
-  const sections = document.querySelectorAll('section');
-  sections.forEach(section => {
-    const content = section.querySelector('.song-list');
-    content.style.display = 'block';
-  });
-}
+        content.appendChild(button);
+      });
+
+      sectionElement.appendChild(content);
+      document.getElementById('sections').prepend(sectionElement);
+
+      header.addEventListener('click', function () {
+        content.style.display = content.style.display === 'none' ? 'block' : 'none';
+      });
+    }
+
+    function createRandomTrackButtons() {
+      const header = document.querySelector('.random-buttons');
+
+      filenames.forEach((filename) => {
+         if (filename === 'playlists.json' || filename === 'Local.json'|| filename === 'After.json' || filename === 'Intro.json' || filename === 'Pregame.json') {
+            // Skip creating a random button for these
+            return;
+        }
+        const button = document.createElement('button');
+        button.textContent = filename.split('.')[0];
+        button.classList.add('random-track-btn');
+        button.onclick = () => loadAndPlayRandomTrack(filename);
+        header.appendChild(button);
+      });
+    }
+
+    function loadAndPlayRandomTrack(filename) {
+      fetch(`/tracks/${filename}`)
+        .then(response => response.json())
+        .then(data => {
+          if (filename === 'Local.json' || filename === 'Hgoal.json') {
+            const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
+            if (randomTrack) {
+              const localUrl = `/tracks/${randomTrack.spotifyURI}`;
+              window.open(localUrl, '_blank');
+            }
+          } else {
+            const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
+            if (randomTrack) {
+              const { spotifyURI, starttime } = randomTrack;
+              if (spotifyURI) {
+                playSpotifyTrack(spotifyURI, starttime);
+              }
+            }
+          }
+        })
+        .catch(err => console.error("Error loading random track:", err));
+    }
+
+    function playSpotifyTrack(spotifyURI, starttime) {
+      if (!selectedDevice) {
+        alert("No device selected!");
+        return;
+      }
+      fetch(`https://api.spotify.com/v1/me/player/play?device_id=${selectedDevice}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          uris: [spotifyURI],
+          position_ms: starttime || 0
+        })
+      });
+    }
+
+    function playPlaylist(playlistURI) {
+      if (!selectedDevice) {
+        alert("No device selected!");
+        return;
+      }
+      console.log(`Now playing playlist: ${playlistURI}`);
+      fetch(`https://api.spotify.com/v1/me/player/play?device_id=${selectedDevice}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ context_uri: playlistURI })
+      })
+      .catch(error => {
+        console.error('Error playing playlist:', error);
+      });
+    }
+
+    function updateStatus(message) {
+      document.getElementById('status').textContent = message;
+    }
+
+    function stopPlayback() {
+      if (!selectedDevice) {
+        alert("No device selected!");
+        return;
+      }
+      fetch(`https://api.spotify.com/v1/me/player/pause?device_id=${selectedDevice}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+    }
+
