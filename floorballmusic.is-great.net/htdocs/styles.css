@@ -1,0 +1,156 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  
+  h1, p {
+    text-align: center;
+  }
+  
+  button {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  
+  .fixed-header {
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
+    padding: 10px;
+    border-bottom: 2px solid #ccc;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  section {
+    margin-bottom: 30px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f4f4f4;
+  }
+  
+  section h2 {
+    margin-top: 0;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    text-align: left;
+  }
+  
+  .song-list {
+      list-style-type: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      vertical-align: top;
+  }
+  
+  .song-list button {
+      vertical-align: top;
+      margin: 10px;
+      width: 160px;
+      height: 80px;
+      text-align: center;
+      line-height: 1.4;
+      background-color: #555;
+      color: white;
+      border: 2px solid transparent;
+  }
+  
+  .header-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+  }
+  
+  .random-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+  }
+  
+  #status {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px 0;
+    text-align: center;
+  }
+  
+  #login-btn, #stop-btn, #refresh-btn, #collapse-all-btn {
+    padding: 12px 20px;
+    font-size: 18px;
+    margin: 5px;
+  }
+  
+  #login-btn {
+    background-color: #3498db;
+  }
+  
+  #stop-btn {
+    background-color: #e74c3c;
+  }
+  
+  #refresh-btn {
+    background-color: #2ecc71;
+  }
+  
+  #collapse-all-btn {
+    background-color: #000000;
+  }
+  
+  #login-btn:hover {
+    background-color: #2980b9;
+  }
+  
+  #stop-btn:hover {
+    background-color: #c0392b;
+  }
+  
+  #refresh-btn:hover {
+    background-color: #27ae60;
+  }
+  
+  #collapse-all-btn:hover {
+    background-color: #AAAAAA;
+  }
+  
+  .device-select {
+    color: black;
+    margin: 5px;
+    padding: 10px;
+  }
+  
+  .file-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .random-track-btn {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    margin: 5px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .random-track-btn:hover {
+    background-color: #333;
+  }
+  
