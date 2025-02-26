@@ -329,7 +329,7 @@ function playLocalTrack(filePath) {
   
     playlists.forEach(playlist => {
       const button = document.createElement('button');
-      button.style.backgroundColor = color;
+      button.style.backgroundColor = '#000';
       button.textContent = playlist.name || 'Unknown Playlist';
       button.onclick = () => playPlaylist(playlist.spotifyURI);
       content.appendChild(button);
