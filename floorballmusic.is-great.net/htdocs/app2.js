@@ -11,15 +11,17 @@ const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Periodpaus.jso
 
 
 window.onload = function () {
-authenticateSpotify()
-createRandomTrackButtons();  // Add random track buttons to header
-loadSongsFromFolder();
 const token = getAccessTokenFromUrl();
 if (token) {
     accessToken = token;
     fetchSpotifyUserData(); // Fetch and display Spotify user info
+    createRandomTrackButtons();  // Add random track buttons to header
+    loadSongsFromFolder();
+    fetchSpotifyDevices();
+  }
+else {
+  authenticateSpotify()
 }
-fetchSpotifyDevices();
 };
 
 
