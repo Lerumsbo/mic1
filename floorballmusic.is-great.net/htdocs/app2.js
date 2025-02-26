@@ -11,6 +11,7 @@ const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Periodpaus.jso
 
 
 window.onload = function () {
+authenticateSpotify()
 createRandomTrackButtons();  // Add random track buttons to header
 loadSongsFromFolder();
 const token = getAccessTokenFromUrl();
@@ -162,7 +163,10 @@ async function loadSongsFromFolder() {
       const button = document.createElement('button');
       button.style.backgroundColor = color;
       button.textContent = `${track.title || 'Unknown Title'}\n${track.artist || 'Unknown Artist'}`;
-      button.onclick = () => playTrack(track);
+      button.onclick = function () {
+        button.style.borderColor = 'red';
+        playTrack(track);
+      }
       content.appendChild(button);
     });
   
