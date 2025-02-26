@@ -17,8 +17,8 @@ body {
     color: white;
     transition: background-color 0.3s ease;
   }
-  
-  .fixed-header {
+
+ .fixed-header {
     position: sticky;
     top: 0;
     background-color: #ffffff;

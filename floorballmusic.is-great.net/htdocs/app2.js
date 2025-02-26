@@ -351,8 +351,15 @@ function createRandomTrackButtons() {
         // Skip creating a random button for these
         return;
     }
+    
     const button = document.createElement('button');
     button.textContent = filename.split('.')[0];
+    if (filename === 'Hgoal.json') {
+      button.style.backgroundColor = '#0A0';
+    }
+    if (filename === 'Agoal.json') {
+      button.style.backgroundColor = '#A00';
+    }
     button.classList.add('random-track-btn');
     button.onclick = () => loadAndPlayRandomTrack(filename);
     header.appendChild(button);
