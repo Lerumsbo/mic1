@@ -356,9 +356,11 @@ function createRandomTrackButtons() {
     button.textContent = filename.split('.')[0];
     if (filename === 'Hgoal.json') {
       button.style.backgroundColor = '#0A0';
+      button.textContent ='Hemmamål'
     }
     if (filename === 'Agoal.json') {
       button.style.backgroundColor = '#A00';
+      button.textContent ='Bortamål'
     }
     button.classList.add('random-track-btn');
     button.onclick = () => loadAndPlayRandomTrack(filename);
