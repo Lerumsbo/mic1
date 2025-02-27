@@ -164,7 +164,8 @@ async function loadSongsFromFolder() {
     tracks.forEach(track => {
       const button = document.createElement('button');
       button.style.backgroundColor = color;
-      button.textContent = `${track.title || 'Unknown Title'}\n${track.artist || 'Unknown Artist'}`;
+      //button.textContent = `${track.title || 'Unknown Title'}\n${track.artist || 'Unknown Artist'}`;
+      button.textContent = `${track.title || 'Unknown Title'}\n${track.artist || 'Unknown Artist'}\n${formatTime(track.starttime || 0)}`;
       button.onclick = function () {
         button.style.borderColor = 'red';
         playTrack(track);
