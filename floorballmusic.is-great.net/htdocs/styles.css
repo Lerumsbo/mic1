@@ -75,7 +75,7 @@ body {
       flex-wrap: wrap;
   }
   
-  .random-buttons button:nth-last-child(-n+2) {
+  .random-buttons {
       display: flex;
       justify-content: center;
       gap: 10px;
