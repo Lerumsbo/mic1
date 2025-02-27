@@ -150,6 +150,10 @@ async function loadSongsFromFolder() {
       }
     }
   }
+ 
+  function truncateText(text, maxLength) {
+    return text.length > maxLength ? text.slice(0, maxLength) + '…' : text;
+}
 
   function createSection(tracks, sectionName, color) {
     const sectionElement = document.createElement('section');
@@ -165,7 +169,8 @@ async function loadSongsFromFolder() {
       const button = document.createElement('button');
       button.style.backgroundColor = color;
       //button.textContent = `${track.title || 'Unknown Title'}\n${track.artist || 'Unknown Artist'}`;
-      button.textContent = `${track.title || 'Unknown Title'}\n${track.artist || 'Unknown Artist'}\n${formatTime(track.starttime || 0)}`;
+      //button.textContent = `${track.title || 'Unknown Title'}\n${track.artist || 'Unknown Artist'}\n${formatTime(track.starttime || 0)}`;
+      button.textContent = `${truncateText(track.title || 'Unknown Title', 15)}\n${truncateText(track.artist || 'Unknown Artist', 15)}\n${formatTime(track.starttime || 0)}`;
       button.onclick = function () {
         button.style.borderColor = 'red';
         playTrack(track);
