@@ -171,9 +171,9 @@ async function loadSongsFromFolder() {
       //button.textContent = `${track.title || 'Unknown Title'}\n${track.artist || 'Unknown Artist'}`;
       //button.textContent = `${track.title || 'Unknown Title'}\n${track.artist || 'Unknown Artist'}\n${formatTime(track.starttime || 0)}`;
       button.textContent = `${truncateText(track.title || 'Unknown Title', 18)}\n${truncateText(track.artist || 'Unknown Artist', 18)}\n${formatTime(track.starttime || 0)}`;
-      button.onclick = function () {
+      button.onclick = function (event) {
         button.style.borderColor = 'red';
-        playTrack(track);
+        playTrack(event,track);
       }
       content.appendChild(button);
     });
@@ -186,7 +186,7 @@ async function loadSongsFromFolder() {
     });
   }
 
-  function playTrack(track) {
+  function playTrack(event,track) {
     const { spotifyURI, starttime } = track;
   
     if (!spotifyURI) {
@@ -197,7 +197,7 @@ async function loadSongsFromFolder() {
     if (spotifyURI.startsWith("spotify:")) {
       playSpotifyTrack(spotifyURI, starttime);
     } else if (spotifyURI.endsWith('.mp3')) {
-      playLocalTrack(spotifyURI);
+      playLocalTrack(event,spotifyURI);
     } else {
       console.error("Okänt format:", spotifyURI);
     }
@@ -240,37 +240,39 @@ function createPlaylistSection(playlists, sectionName, color) {
   
 let currentPlayer = null; // Håller reda på aktuell spelare
 
-function playLocalTrack(filePath) {
-    const localUrl = `/tracks/${filePath}`;
+function playLocalTrack(event,filePath) {
+  const localUrl = `/tracks/${filePath}`;
 
-    // Om spelaren redan finns, byt ljudkälla och spela
-    if (currentPlayer) {
-        currentPlayer.audioElement.pause();
-        currentPlayer.audioElement.currentTime = 0;
-        currentPlayer.audioElement.src = localUrl;
-        currentPlayer.audioElement.play();
+  // Om spelaren redan finns, byt ljudkälla och spela
+  if (currentPlayer) {
+      currentPlayer.audioElement.pause();
+      currentPlayer.audioElement.currentTime = 0;
+      currentPlayer.audioElement.src = localUrl;
+      currentPlayer.audioElement.play();
 
-        // Uppdatera play/pause-knappen
-        currentPlayer.playPauseButton.textContent = 'Pause';
-    } else {
-        // Skapa en ny spelare om ingen finns
-        currentPlayer = {
-            playerDiv: document.createElement('div'),
-            audioElement: document.createElement('audio'),
-            playPauseButton: document.createElement('button')
-        };
+      // Uppdatera play/pause-knappen
+      currentPlayer.playPauseButton.textContent = 'Pause';
+  } else {
+      // Skapa en ny spelare om ingen finns
+      currentPlayer = {
+          playerDiv: document.createElement('div'),
+          audioElement: document.createElement('audio'),
+          playPauseButton: document.createElement('button')
+      };
+      const mouseX = event.clientX;
+      const mouseY = event.clientY;
 
-        // Styla spelaren
-        Object.assign(currentPlayer.playerDiv.style, {
-            position: 'absolute',
-            top: '220px',
-            left: '10px',
-            width: '120px',
-            padding: '10px',
-            backgroundColor: '#AAAAAA',
-            borderRadius: '5px',
-            zIndex: 1000
-        });
+      // Styla spelaren
+      Object.assign(currentPlayer.playerDiv.style, {
+          position: 'fixed',
+          top: `${mouseY}px`,
+          left: `${mouseX}px`,
+          width: '120px',
+          padding: '10px',
+          backgroundColor: '#AAAAAA',
+          borderRadius: '5px',
+          zIndex: 1000
+      });
 
         // Lägg till ljudet
         currentPlayer.audioElement.src = localUrl;
@@ -361,7 +363,7 @@ function playLocalTrack(filePath) {
       
       const button = document.createElement('button');
       button.textContent = filename.split('.')[0];
-      button.onclick = () => loadAndPlayRandomTrack(filename);
+      button.onclick = (event) => { loadAndPlayRandomTrack(event,filename);}
 
       if (filename === 'Hgoal.json') {
         button.style.backgroundColor = '#0A0';
@@ -385,13 +387,13 @@ function playLocalTrack(filePath) {
     });
   }
 
-function loadAndPlayRandomTrack(filename) {
+function loadAndPlayRandomTrack(event,filename) {
     fetch(`/tracks/${filename}`)
         .then(response => response.json())
         .then(data => {
             const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
             if (randomTrack) {
-                playTrack(randomTrack); // Use the unified playTrack function
+                playTrack(event,randomTrack); // Use the unified playTrack function
             }
         })
         .catch(err => console.error("Error loading random track:", err));
