@@ -349,33 +349,41 @@ function playLocalTrack(filePath) {
     });
   }
 
-function createRandomTrackButtons() {
-  const header = document.querySelector('.random-buttons');
+  function createRandomTrackButtons() {
+    const header = document.querySelector('.random-buttons');
+    const goalheader = document.querySelector('.goal-buttons');
+  
+    filenames.forEach((filename) => {
+       if (filename === 'playlists.json' || filename === 'Local.json'|| filename === 'After.json' || filename === 'Intro.json' || filename === 'Pregame.json') {
+          // Skip creating a random button for these
+          return;
+      }
+      
+      const button = document.createElement('button');
+      button.textContent = filename.split('.')[0];
+      button.onclick = () => loadAndPlayRandomTrack(filename);
 
-  filenames.forEach((filename) => {
-     if (filename === 'playlists.json' || filename === 'Local.json'|| filename === 'After.json' || filename === 'Intro.json' || filename === 'Pregame.json') {
-        // Skip creating a random button for these
-        return;
-    }
-    
-    const button = document.createElement('button');
-    button.textContent = filename.split('.')[0];
-    button.classList.add('random-track-btn');
-    if (filename === 'Hgoal.json') {
-      button.style.backgroundColor = '#0A0';
-      button.textContent ='Hemmamål'
-      button.classList.add('random-goal-btn');
-    }
-    if (filename === 'Agoal.json') {
-      button.style.backgroundColor = '#A00';
-      button.textContent ='Bortamål'
-      button.classList.add('random-goal-btn');
-    }
-    button.classList.add('random-track-btn');
-    button.onclick = () => loadAndPlayRandomTrack(filename);
-    header.appendChild(button);
-  });
-}
+      if (filename === 'Hgoal.json') {
+        button.style.backgroundColor = '#0A0';
+        button.textContent ='Hemmamål'
+        button.classList.add('random-goal-btn');
+        goalheader.appendChild(button);
+      }
+
+      else if (filename === 'Agoal.json') {
+        button.style.backgroundColor = '#A00';
+        button.textContent ='Bortamål';
+        button.classList.add('random-goal-btn');
+        goalheader.appendChild(button);
+      }
+      
+      else {
+          button.classList.add('random-track-btn');
+          header.appendChild(button);
+        }
+      
+    });
+  }
 
 function loadAndPlayRandomTrack(filename) {
     fetch(`/tracks/${filename}`)

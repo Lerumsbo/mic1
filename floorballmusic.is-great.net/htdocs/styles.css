@@ -81,7 +81,13 @@ body {
       gap: 10px;
       flex-wrap: wrap;
   }
-  
+
+  .goal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
   
   #status {
     font-size: 18px;
