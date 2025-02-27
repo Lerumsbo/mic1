@@ -53,7 +53,7 @@ addDisplayNameToHeader();
 }
 
 function addDisplayNameToHeader() {
-const header = document.createElement('h2');
+const header = document.createElement('h4');
 header.textContent = displayName;
 header.style.cursor = 'pointer';
 
@@ -376,7 +376,7 @@ function playLocalTrack(filePath) {
         button.classList.add('random-goal-btn');
         goalheader.appendChild(button);
       }
-      
+
       else {
           button.classList.add('random-track-btn');
           header.appendChild(button);
