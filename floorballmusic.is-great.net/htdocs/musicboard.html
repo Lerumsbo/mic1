@@ -9,10 +9,11 @@
 <body>
 
   <div class="fixed-header">
-    <div class="header-buttons">
+    <div class="header-buttons" id="stop-playback">
       <button id="stop-btn" onclick="stopPlayback()">Stop</button>
+    </div>
+    <div class="header-buttons">
       <button id="login-btn" onclick="authenticateSpotify()">Log in</button>
-      <button id="refresh-btn" onclick="loadSongsFromFolder()">Reload</button>
       <button id="collapse-all-btn" onclick="collapseAllSections()">Retract</button>
       <select id="deviceSelect" class="device-select"></select>
     </div>

@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    padding: 20px;
+    padding: 0px;
   }
   
   h1, p {
@@ -22,7 +22,7 @@ body {
     position: sticky;
     top: 0;
     background-color: #ffffff;
-    padding: 10px;
+    padding: 00px;
     border-bottom: 2px solid #ccc;
     z-index: 1000;
     display: flex;
@@ -69,10 +69,14 @@ body {
   }
   
   .header-buttons {
+      position: relative;
+      top: 0;
+      left: 0;
       display: flex;
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
+      z-index: 9999;
   }
   
   .random-buttons {
@@ -80,6 +84,7 @@ body {
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
+      
   }
 
   .goal-buttons {
@@ -87,6 +92,7 @@ body {
     justify-content: center;
     gap: 10px;
     flex-wrap: nowrap;
+    
 }
   
   #status {
@@ -96,27 +102,41 @@ body {
     text-align: center;
   }
   
-  #login-btn, #stop-btn, #refresh-btn, #collapse-all-btn {
-    padding: 12px 20px;
-    font-size: 18px;
-    margin: 5px;
-  }
-  
-  #login-btn {
-    background-color: #3498db;
-  }
-  
   #stop-btn {
     background-color: #e74c3c;
+    width: 100%;  
+    height: 100px; 
+    color: white;
+    border: none;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
   }
-  
-  #refresh-btn {
-    background-color: #2ecc71;
-  }
-  
-  #collapse-all-btn {
-    background-color: #000000;
-  }
+
+  #login-btn, #refresh-btn, #collapse-all-btn {
+  color: white;
+  border: none;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+
+#login-btn {
+  background-color: #3498db; /* Specifik bakgrundsfärg för logga in-knappen */
+}
+
+#refresh-btn {
+  background-color: #2ecc71; /* Specifik bakgrundsfärg för reload-knappen */
+}
+
+#collapse-all-btn {
+  background-color: #727272; /* Specifik bakgrundsfärg för retract-knappen */
+}
   
   #login-btn:hover {
     background-color: #2980b9;
