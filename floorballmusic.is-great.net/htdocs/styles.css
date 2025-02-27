@@ -75,12 +75,13 @@ body {
       flex-wrap: wrap;
   }
   
-  .random-buttons {
+  .random-buttons button:nth-last-child(-n+2) {
       display: flex;
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
   }
+  
   
   #status {
     font-size: 18px;
@@ -142,6 +143,18 @@ body {
   .random-track-btn {
     background-color: black;
     color: white;
+    padding: 5px;
+    font-size: 14px;
+    margin: 5px;
+    cursor: pointer;
+    border: none;
+    width: 90px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .random-goal-btn {
+    background-color: black;
+    color: white;
     padding: 10px;
     font-size: 16px;
     margin: 5px;
@@ -149,7 +162,7 @@ body {
     border: none;
     transition: background-color 0.3s ease;
   }
-  
+
   .random-track-btn:hover {
     background-color: #333;
   }

@@ -360,13 +360,16 @@ function createRandomTrackButtons() {
     
     const button = document.createElement('button');
     button.textContent = filename.split('.')[0];
+    button.classList.add('random-track-btn');
     if (filename === 'Hgoal.json') {
       button.style.backgroundColor = '#0A0';
       button.textContent ='Hemmamål'
+      button.classList.add('random-goal-btn');
     }
     if (filename === 'Agoal.json') {
       button.style.backgroundColor = '#A00';
       button.textContent ='Bortamål'
+      button.classList.add('random-goal-btn');
     }
     button.classList.add('random-track-btn');
     button.onclick = () => loadAndPlayRandomTrack(filename);
