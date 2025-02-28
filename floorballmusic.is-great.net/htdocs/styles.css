@@ -100,11 +100,13 @@ body {
     
 }
   .title {
-    margin: 5px;
+    margin-top: 5px;
     padding: 0; /* Tar bort padding */
     line-height: 1; /* Komprimerar höjden */
-    font-size: 20px; /* Minskar textstorleken */
+    font-size: 30px; /* Minskar textstorleken */
     text-align: center;
+    font-weight:bold;
+    
 }
   
   #status {
