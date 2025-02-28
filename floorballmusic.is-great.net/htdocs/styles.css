@@ -8,12 +8,6 @@ body {
   h1, p {
     text-align: center;
   }
-
-  .title {
-    text-align: center;
-    font-size: 26px;
-    font-weight: bold;
-  }
   
   button {
     padding: 5px;
@@ -42,7 +36,7 @@ body {
     margin-bottom: 30px;
     padding: 5px;
     border-radius: 8px;
-    background-color: #ede7ff;
+    background-color: #b0b2c7;
   }
   
   section h2 {
@@ -50,7 +44,7 @@ body {
     font-size: 20px;
     cursor: pointer;
     padding: 10px;
-    background-color: #ede7ff;
+    background-color: #b0b2c7;
     border-radius: 5px;
     text-align: left;
   }
@@ -89,7 +83,6 @@ body {
   display: flex;
   justify-content: center;
   margin-bottom: 0px; /* Lägger lite utrymme mellan stop-knappen och de andra */
-  margin-top: 0px; /* Lägger lite utrymme mellan stop-knappen och de andra */
 }
   .random-buttons {
       display: flex;
@@ -106,8 +99,15 @@ body {
     flex-wrap: nowrap;
     
 }
+  .title {
+    margin: 5px;
+    padding: 0; /* Tar bort padding */
+    line-height: 1; /* Komprimerar höjden */
+    font-size: 20px; /* Minskar textstorleken */
+    text-align: center;
+}
   
- #status {
+  #status {
     margin: 0; /* Tar bort marginaler */
     padding: 0; /* Tar bort padding */
     line-height: 1; /* Komprimerar höjden */
@@ -115,22 +115,18 @@ body {
     text-align: center;
 }
 
-#status h2 {
+  #status h2 {
     margin: 0; /* Tar bort marginal från H3 */
     padding: 0; /* Tar bort padding från H3 */
 }
 
-#status p {
-    margin: 0; 
-    padding: 2; 
-}
-#status *:not(h2) { 
+  #status *:not(h2) { 
     font-size: 10px; /* Gör all annan text i #status mindre */
     line-height: 1; /* Komprimerar höjden ytterligare */
 }
-  
+
   #stop-btn {
-    background-color: #A00;
+    background-color: #791e1e;
     width: 100%;  
     height: 60px; 
     color: white;
@@ -207,8 +203,8 @@ body {
   }
   
   .random-goal-btn {
-    width:150px;
     background-color: black;
+    width:200px;
     color: white;
     padding: 10px;
     height: 60px;

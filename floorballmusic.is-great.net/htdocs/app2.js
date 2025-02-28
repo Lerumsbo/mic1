@@ -364,14 +364,14 @@ function playLocalTrack(event,filePath) {
       button.onclick = (event) => { loadAndPlayRandomTrack(event,filename);}
 
       if (filename === 'Hgoal.json') {
-        button.style.backgroundColor = '#0A0';
+        button.style.backgroundColor = '#228122';
         button.textContent ='Hemmamål'
         button.classList.add('random-goal-btn');
         goalheader.appendChild(button);
       }
 
       else if (filename === 'Agoal.json') {
-        button.style.backgroundColor = '#A00';
+        button.style.backgroundColor = '#6f2d2d';
         button.textContent ='Bortamål';
         button.classList.add('random-goal-btn');
         goalheader.appendChild(button);
