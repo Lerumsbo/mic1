@@ -1,7 +1,7 @@
 const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
 const REDIRECT_URI = "http://floorballmusic.is-great.net/musicboard.html";
 const SCOPES = "user-modify-playback-state user-read-playback-state user-read-private user-read-email user-top-read";
-const sectionColors = ['#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE','#5F9EA0', '#6A5ACD', '#708090', '#4682B4', '#7B68EE','#5F9EA0', '#6A5ACD', '#708090'];
+const sectionColors = ['#473b91'];
 let accessToken = "";
 let availableDevices = [];
 let selectedDevice = null;
@@ -168,8 +168,6 @@ async function loadSongsFromFolder() {
     tracks.forEach(track => {
       const button = document.createElement('button');
       button.style.backgroundColor = color;
-      //button.textContent = `${track.title || 'Unknown Title'}\n${track.artist || 'Unknown Artist'}`;
-      //button.textContent = `${track.title || 'Unknown Title'}\n${track.artist || 'Unknown Artist'}\n${formatTime(track.starttime || 0)}`;
       button.textContent = `${truncateText(track.title || 'Unknown Title', 18)}\n${truncateText(track.artist || 'Unknown Artist', 18)}\n${formatTime(track.starttime || 0)}`;
       button.onclick = function (event) {
         button.style.borderColor = 'red';

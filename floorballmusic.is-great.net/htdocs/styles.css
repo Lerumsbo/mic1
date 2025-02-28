@@ -2,10 +2,17 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     padding: 0px;
+    margin: 0px;
   }
   
   h1, p {
     text-align: center;
+  }
+
+  .title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
   }
   
   button {
@@ -20,7 +27,7 @@ body {
 
  .fixed-header {
     position: sticky;
-    top: 0;
+    top: 0px;
     background-color: #ffffff;
     padding: 00px;
     border-bottom: 2px solid #ccc;
@@ -35,7 +42,7 @@ body {
     margin-bottom: 30px;
     padding: 5px;
     border-radius: 8px;
-    background-color: #f4f4f4;
+    background-color: #ede7ff;
   }
   
   section h2 {
@@ -43,7 +50,7 @@ body {
     font-size: 20px;
     cursor: pointer;
     padding: 10px;
-    background-color: #f4f4f4;
+    background-color: #ede7ff;
     border-radius: 5px;
     text-align: left;
   }
@@ -59,7 +66,7 @@ body {
   .song-list button {
       vertical-align: top;
       margin: 10px;
-      width: 160px;
+      width: 190px;
       height: 80px;
       text-align: center;
       line-height: 1.4;
@@ -69,9 +76,7 @@ body {
   }
   
   .header-buttons {
-      position: relative;
-      top: 0;
-      left: 0;
+      position: flex;
       display: flex;
       justify-content: center;
       gap: 10px;
@@ -79,6 +84,13 @@ body {
       z-index: 9999;
   }
   
+  .stop-buttons {
+  width: 100%; /* Fyller hela bredden */
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0px; /* Lägger lite utrymme mellan stop-knappen och de andra */
+  margin-top: 0px; /* Lägger lite utrymme mellan stop-knappen och de andra */
+}
   .random-buttons {
       display: flex;
       justify-content: center;
@@ -95,17 +107,32 @@ body {
     
 }
   
-  #status {
-    font-size: 12px;
-    font-weight: bold;
-    margin: 20px 0;
+ #status {
+    margin: 0; /* Tar bort marginaler */
+    padding: 0; /* Tar bort padding */
+    line-height: 1; /* Komprimerar höjden */
+    font-size: 12px; /* Minskar textstorleken */
     text-align: center;
-  }
+}
+
+#status h2 {
+    margin: 0; /* Tar bort marginal från H3 */
+    padding: 0; /* Tar bort padding från H3 */
+}
+
+#status p {
+    margin: 0; 
+    padding: 2; 
+}
+#status *:not(h2) { 
+    font-size: 10px; /* Gör all annan text i #status mindre */
+    line-height: 1; /* Komprimerar höjden ytterligare */
+}
   
   #stop-btn {
-    background-color: #e74c3c;
+    background-color: #A00;
     width: 100%;  
-    height: 100px; 
+    height: 60px; 
     color: white;
     border: none;
     font-size: 16px;
@@ -127,11 +154,11 @@ body {
 
 
 #login-btn {
-  background-color: #3498db; /* Specifik bakgrundsfärg för logga in-knappen */
+  background-color: #2da016; /* Specifik bakgrundsfärg för logga in-knappen */
 }
 
 #refresh-btn {
-  background-color: #2ecc71; /* Specifik bakgrundsfärg för reload-knappen */
+  background-color: #874be9; /* Specifik bakgrundsfärg för reload-knappen */
 }
 
 #collapse-all-btn {
@@ -174,14 +201,17 @@ body {
     margin: 5px;
     cursor: pointer;
     border: none;
-    width: 90px;
+    width: 120px;
+    height: 40px;
     transition: background-color 0.3s ease;
   }
   
   .random-goal-btn {
+    width:150px;
     background-color: black;
     color: white;
     padding: 10px;
+    height: 60px;
     font-size: 16px;
     margin: 5px;
     cursor: pointer;
