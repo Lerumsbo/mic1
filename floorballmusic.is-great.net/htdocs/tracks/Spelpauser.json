@@ -359,6 +359,18 @@
             "starttime": 63000,
             "artist": "In-Grid",
             "title": "Tu Es Foutu - Radio Edit"
+        },
+        {
+            "spotifyURI": "spotify:track:2ZfaBbRMcEgSF8JnJIaEBP",
+            "starttime": 7500,
+            "artist": "Hooja",
+            "title": "Banan Melon Kiwi & Citron"
+        },
+        {
+            "spotifyURI": "spotify:track:5v5cNnwvtntSGSDR3BSVwq",
+            "starttime": 145900,
+            "artist": "Medina",
+            "title": "In i dimman"
         }
     ]
 }
