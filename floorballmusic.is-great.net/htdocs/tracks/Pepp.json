@@ -107,6 +107,18 @@
             "starttime": 74650,
             "artist": "LOK",
             "title": "Lok st\u00e5r n\u00e4r de andra faller"
+        },
+        {
+            "spotifyURI": "spotify:track:3B6bFntJAX3KYREWk92aJL",
+            "starttime": 30963,
+            "artist": "Tomas Ledin",
+            "title": "Du kan lita p\u00e5 mej"
+        },
+        {
+            "spotifyURI": "spotify:track:4zXa17K83Pp6N2yXdVc2sv",
+            "starttime": 24700,
+            "artist": "Joe \"Bean\" Esposito",
+            "title": "You're The Best"
         }
     ]
 }

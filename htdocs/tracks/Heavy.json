@@ -179,6 +179,18 @@
             "starttime": 0,
             "artist": "Van Halen",
             "title": "Panama - 2015 Remaster"
+        },
+        {
+            "spotifyURI": "spotify:track:2zSudlr6kCVjgxaYtP4vuc",
+            "starttime": 17000,
+            "artist": "Liliac",
+            "title": "Crazy Train"
+        },
+        {
+            "spotifyURI": "spotify:track:4f74h9bcuHOroCaVsKIr4F",
+            "starttime": 13600,
+            "artist": "Mammoth",
+            "title": "Don't Back Down"
         }
     ]
 }

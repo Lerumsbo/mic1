@@ -421,6 +421,21 @@ function playPlaylist(playlistURI) {
     alert("No device selected!");
     return;
   }
+
+  console.log(`Enabling shuffle on device: ${selectedDevice}`);
+
+  // Först aktivera shuffle
+  fetch(`https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=${selectedDevice}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to enable shuffle');
+    }  
+
   console.log(`Now playing playlist: ${playlistURI}`);
   fetch(`https://api.spotify.com/v1/me/player/play?device_id=${selectedDevice}`, {
     method: 'PUT',
