@@ -59,6 +59,18 @@
             "starttime": 0,
             "artist": "Armin van Buuren",
             "title": "Sirius"
+        },
+        {
+            "spotifyURI": "spotify:track:0R7YVi7w41Dr9jU5vblAok",
+            "starttime": 103800,
+            "artist": "Snoop Dogg",
+            "title": "Sweat - Snoop Dogg vs David Guetta Remix"
+        },
+        {
+            "spotifyURI": "spotify:track:3cHyzEpemYlq62PWCEFqGR",
+            "starttime": 236350,
+            "artist": "Ti\u00ebsto",
+            "title": "Maximal Crazy - Original Mix"
         }
     ]
 }
