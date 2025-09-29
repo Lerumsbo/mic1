@@ -435,6 +435,7 @@ function playPlaylist(playlistURI) {
     if (!response.ok) {
       throw new Error('Failed to enable shuffle');
     }  
+  })
 
   console.log(`Now playing playlist: ${playlistURI}`);
   fetch(`https://api.spotify.com/v1/me/player/play?device_id=${selectedDevice}`, {
@@ -448,6 +449,7 @@ function playPlaylist(playlistURI) {
   .catch(error => {
     console.error('Error playing playlist:', error);
   });
+  
 }
 
 function updateStatus(message) {
