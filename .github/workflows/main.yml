@@ -15,4 +15,4 @@ jobs:
         url: "ftpupload.net"
         user: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PWD }}
-        options: "-vv --insecure"
+        options: "-vv"
