@@ -15,4 +15,4 @@ jobs:
         url: "ftp://ftpupload.net/htdocs/"
         user: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PWD }}
-        options: --verbose --debug
+        options: --vv
