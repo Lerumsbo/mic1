@@ -12,7 +12,7 @@ jobs:
     - name: git-ftp push
       uses: sebastianpopp/git-ftp-action@releases/v3
       with:
-        url: "ftpupload.net"
+        url: "ftp://ftpupload.net/htdocs/"
         user: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PWD }}
         options: --verbose --debug
