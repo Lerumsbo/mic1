@@ -377,6 +377,36 @@
             "starttime": 17080,
             "artist": "Duck Sauce",
             "title": "Barbra Streisand - Radio Edit"
+        },
+        {
+            "spotifyURI": "spotify:track:17NHXI2CJp7KgdcwcDnRx4",
+            "starttime": 65390,
+            "artist": "Marnik",
+            "title": "Boyz In Paris (with VINAI)"
+        },
+        {
+            "spotifyURI": "spotify:track:2ygMBIctKIAfbEBcT9065L",
+            "starttime": 0,
+            "artist": "Black Eyed Peas",
+            "title": "Pump It"
+        },
+        {
+            "spotifyURI": "spotify:track:47dPnCWVGyRjtH04nZmxUv",
+            "starttime": 59300,
+            "artist": "Babes on the Run",
+            "title": "Power - Original Mix"
+        },
+        {
+            "spotifyURI": "spotify:track:39shmbIHICJ2Wxnk1fPSdz",
+            "starttime": 8950,
+            "artist": "The Clash",
+            "title": "Should I Stay or Should I Go - Remastered"
+        },
+        {
+            "spotifyURI": "spotify:track:7lz578ML4nWrDL3uOLyQoR",
+            "starttime": 14200,
+            "artist": "ZZ Top",
+            "title": "Got Me Under Pressure (2008 Remaster)"
         }
     ]
 }

@@ -131,6 +131,24 @@
             "starttime": 0,
             "artist": "RiNG-O.Games",
             "title": "Power up Mario - Super wii Sound ver."
+        },
+        {
+            "spotifyURI": "spotify:track:6IOdPIKmhmDJANJT2ktP4X",
+            "starttime": 8250,
+            "artist": "Ihsan Dincer",
+            "title": "Chicago Bulls Theme (SIRIUS)"
+        },
+        {
+            "spotifyURI": "spotify:track:5ry1GWOraVbudUG4Rn9dHu",
+            "starttime": 43400,
+            "artist": "Shinedown",
+            "title": "BLACK SOUL"
+        },
+        {
+            "spotifyURI": "spotify:track:6tHDtYkt3PyR9pSffKRVYz",
+            "starttime": 122065,
+            "artist": "No Resolve",
+            "title": "UNSTOPPABLE"
         }
     ]
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Board</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="fixed-header">
+    <div class="title">Floorball Music Panel</div>
+    <div class="stop-buttons" id="stop-playback">
+      <button id="stop-btn" onclick="stopPlayback()">Stop</button>
+    </div>
+    <div class="header-buttons">
+      <button id="login-btn" onclick="authenticateSpotify()">Log in</button>
+      <button id="collapse-all-btn" onclick="collapseAllSections()">Compact</button>
+      <select id="deviceSelect" class="device-select"></select>
+    </div>
+    <div class="random-buttons" id="random-buttons"></div>
+    <div class="goal-buttons" id="goal-buttons"></div>
+  </div>
+  
+  <div class="file-buttons" id="file-buttons"></div>
+
+  <div id="status"></div>
+  <div id="sections"></div>
+
+  <script src="app_alternative.js"></script>
+</body>
+</html>
