@@ -9,6 +9,25 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+
+    - name: show changed files & git-ftp diff
+      run: |
+        echo "=== git status (porcelain) ==="
+        git status --porcelain
+        echo
+        echo "=== changed since last commit (HEAD^ -> HEAD) ==="
+        git diff --name-only HEAD^ HEAD || true
+        echo
+        echo "=== tracked modified/untracked files ==="
+        git ls-files -m
+        git ls-files --others --exclude-standard
+        echo
+        echo "=== show .git-ftp-ignore ==="
+        sed -n '1,200p' .git-ftp-ignore || true
+        echo
+        echo "=== git-ftp diff (what would be uploaded) ==="
+        git ftp diff || true
+
     - name: git-ftp push
       uses: sebastianpopp/git-ftp-action@releases/v3
       with:
