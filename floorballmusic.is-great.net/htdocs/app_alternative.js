@@ -1,5 +1,5 @@
 const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
-const REDIRECT_URI = "http://floorballmusic.is-great.net/musicboard2.html";
+const REDIRECT_URI = "http://floorballmusic.is-great.net/newboard.html";
 const SCOPES = "user-modify-playback-state user-read-playback-state user-read-private user-read-email user-top-read";
 const sectionColors = ['#473b91'];
 let accessToken = "";
