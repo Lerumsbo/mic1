@@ -6,13 +6,32 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - name: git-ftp push
-      uses: sebastianpopp/git-ftp-action@releases/v3
-      with:
-        url: "ftpupload.net/"
-        user: ${{ secrets.FTP_USER }}
-        password: ${{ secrets.FTP_PWD }}
-        options: "-v"
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Debug: show changed files & git-ftp diff
+        run: |
+          echo "=== git status (porcelain) ==="
+          git status --porcelain
+          echo
+          echo "=== changed since last commit (HEAD^ -> HEAD) ==="
+          git diff --name-only HEAD^ HEAD || true
+          echo
+          echo "=== tracked modified/untracked files ==="
+          git ls-files -m
+          git ls-files --others --exclude-standard
+          echo
+          echo "=== show .git-ftp-ignore ==="
+          sed -n '1,200p' .git-ftp-ignore || true
+          echo
+          echo "=== git-ftp diff (what would be uploaded) ==="
+          git ftp diff || true
+
+      - name: git-ftp push
+        uses: sebastianpopp/git-ftp-action@releases/v3
+        with:
+          url: "ftpupload.net/"
+          user: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PWD }}
+          options: "-v"
