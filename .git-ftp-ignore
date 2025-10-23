@@ -1,13 +1,18 @@
 # Ignore everything by default
 *
 
-# Include htdocs folder
+# Include htdocs folder and all contents
 !floorballmusic.is-great.net/htdocs/
 !floorballmusic.is-great.net/htdocs/**
 
-# Optional: ignore hidden files
-floorballmusic.is-great.net/htdocs/.* 
+# Explicitly allow HTML and JSON files (avoid accidental ignores)
+!floorballmusic.is-great.net/htdocs/**/*.html
+!floorballmusic.is-great.net/htdocs/**/*.htm
+!floorballmusic.is-great.net/htdocs/**/*.json
 
-# Ignore all MP3 files
-*.mp3
+# Ignore MP3 files explicitly
 floorballmusic.is-great.net/htdocs/**/*.mp3
+*.mp3
+
+# Ignore hidden files inside htdocs (optional)
+floorballmusic.is-great.net/htdocs/.* 
