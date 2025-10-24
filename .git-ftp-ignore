@@ -1,15 +1,16 @@
-# Ignore everything
+# Ignore everything by default
 *
 
-# Include all contents under htdocs
-!floorballmusic.is-great.net/
-!floorballmusic.is-great.net/**
-!floorballmusic.is-great.net/htdocs/
-!floorballmusic.is-great.net/htdocs/**
-!floorballmusic.is-great.net/htdocs/**/*.json
-!floorballmusic.is-great.net/htdocs/**/*.html
-!floorballmusic.is-great.net/htdocs/**/*.htm
+# Include everything under htdocs
+!htdocs/
+!htdocs/**
+!htdocs/**/*.html
+!htdocs/**/*.htm
+!htdocs/**/*.json
 
-# Explicitly ignore mp3s
-floorballmusic.is-great.net/htdocs/**/*.mp3
+# Ignore MP3s explicitly
+htdocs/**/*.mp3
 *.mp3
+
+# Ignore hidden files
+htdocs/.*
