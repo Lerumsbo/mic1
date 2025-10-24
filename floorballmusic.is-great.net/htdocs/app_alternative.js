@@ -1,3 +1,13 @@
+async function loadFilenames(dir) {
+  const res = await fetch(`getFileList.php?dir=${encodeURIComponent(dir)}`);
+  if (!res.ok) throw new Error('Failed to load file list');
+  return await res.json();
+}
+
+const filenames = loadFilenames('tracks2').then(console.log);
+
+
+
 const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
 const REDIRECT_URI = "http://floorballmusic.is-great.net/newboard.html";
 const SCOPES = "user-modify-playback-state user-read-playback-state user-read-private user-read-email user-top-read";
@@ -7,7 +17,7 @@ let availableDevices = [];
 let selectedDevice = null;
 let displayName = "";
 
-const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Lomis.json', 'Warmup.json', 'Pregame.json', 'Mål.json', 'Utvisning.json', 'Odd.json', 'Cheery.json', 'Energy.json', 'Rythm.json', 'Local.json', 'Gameevents.json', 'Hgoal.json', 'Agoal.json'];
+//const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Lomis.json', 'Warmup.json', 'Pregame.json', 'Mål.json', 'Utvisning.json', 'Odd.json', 'Cheery.json', 'Energy.json', 'Rythm.json', 'Local.json', 'Gameevents.json', 'Hgoal.json', 'Agoal.json'];
 
 
 window.onload = function () {
