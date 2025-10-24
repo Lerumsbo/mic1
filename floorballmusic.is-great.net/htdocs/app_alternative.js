@@ -18,19 +18,20 @@ let displayName = "";
 let filenames = [];
 
 window.onload = async function () {
-const token = getAccessTokenFromUrl();
-const filenames = await loadFilenames('tracks2');
-console.log(filenames); // will show the array
-createRandomTrackButtons();  // Add random track buttons to header
-loadSongsFromFolder();
-if (token) {
-    accessToken = token;
-    fetchSpotifyUserData(); // Fetch and display Spotify user info
-    fetchSpotifyDevices();
+  const token = getAccessTokenFromUrl();
+  const filenames = await loadFilenames('tracks2');
+  console.log(filenames); // will show the array
+
+  if (token) {
+      accessToken = token;
+      fetchSpotifyUserData(); // Fetch and display Spotify user info
+      fetchSpotifyDevices();
+      createRandomTrackButtons();  // Add random track buttons to header
+      loadSongsFromFolder();
+    }
+  else {
+    authenticateSpotify()
   }
-else {
-  authenticateSpotify()
-}
 };
 
 
