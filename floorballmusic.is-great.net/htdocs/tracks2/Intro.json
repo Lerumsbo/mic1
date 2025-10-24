@@ -1,0 +1,76 @@
+{
+    "tracks": [
+        {
+            "spotifyURI": "spotify:track:2bPGTMB5sFfFYQ2YvSmup0",
+            "starttime": 7900,
+            "title": "Deutschland",
+            "artist": "Rammstein"
+        },
+        {
+            "spotifyURI": "spotify:track:78UcxP3Xm0EOXneQUDsStA",
+            "starttime": 0,
+            "title": "Campione 2000 - Radio Version",
+            "artist": "E-Type"
+        },
+        {
+            "spotifyURI": "spotify:track:0bVtevEgtDIeRjCJbK3Lmv",
+            "starttime": 0,
+            "title": "Welcome To The Jungle",
+            "artist": "Guns N' Roses"
+        },
+        {
+            "spotifyURI": "spotify:track:6dNJ3lasVLPd0078T9yqlm",
+            "starttime": 17800,
+            "artist": "Wolfmother",
+            "title": "Joker And The Thief"
+        },
+        {
+            "spotifyURI": "spotify:track:1aPQhwQfYSYM81SVDeC92T",
+            "starttime": 0,
+            "artist": "W.A.S.P.",
+            "title": "Wild Child"
+        },
+        {
+            "spotifyURI": "spotify:track:1iWLoUrmSLht6keK0436jK",
+            "starttime": 0,
+            "artist": "Steel Panther",
+            "title": "Eyes Of A Panther"
+        },
+        {
+            "spotifyURI": "spotify:track:3VqHuw0wFlIHcIPWkhIbdQ",
+            "starttime": 16079,
+            "artist": "Metallica",
+            "title": "Enter Sandman (Remastered)"
+        },
+        {
+            "spotifyURI": "spotify:track:4Yqy0GpeDEXLibWJCZyQew",
+            "starttime": 0,
+            "artist": "M\u00f6tley Cr\u00fce",
+            "title": "Kickstart My Heart"
+        },
+        {
+            "spotifyURI": "spotify:track:65eSPR5pShRaILbVJ9FPfC",
+            "starttime": 63487,
+            "artist": "IMAscore",
+            "title": "Instant Go"
+        },
+        {
+            "spotifyURI": "spotify:track:3GYH6TqF2fIihKps1Sedxc",
+            "starttime": 0,
+            "artist": "Armin van Buuren",
+            "title": "Sirius"
+        },
+        {
+            "spotifyURI": "spotify:track:0R7YVi7w41Dr9jU5vblAok",
+            "starttime": 103800,
+            "artist": "Snoop Dogg",
+            "title": "Sweat - Snoop Dogg vs David Guetta Remix"
+        },
+        {
+            "spotifyURI": "spotify:track:3cHyzEpemYlq62PWCEFqGR",
+            "starttime": 236350,
+            "artist": "Ti\u00ebsto",
+            "title": "Maximal Crazy - Original Mix"
+        }
+    ]
+}

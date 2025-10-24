@@ -132,7 +132,7 @@ async function loadSongsFromFolder() {
     document.getElementById('sections').innerHTML = "";
   
     for (const [index, filename] of filenames.entries()) {
-      const fileUrl = `/tracks/${filename}`;
+      const fileUrl = `/tracks2/${filename}`;
       try {
         const response = await fetch(fileUrl);
         if (!response.ok) continue;
@@ -239,7 +239,7 @@ function createPlaylistSection(playlists, sectionName, color) {
 let currentPlayer = null; // Håller reda på aktuell spelare
 
 function playLocalTrack(event,filePath) {
-  const localUrl = `/tracks/${filePath}`;
+  const localUrl = `../mp3/${filePath}`;
 
   // Om spelaren redan finns, byt ljudkälla och spela
   if (currentPlayer) {
@@ -386,7 +386,7 @@ function playLocalTrack(event,filePath) {
   }
 
 function loadAndPlayRandomTrack(event,filename) {
-    fetch(`/tracks/${filename}`)
+    fetch(`/tracks2/${filename}`)
         .then(response => response.json())
         .then(data => {
             const randomTrack = data.tracks ? data.tracks[Math.floor(Math.random() * data.tracks.length)] : null;
