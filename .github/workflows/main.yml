@@ -34,4 +34,4 @@ jobs:
         url: "ftpupload.net/"
         user: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PWD }}
-        options: "--auto-init -v"
+        options: "-v"
