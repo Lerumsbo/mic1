@@ -4,13 +4,11 @@
 # Include everything under htdocs
 !htdocs/
 !htdocs/**
-!htdocs/**/*.html
-!htdocs/**/*.htm
-!htdocs/**/*.json
 
-# Ignore MP3s explicitly
+# But exclude specific things you don’t want uploaded
 htdocs/**/*.mp3
 *.mp3
 
-# Ignore hidden files
-htdocs/.*
+# Ignore hidden files and git-specific files
+htdocs/.* 
+.git*
