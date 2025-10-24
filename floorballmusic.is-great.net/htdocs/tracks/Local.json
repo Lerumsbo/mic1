@@ -1,13 +1,13 @@
 {
   "tracks": [
-    { "spotifyURI": "../mp3/Modo-long.mp3", "starttime": 0, "title": "Modomåljingel lång", "artist": "NA" },
-    { "spotifyURI": "../mp3/Modo-goal.mp3", "starttime": 0, "title": "Modomåljingel kort", "artist": "NA" },
-    { "spotifyURI": "../mp3/FBC Lerum Style.mp3", "starttime": 0, "title": "FBC Lerum style", "artist": "NA" },
-    { "spotifyURI": "../mp3/Short Lerum Style.mp3", "starttime": 0, "title": "Kort FBC Lerum style", "artist": "NA" },
-    { "spotifyURI": "../mp3/Goal - Rave.mp3", "starttime": 0, "title": "Ravemål", "artist": "NA" },
-    { "spotifyURI": "../mp3/Lerumgoal.mp3", "starttime": 0, "title": "Lerummål", "artist": "NA" },
-    { "spotifyURI": "../mp3/Sandman-Deutchland.mp3", "starttime": 0, "title": "Matchintro Sandman-Deutchland", "artist": "NA" },
-    { "spotifyURI": "../mp3/Cheetahs go.mp3", "starttime": 0, "title": "AI Cheetahs", "artist": "NA" },
-    { "spotifyURI": "../mp3/1UP.mp3", "starttime": 0, "title": "1 UP", "artist": "NA" }
+    { "spotifyURI": "Modo-long.mp3", "starttime": 0, "title": "Modomåljingel lång", "artist": "NA" },
+    { "spotifyURI": "Modo-goal.mp3", "starttime": 0, "title": "Modomåljingel kort", "artist": "NA" },
+    { "spotifyURI": "FBC Lerum Style.mp3", "starttime": 0, "title": "FBC Lerum style", "artist": "NA" },
+    { "spotifyURI": "Short FBC Lerum Style.mp3", "starttime": 0, "title": "Kort FBC Lerum style", "artist": "NA" },
+    { "spotifyURI": "Goal - Rave.mp3", "starttime": 0, "title": "Ravemål", "artist": "NA" },
+    { "spotifyURI": "Lerumgoal.mp3", "starttime": 0, "title": "Lerummål", "artist": "NA" },
+    { "spotifyURI": "Sandman-Deutchland.mp3", "starttime": 0, "title": "Matchintro Sandman-Deutchland", "artist": "NA" },
+    { "spotifyURI": "Cheetahs go.mp3", "starttime": 0, "title": "AI Cheetahs", "artist": "NA" },
+    { "spotifyURI": "1UP.mp3", "starttime": 0, "title": "1 UP", "artist": "NA" }
   ]
 }

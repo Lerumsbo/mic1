@@ -239,7 +239,7 @@ function createPlaylistSection(playlists, sectionName, color) {
 let currentPlayer = null; // Håller reda på aktuell spelare
 
 function playLocalTrack(event,filePath) {
-  const localUrl = `/tracks/${filePath}`;
+  const localUrl = `../mp3/${filePath}`;
 
   // Om spelaren redan finns, byt ljudkälla och spela
   if (currentPlayer) {
