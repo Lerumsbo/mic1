@@ -14,7 +14,7 @@ async function loadFilenames(dir) {
 }
 
 //const filenames = loadFilenames('tracks2').then(console.log);
-const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Periodpaus.json', 'Warmup.json', 'Pregame.json', 'Mål.json', 'Utvisning.json', 'Publik.json', 'Spelpauser2.json', 'Heavy.json', 'Spelpauser.json', 'Local.json', 'Pepp.json', 'Hgoal.json', 'Agoal.json'];
+const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Periodpaus.json', 'Warmup.json', 'Pregame.json', 'Goal.json', 'Spelpauser2.json', 'Spelpauser.json', 'Local.json', 'Heavy.json', 'Utvisning.json', 'Publik.json', 'GameEvents.json', 'Hgoal.json', 'Agoal.json'];
 
 
 window.onload = function () {
