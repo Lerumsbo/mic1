@@ -1,5 +1,5 @@
 async function loadFilenames(dir) {
-  const res = await fetch(`getFileList.php?dir=${encodeURIComponent(dir)}`);
+  const res = await fetch(`get_json_files.php?dir=${encodeURIComponent(dir)}`);
   if (!res.ok) throw new Error('Failed to load file list');
   return await res.json();
 }
