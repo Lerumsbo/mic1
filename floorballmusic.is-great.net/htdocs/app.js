@@ -200,7 +200,7 @@ button.onclick = function () {
   playSpotifyTrack(spotifyURI, starttime);
 };
 } else if (spotifyURI.endsWith('.mp3')) {
-const localUrl = `/tracks/${spotifyURI}`;
+const localUrl = `/mp3/${spotifyURI}`;
 button.onclick = function (event) {
   event.preventDefault();
 
