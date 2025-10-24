@@ -34,4 +34,5 @@ jobs:
         url: ftp://ftpupload.net/floorballmusic.is-great.net
         user: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        syncroot: floorballmusic.is-great.net
+        syncroot: floorballmusic.is-great.net/htdocs
+
