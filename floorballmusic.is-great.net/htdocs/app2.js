@@ -13,8 +13,8 @@ async function loadFilenames(dir) {
   return await res.json();
 }
 
-const filenames = loadFilenames('tracks2').then(console.log);
-//const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Periodpaus.json', 'Warmup.json', 'Pregame.json', 'Mål.json', 'Utvisning.json', 'Publik.json', 'Spelpauser2.json', 'Heavy.json', 'Spelpauser.json', 'Local.json', 'Pepp.json', 'Hgoal.json', 'Agoal.json'];
+//const filenames = loadFilenames('tracks2').then(console.log);
+const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Periodpaus.json', 'Warmup.json', 'Pregame.json', 'Mål.json', 'Utvisning.json', 'Publik.json', 'Spelpauser2.json', 'Heavy.json', 'Spelpauser.json', 'Local.json', 'Pepp.json', 'Hgoal.json', 'Agoal.json'];
 
 
 window.onload = function () {
