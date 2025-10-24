@@ -28,11 +28,10 @@ jobs:
         echo "=== git-ftp diff (what would be uploaded) ==="
         git ftp push -n || true
 
-    - name: git-ftp init
+    - name: git-ftp push
       uses: sebastianpopp/git-ftp-action@releases/v3
       with:
         url: "ftp://ftpupload.net/floorballmusic.is-great.net/htdocs"
         user: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PWD }}
         options: "-v"
-
