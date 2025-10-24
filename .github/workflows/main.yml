@@ -31,7 +31,9 @@ jobs:
     - name: Upload via git-ftp
       uses: sebastianpopp/git-ftp-action@releases/v3
       with:
-        url: ftp://ftpupload.net/floorballmusic.is-great.net/htdocs
+        url: ftp://ftpupload.net/
         user: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
+        password: "${{ secrets.FTP_PASSWORD }}"
         syncroot: floorballmusic.is-great.net/htdocs
+        options: "-v"
+
