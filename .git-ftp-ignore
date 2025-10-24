@@ -6,13 +6,13 @@
 !floorballmusic.is-great.net/htdocs/**
 
 # Explicitly allow HTML and JSON files (avoid accidental ignores)
-!floorballmusic.is-great.net/htdocs/**/*.html
-!floorballmusic.is-great.net/htdocs/**/*.htm
-!floorballmusic.is-great.net/htdocs/**/*.json
+#!floorballmusic.is-great.net/htdocs/**/*.html
+#!floorballmusic.is-great.net/htdocs/**/*.htm
+#!floorballmusic.is-great.net/htdocs/**/*.json
 
 # Ignore MP3 files explicitly
 floorballmusic.is-great.net/htdocs/**/*.mp3
 *.mp3
 
 # Ignore hidden files inside htdocs (optional)
-floorballmusic.is-great.net/htdocs/.* 
+#floorballmusic.is-great.net/htdocs/.* 
