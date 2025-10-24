@@ -4,9 +4,8 @@ async function loadFilenames(dir) {
   return await res.json();
 }
 
-const filenames = loadFilenames('tracks2').then(console.log);
-
-
+const filenames = await loadFilenames('tracks2');
+console.log(filenames); // will show the array
 
 const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
 const REDIRECT_URI = "http://floorballmusic.is-great.net/newboard.html";
