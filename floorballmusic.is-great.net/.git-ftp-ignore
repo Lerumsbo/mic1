@@ -1,7 +1,13 @@
 # Ignore everything by default
 *
-# Allow everything inside htdocs
-!htdocs/**
-# Ignore mp3s
-htdocs/**/*.mp3
+
+# Exclude .git and .github
+.git/
+.github/
+
+# Ignore all mp3 files anywhere
 *.mp3
+htdocs/**/*.mp3
+
+# Allow htdocs folder and its contents
+!htdocs/**

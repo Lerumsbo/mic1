@@ -34,4 +34,5 @@ jobs:
         url: "ftp://ftpupload.net/floorballmusic.is-great.net/htdocs"
         user: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PWD }}
-        options: "-v"
+        options: "--syncroot=floorballmusic.is-great.net/htdocs -v"
+
