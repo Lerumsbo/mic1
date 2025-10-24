@@ -1,14 +1,7 @@
 # Ignore everything by default
 *
-
-# Include everything under htdocs
-!htdocs/
+# Allow everything inside htdocs
 !htdocs/**
-
-# But exclude specific things you don’t want uploaded
+# Ignore mp3s
 htdocs/**/*.mp3
 *.mp3
-
-# Ignore hidden files and git-specific files
-htdocs/.* 
-.git*
