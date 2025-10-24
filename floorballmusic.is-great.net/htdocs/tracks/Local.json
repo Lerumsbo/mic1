@@ -7,7 +7,7 @@
     { "spotifyURI": "Goal - Rave.mp3", "starttime": 0, "title": "Ravemål", "artist": "NA" },
     { "spotifyURI": "Lerumgoal.mp3", "starttime": 0, "title": "Lerummål", "artist": "NA" },
     { "spotifyURI": "Sandman-Deutchland.mp3", "starttime": 0, "title": "Matchintro Sandman-Deutchland", "artist": "NA" },
-    { "spotifyURI": "Cheetahs go.mp3", "starttime": 0, "title": "AI Cheetahs", "artist": "NA" },
+    { "spotifyURI": "../mp3/Cheetahs go.mp3", "starttime": 0, "title": "AI Cheetahs", "artist": "NA" },
     { "spotifyURI": "1UP.mp3", "starttime": 0, "title": "1 UP", "artist": "NA" }
   ]
 }

@@ -1,0 +1,64 @@
+{
+    "tracks": [
+        {
+            "spotifyURI": "spotify:track:1jqBju1B8zyuC8EPvkEjlE",
+            "starttime": 0,
+            "artist": "Twisted Sister",
+            "title": "We're Not Gonna Take It - 2024 Remaster"
+        },
+        {
+            "spotifyURI": "spotify:track:2RaA6kIcvomt77qlIgGhCT",
+            "starttime": 35000,
+            "artist": "Judas Priest",
+            "title": "Breaking the Law"
+        },
+        {
+            "spotifyURI": "spotify:track:3Y6XWs8xMlCngyIxNOFnsp",
+            "starttime": 10500,
+            "artist": "KRS-One",
+            "title": "Sound of da Police"
+        },
+        {
+            "spotifyURI": "spotify:track:0qeKzbUsW0V4ZWRJrHNiD3",
+            "starttime": 48800,
+            "artist": "Inner Circle",
+            "title": "Bad Boys (Theme from COPS)"
+        },
+        {
+            "spotifyURI": "spotify:track:5oKlSLcbGzGtNQXHIRFHDp",
+            "starttime": 0,
+            "artist": "Juice Music",
+            "title": "Dont Worry, Be Happy"
+        },
+        {
+            "spotifyURI": "spotify:track:5KC7ginqShi7mhDQLttQh0",
+            "starttime": 38000,
+            "artist": "Dimitri Vegas & Like Mike",
+            "title": "Get in Trouble (So What)"
+        },
+        {
+            "spotifyURI": "spotify:track:7nqnMxJAtbgctaOtUpyHVK",
+            "starttime": 2500,
+            "artist": "Rockwell",
+            "title": "Somebody's Watching Me"
+        },
+        {
+            "spotifyURI": "spotify:track:69QHm3pustz01CJRwdo20z",
+            "starttime": 20000,
+            "artist": "AC\/DC",
+            "title": "Hells Bells"
+        },
+        {
+            "spotifyURI": "spotify:track:49fzPkBb3aOUWYRKaTWVhm",
+            "starttime": 5500,
+            "artist": "Ray Charles",
+            "title": "Hit the Road Jack"
+        },
+        {
+            "spotifyURI": "spotify:track:0l5i2lHBBB1UqFg44HSMuF",
+            "starttime": 31866,
+            "artist": "The Rolling Stones",
+            "title": "Shame, Shame, Shame"
+        }
+    ]
+}
