@@ -4,8 +4,6 @@ async function loadFilenames(dir) {
   return await res.json();
 }
 
-const filenames = await loadFilenames('tracks2');
-console.log(filenames); // will show the array
 
 const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
 const REDIRECT_URI = "http://floorballmusic.is-great.net/newboard.html";
@@ -21,11 +19,13 @@ let displayName = "";
 
 window.onload = function () {
 const token = getAccessTokenFromUrl();
+const filenames = await loadFilenames('tracks2');
+console.log(filenames); // will show the array
+createRandomTrackButtons();  // Add random track buttons to header
+loadSongsFromFolder();
 if (token) {
     accessToken = token;
     fetchSpotifyUserData(); // Fetch and display Spotify user info
-    createRandomTrackButtons();  // Add random track buttons to header
-    loadSongsFromFolder();
     fetchSpotifyDevices();
   }
 else {
