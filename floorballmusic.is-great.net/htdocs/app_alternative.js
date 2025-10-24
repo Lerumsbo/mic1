@@ -17,7 +17,7 @@ let displayName = "";
 //const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Lomis.json', 'Warmup.json', 'Pregame.json', 'Mål.json', 'Utvisning.json', 'Odd.json', 'Cheery.json', 'Energy.json', 'Rythm.json', 'Local.json', 'Gameevents.json', 'Hgoal.json', 'Agoal.json'];
 
 
-window.onload = function () {
+window.onload = async function () {
 const token = getAccessTokenFromUrl();
 const filenames = await loadFilenames('tracks2');
 console.log(filenames); // will show the array
