@@ -7,7 +7,14 @@ let availableDevices = [];
 let selectedDevice = null;
 let displayName = "";
 
-const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Periodpaus.json', 'Warmup.json', 'Pregame.json', 'Mål.json', 'Utvisning.json', 'Publik.json', 'Spelpauser2.json', 'Heavy.json', 'Spelpauser.json', 'Local.json', 'Pepp.json', 'Hgoal.json', 'Agoal.json'];
+async function loadFilenames(dir) {
+  const res = await fetch(`getFileList.php?dir=${encodeURIComponent(dir)}`);
+  if (!res.ok) throw new Error('Failed to load file list');
+  return await res.json();
+}
+
+const filenames = loadFilenames('tracks2').then(console.log);
+//const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Periodpaus.json', 'Warmup.json', 'Pregame.json', 'Mål.json', 'Utvisning.json', 'Publik.json', 'Spelpauser2.json', 'Heavy.json', 'Spelpauser.json', 'Local.json', 'Pepp.json', 'Hgoal.json', 'Agoal.json'];
 
 
 window.onload = function () {

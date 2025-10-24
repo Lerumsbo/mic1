@@ -22,6 +22,6 @@ if (!is_dir($dir)) {
 // List only .json files
 $files = glob($dir . '/*.json');
 $filenames = array_map('basename', $files);
-
+sort($filenames);
 echo json_encode($filenames);
 ?>
