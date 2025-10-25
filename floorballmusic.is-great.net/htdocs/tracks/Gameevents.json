@@ -85,12 +85,6 @@
             "title": "Sean den f\u00f6rste Banan"
         },
         {
-            "spotifyURI": "spotify:track:4ClMpsy7FExBFQVGUBrGWH",
-            "starttime": 0,
-            "artist": "Sports All-Stars",
-            "title": "Chicago Bulls Intro Theme - Sirius"
-        },
-        {
             "spotifyURI": "spotify:track:41Ef0PikCCRBcIM8O0t5HK",
             "starttime": 57500,
             "artist": "E-Type",
@@ -149,6 +143,12 @@
             "starttime": 0,
             "artist": "Twisted Sister",
             "title": "We're Not Gonna Take It - 2024 Remaster"
+        },
+        {
+            "spotifyURI": "spotify:track:6IOdPIKmhmDJANJT2ktP4X",
+            "starttime": 34250,
+            "artist": "Ihsan Dincer",
+            "title": "Chicago Bulls Theme (SIRIUS)"
         }
     ]
 }

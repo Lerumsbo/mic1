@@ -29,6 +29,12 @@
             "starttime": 0,
             "artist": "Armin van Buuren",
             "title": "Sirius"
+        },
+        {
+            "spotifyURI": "spotify:track:6IOdPIKmhmDJANJT2ktP4X",
+            "starttime": 8000,
+            "artist": "Ihsan Dincer",
+            "title": "Chicago Bulls Theme (SIRIUS)"
         }
     ]
 }
