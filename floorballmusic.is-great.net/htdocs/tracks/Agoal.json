@@ -1,10 +1,5 @@
 {
     "tracks": [
-        {
-            "spotifyURI": "spotify:track:2McQQA5nCLVL0XvzcxWhFC",
-            "starttime": 20000,
-            "artist": "The Bouncing Souls",
-            "title": "Ole"
-        }
+      { "spotifyURI": "Ole_Goal_1up.mp3", "starttime": 0, "title": "Ole 1UP", "artist": "NA" }   
     ]
-}
+  }
