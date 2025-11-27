@@ -1,74 +1,70 @@
 const CLIENT_ID = "52ec9869958e47e2898e85242e0f061a";
 const REDIRECT_URI = "https://floorballmusic.is-great.net/musicboard.html";
 const SCOPES = "user-modify-playback-state user-read-playback-state user-read-private user-read-email user-top-read";
+
 const sectionColors = ['#473b91'];
 let accessToken = "";
 let availableDevices = [];
 let selectedDevice = null;
 let displayName = "";
 
-// --- PKCE helpers ---
-function generateRandomString(length) {
-    const array = new Uint8Array(length);
+// =======================
+// --- PKCE Helpers ------
+function generateCodeVerifier(length = 128) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+    let result = '';
+    const array = new Uint32Array(length);
     window.crypto.getRandomValues(array);
-    return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
+    array.forEach(x => result += chars[x % chars.length]);
+    return result;
 }
 
-async function sha256(plain) {
+async function generateCodeChallenge(codeVerifier) {
     const encoder = new TextEncoder();
-    const data = encoder.encode(plain);
-    const hash = await crypto.subtle.digest('SHA-256', data);
-    return new Uint8Array(hash);
+    const data = encoder.encode(codeVerifier);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    let base64 = btoa(String.fromCharCode(...new Uint8Array(digest)));
+    return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-function base64urlencode(a) {
-    let str = '';
-    const len = a.byteLength;
-    for (let i = 0; i < len; i++) {
-        str += String.fromCharCode(a[i]);
-    }
-    return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-
-async function generateCodeChallenge(verifier) {
-    const hashed = await sha256(verifier);
-    return base64urlencode(hashed);
-}
-// --- End PKCE helpers ---
-
+// =======================
+// --- Initialization ----
 window.onload = async function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
 
     if (code) {
         await exchangeCodeForToken(code);
-    } else if (!accessToken) {
+        window.history.replaceState({}, document.title, REDIRECT_URI);
+        initializeApp();
+    } else if (sessionStorage.getItem('access_token')) {
+        accessToken = sessionStorage.getItem('access_token');
+        initializeApp();
+    } else {
         await authenticateSpotify();
     }
+}
 
-    if (accessToken) {
-        fetchSpotifyUserData();
-        createRandomTrackButtons();
-        loadSongsFromFolder();
-        fetchSpotifyDevices();
-    }
-};
-
+// =======================
+// --- Spotify Auth ------
 async function authenticateSpotify() {
-    const codeVerifier = generateRandomString(128);
+    const codeVerifier = generateCodeVerifier();
     sessionStorage.setItem('code_verifier', codeVerifier);
     const codeChallenge = await generateCodeChallenge(codeVerifier);
 
-    const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&scope=${encodeURIComponent(SCOPES)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&code_challenge_method=S256&code_challenge=${codeChallenge}`;
+    const authUrl = `https://accounts.spotify.com/authorize?response_type=code` +
+        `&client_id=${CLIENT_ID}` +
+        `&scope=${encodeURIComponent(SCOPES)}` +
+        `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
+        `&code_challenge_method=S256` +
+        `&code_challenge=${codeChallenge}`;
+
     window.location.href = authUrl;
 }
 
 async function exchangeCodeForToken(code) {
     const codeVerifier = sessionStorage.getItem('code_verifier');
-    if (!codeVerifier) {
-        console.error("Missing code verifier.");
-        return;
-    }
+    if (!codeVerifier) return console.error("Missing code verifier.");
 
     try {
         const response = await fetch('spotify_token_exchange.php', {
@@ -83,7 +79,9 @@ async function exchangeCodeForToken(code) {
         const data = await response.json();
         if (data.access_token) {
             accessToken = data.access_token;
-            window.history.replaceState({}, document.title, REDIRECT_URI);
+            sessionStorage.setItem('access_token', accessToken);
+            if (data.refresh_token) sessionStorage.setItem('refresh_token', data.refresh_token);
+            scheduleTokenRefresh(data.expires_in || 3600);
         } else {
             console.error("Failed to get access token:", data);
         }
@@ -92,18 +90,55 @@ async function exchangeCodeForToken(code) {
     }
 }
 
-// --- Spotify user and device functions ---
+function scheduleTokenRefresh(expiresIn) {
+    const refreshTime = (expiresIn - 300) * 1000; // 5 min before expiry
+    setTimeout(refreshAccessToken, refreshTime);
+}
+
+async function refreshAccessToken() {
+    const refreshToken = sessionStorage.getItem('refresh_token');
+    if (!refreshToken) return console.error("No refresh token stored.");
+
+    try {
+        const response = await fetch('spotify_token_exchange.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ refresh_token: refreshToken })
+        });
+        const data = await response.json();
+        if (data.access_token) {
+            accessToken = data.access_token;
+            sessionStorage.setItem('access_token', accessToken);
+            scheduleTokenRefresh(data.expires_in || 3600);
+            console.log("Spotify token refreshed");
+        } else {
+            console.error("Failed to refresh access token:", data);
+        }
+    } catch (error) {
+        console.error("Error refreshing token:", error);
+    }
+}
+
+// =======================
+// --- App Initialization
+function initializeApp() {
+    fetchSpotifyUserData();
+    createRandomTrackButtons();
+    loadSongsFromFolder();
+    fetchSpotifyDevices();
+}
+
+// =======================
+// --- Spotify User & Devices
 async function fetchSpotifyUserData() {
     try {
-        const response = await fetch("https://api.spotify.com/v1/me", {
+        const res = await fetch("https://api.spotify.com/v1/me", {
             headers: { 'Authorization': `Bearer ${accessToken}` }
         });
-        const userData = await response.json();
-        displayName = userData.display_name || "Unknown User";
+        const data = await res.json();
+        displayName = data.display_name || "Unknown User";
         addDisplayNameToHeader();
-    } catch (error) {
-        console.error("Error fetching user data:", error);
-    }
+    } catch (err) { console.error(err); }
 }
 
 function addDisplayNameToHeader() {
@@ -111,15 +146,15 @@ function addDisplayNameToHeader() {
     header.textContent = displayName;
     header.style.cursor = 'pointer';
     header.addEventListener('click', () => {
-        if (navigator.clipboard) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(accessToken).then(() => alert("Spotify token copied!"));
         } else {
-            const textArea = document.createElement('textarea');
-            textArea.value = accessToken;
-            document.body.appendChild(textArea);
-            textArea.select();
+            const ta = document.createElement('textarea');
+            ta.value = accessToken;
+            document.body.appendChild(ta);
+            ta.select();
             document.execCommand('copy');
-            document.body.removeChild(textArea);
+            document.body.removeChild(ta);
             alert("Spotify token copied!");
         }
     });
@@ -128,25 +163,29 @@ function addDisplayNameToHeader() {
 
 async function fetchSpotifyDevices() {
     try {
-        const response = await fetch("https://api.spotify.com/v1/me/player/devices", {
+        const res = await fetch("https://api.spotify.com/v1/me/player/devices", {
             headers: { 'Authorization': `Bearer ${accessToken}` }
         });
-        const data = await response.json();
+        const data = await res.json();
         availableDevices = data.devices || [];
-        const deviceSelect = document.getElementById("deviceSelect");
-        deviceSelect.innerHTML = "";
-        availableDevices.forEach(device => {
-            const option = document.createElement("option");
-            option.value = device.id;
-            option.textContent = device.name;
-            deviceSelect.appendChild(option);
+        const select = document.getElementById("deviceSelect");
+        select.innerHTML = "";
+        availableDevices.forEach(d => {
+            const opt = document.createElement('option');
+            opt.value = d.id; opt.textContent = d.name;
+            select.appendChild(opt);
         });
         selectedDevice = availableDevices.length > 0 ? availableDevices[0].id : null;
-        deviceSelect.addEventListener('change', () => { selectedDevice = deviceSelect.value; });
-    } catch (error) {
-        console.error("Error fetching devices:", error);
-    }
+        select.addEventListener('change', () => selectedDevice = select.value);
+    } catch (err) { console.error(err); }
 }
+
+// =======================
+// --- Songs / Tracks / Playlists
+// (Your original functions: loadFilenames, loadSongsFromFolder, createSection, createPlaylistSection, playTrack, playLocalTrack, playSpotifyTrack, playPlaylist, createRandomTrackButtons, loadAndPlayRandomTrack, etc.)
+// --- Copy all of your original code here from the existing file after this point
+// (No changes needed beyond authentication)
+
 
 // --- File and track loading ---
 async function loadFilenames(dir) {
