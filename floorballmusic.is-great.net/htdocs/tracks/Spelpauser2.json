@@ -407,6 +407,24 @@
             "starttime": 14200,
             "artist": "ZZ Top",
             "title": "Got Me Under Pressure (2008 Remaster)"
+        },
+        {
+            "spotifyURI": "spotify:track:7aIiDOQyCBA8yi1dozGojm",
+            "starttime": 179600,
+            "artist": "TJR",
+            "title": "Ode To Oi"
+        },
+        {
+            "spotifyURI": "spotify:track:1EiO0oc4plO7C6hX2GLKvK",
+            "starttime": 125900,
+            "artist": "2WEI",
+            "title": "Insomnia"
+        },
+        {
+            "spotifyURI": "spotify:track:5gMlJrERAxpPRSDBQUiqyy",
+            "starttime": 7522,
+            "artist": "Royal Republic",
+            "title": "LoveCop"
         }
     ]
 }

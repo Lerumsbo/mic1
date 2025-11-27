@@ -146,7 +146,7 @@
 
     function loginToSpotify() {
       const clientId = "52ec9869958e47e2898e85242e0f061a";
-      const redirectUri = "http://floorballmusic.is-great.net/fetchtest.html"; 
+      const redirectUri = "https://floorballmusic.is-great.net/fetchtest.html"; 
       const scope = "user-read-private user-modify-playback-state user-read-playback-state";
 
       const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientId}&scope=${encodeURIComponent(scope)}&redirect_uri=${encodeURIComponent(redirectUri)}`;
