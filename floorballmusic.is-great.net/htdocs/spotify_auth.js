@@ -4,7 +4,6 @@ let refreshToken = '';
 let expiresAt = 0;
 
 const clientId = "52ec9869958e47e2898e85242e0f061a";
-const redirectUri = "https://floorballmusic.is-great.net/fetchtest.html";
 const scopes = [
     "user-read-private",
     "user-read-email",
@@ -39,48 +38,65 @@ function base64UrlEncode(arrayBuffer) {
     return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-// --- Start login ---
-async function loginToSpotify() {
+// --- Start login (dynamic redirectUri) ---
+async function loginToSpotify(redirectUri) {
     const codeVerifier = generateRandomString(128);
     sessionStorage.setItem('spotify_code_verifier', codeVerifier);
 
     const hashed = await sha256(codeVerifier);
     const codeChallenge = base64UrlEncode(hashed);
 
-    const url = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&scope=${encodeURIComponent(scopes.join(' '))}&redirect_uri=${encodeURIComponent(redirectUri)}&code_challenge_method=S256&code_challenge=${codeChallenge}`;
-    window.location.href = url;
+    const authUrl =
+        "https://accounts.spotify.com/authorize?" +
+        new URLSearchParams({
+            response_type: "code",
+            client_id: clientId,
+            scope: scopes.join(" "),
+            redirect_uri: redirectUri,
+            code_challenge_method: "S256",
+            code_challenge: codeChallenge
+        });
+
+    window.location.href = authUrl;
 }
 
-// --- Handle redirect ---
-async function handleRedirect() {
+// --- Handle redirect (dynamic redirectUri) ---
+async function handleRedirect(redirectUri) {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
     if (!code) return;
 
     const codeVerifier = sessionStorage.getItem('spotify_code_verifier');
-    if (!codeVerifier) return console.error('Missing code verifier');
+    if (!codeVerifier) {
+        console.error("Missing code verifier");
+        return;
+    }
 
     const formData = new FormData();
-    formData.append('code', code);
-    formData.append('code_verifier', codeVerifier);
+    formData.append("code", code);
+    formData.append("code_verifier", codeVerifier);
 
-    const response = await fetch('spotify_auth.php', { method: 'POST', body: formData });
+    const response = await fetch("spotify_auth.php", {
+        method: "POST",
+        body: formData
+    });
+
     const data = await response.json();
     if (data.error) {
-        console.error('Failed to get tokens:', data);
+        console.error("Failed to get tokens:", data);
         return;
     }
 
     accessToken = data.access_token;
     refreshToken = data.refresh_token;
-    expiresAt = Date.now() + (data.expires_in * 1000);
+    expiresAt = Date.now() + data.expires_in * 1000;
 
-    console.log('Spotify login successful', accessToken);
+    console.log("Spotify login successful", accessToken);
 
-    // Schedule auto refresh 1 minute before expiry
+    // Auto refresh 1 min before expiry
     setTimeout(refreshAccessToken, (data.expires_in - 60) * 1000);
 
-    // Remove code from URL
+    // Clean URL
     window.history.replaceState({}, document.title, redirectUri);
 }
 
@@ -88,29 +104,29 @@ async function refreshAccessToken() {
     if (!refreshToken) return;
 
     const formData = new FormData();
-    formData.append('refresh_token', refreshToken);
+    formData.append("refresh_token", refreshToken);
 
-    const response = await fetch('spotify_auth.php', { method: 'POST', body: formData });
+    const response = await fetch("spotify_auth.php", {
+        method: "POST",
+        body: formData
+    });
+
     const data = await response.json();
-
     if (data.error) {
-        console.error('Failed to refresh token:', data);
+        console.error("Failed to refresh token:", data);
         return;
     }
 
     accessToken = data.access_token;
-    expiresAt = Date.now() + (data.expires_in * 1000);
+    expiresAt = Date.now() + data.expires_in * 1000;
 
-    console.log('Spotify token refreshed', accessToken);
+    console.log("Spotify token refreshed", accessToken);
 
     setTimeout(refreshAccessToken, (data.expires_in - 60) * 1000);
 }
 
 // --- Utility to check login ---
 function ensureAccessToken() {
-    if (!accessToken) throw new Error('Spotify not logged in');
+    if (!accessToken) throw new Error("Spotify not logged in");
     return accessToken;
 }
-
-// Call on page load
-window.onload = handleRedirect;

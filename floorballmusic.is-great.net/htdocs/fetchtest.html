@@ -88,7 +88,8 @@ const redirectUri = window.location.href.split('?')[0];
 
 // Initialize auth on page load
 window.onload = async () => {
-  await handleRedirect({ redirectUri });
+  await handleRedirect(redirectUri);
+
   if (accessToken) {
     document.getElementById("status").textContent = "Inloggad på Spotify!";
   } else {
@@ -96,8 +97,10 @@ window.onload = async () => {
   }
 };
 
-// Login button
-document.getElementById("login-button").onclick = () => loginToSpotify({ redirectUri });
+// login button click
+document.getElementById("login-button").onclick = () =>
+  loginToSpotify(redirectUri);
+
 
 // --- Fetch current playing track ---
 async function getCurrentPlayingTrack() {
