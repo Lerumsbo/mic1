@@ -7,7 +7,6 @@ let accessToken = "";
 let availableDevices = [];
 let selectedDevice = null;
 let displayName = "";
-
 // =======================
 // --- PKCE Helpers ------
 function generateCodeVerifier(length = 128) {
@@ -192,6 +191,12 @@ async function loadFilenames(dir) {
   const res = await fetch(`getFileList.php?dir=${encodeURIComponent(dir)}`);
   if (!res.ok) throw new Error('Failed to load file list');
   return await res.json();
+}
+function collapseAllSections() {
+const sections = document.querySelectorAll(".song-list");
+sections.forEach(section => {
+section.style.display = "none";
+});
 }
 
 const filenames = ['playlists.json', 'After.json', 'Intro.json', 'Periodpaus.json', 'Warmup.json', 'Pregame.json', 'Goal.json', 'Spelpauser2.json', 'Spelpauser.json', 'Local.json', 'Heavy.json', 'Utvisning.json', 'Publik.json', 'GameEvents.json', 'Hgoal.json', 'Agoal.json'];

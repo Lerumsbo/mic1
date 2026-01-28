@@ -65,6 +65,18 @@
             "starttime": 0,
             "artist": "The Alan Parsons Project",
             "title": "Sirius 2017 - Disco Demolition Remix"
+        },
+        {
+            "spotifyURI": "spotify:track:4DEcdqqKokU7UAE4wCGQEy",
+            "starttime": 25500,
+            "artist": "Monty Python",
+            "title": "Always Look On The Bright Side Of Life"
+        },
+        {
+            "spotifyURI": "spotify:track:4dt6XKr0xKdPzjFhwB8dBm",
+            "starttime": 12200,
+            "artist": "Frank Sinatra",
+            "title": "That's Life - 2008 Remastered"
         }
     ]
 }

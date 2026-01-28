@@ -35,6 +35,12 @@
             "starttime": 8000,
             "artist": "Ihsan Dincer",
             "title": "Chicago Bulls Theme (SIRIUS)"
+        },
+        {
+            "spotifyURI": "spotify:track:20Ad6hTVs4CK1VxCDUC9LX",
+            "starttime": 47500,
+            "artist": "Thomas Bergersen",
+            "title": "Freedom Fighters"
         }
     ]
 }

@@ -59,6 +59,18 @@
             "starttime": 31866,
             "artist": "The Rolling Stones",
             "title": "Shame, Shame, Shame"
+        },
+        {
+            "spotifyURI": "spotify:track:6FK3E5XGjp2ViJAG4i2OJ1",
+            "starttime": 16800,
+            "artist": "Astrid Lindgren",
+            "title": "Du k\u00e4re lille snickerbo"
+        },
+        {
+            "spotifyURI": "spotify:track:5nF0k5FkpPvjTZq6IeWwjw",
+            "starttime": 78100,
+            "artist": "Sockiplast",
+            "title": "S\u00e5 f\u00e5r man inte g\u00f6ra"
         }
     ]
 }

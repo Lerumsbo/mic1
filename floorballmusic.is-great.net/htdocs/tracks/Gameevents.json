@@ -149,6 +149,30 @@
             "starttime": 34250,
             "artist": "Ihsan Dincer",
             "title": "Chicago Bulls Theme (SIRIUS)"
+        },
+        {
+            "spotifyURI": "spotify:track:2XjeZEdPK7Qo66Z7ONp854",
+            "starttime": 39700,
+            "artist": "Airbourne",
+            "title": "Back In the Game"
+        },
+        {
+            "spotifyURI": "spotify:track:0khGENsYIkglYAWBYVIELI",
+            "starttime": 178600,
+            "artist": "Volbeat",
+            "title": "Seal The Deal"
+        },
+        {
+            "spotifyURI": "spotify:track:4Lgi7RloLnKtsMWLFOtocj",
+            "starttime": 0,
+            "artist": "STRLGHT",
+            "title": "Venture"
+        },
+        {
+            "spotifyURI": "spotify:track:16JDdi31YFs7huc6ORNiZD",
+            "starttime": 21800,
+            "artist": "David Chappell",
+            "title": "Cytokine Storm"
         }
     ]
 }

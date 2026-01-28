@@ -425,6 +425,54 @@
             "starttime": 7522,
             "artist": "Royal Republic",
             "title": "LoveCop"
+        },
+        {
+            "spotifyURI": "spotify:track:4f3NHOxgC8Bg21IJBg4cZ3",
+            "starttime": 15600,
+            "artist": "Timmy Trumpet",
+            "title": "Freaks - Radio Edit"
+        },
+        {
+            "spotifyURI": "spotify:track:0yqrhHrcWLMjBylHReDN5u",
+            "starttime": 77049,
+            "artist": "Sam Tinnesz",
+            "title": "Legends Are Made"
+        },
+        {
+            "spotifyURI": "spotify:track:265SFiKBPvo5ojatV1egRk",
+            "starttime": 16793,
+            "artist": "AronChupa",
+            "title": "The Woodchuck Song"
+        },
+        {
+            "spotifyURI": "spotify:track:6F3rgQfSns1slUnMfHXjOA",
+            "starttime": 46000,
+            "artist": "CID",
+            "title": "Sweet Memories"
+        },
+        {
+            "spotifyURI": "spotify:track:2Y8OTlI2muZTiFASMRONpJ",
+            "starttime": 115000,
+            "artist": "Sound Of Legend",
+            "title": "Sweet Dreams - Are Made of This"
+        },
+        {
+            "spotifyURI": "spotify:track:4Lgi7RloLnKtsMWLFOtocj",
+            "starttime": 35250,
+            "artist": "STRLGHT",
+            "title": "Venture"
+        },
+        {
+            "spotifyURI": "spotify:track:3GBnGi8VktRx2Dr3Abn6m6",
+            "starttime": 21703,
+            "artist": "Icona Pop",
+            "title": "I Love It (feat. Charli XCX)"
+        },
+        {
+            "spotifyURI": "spotify:track:2WFWe13VHVAIHCbdTKGO1M",
+            "starttime": 46400,
+            "artist": "Ameritz - Karaoke",
+            "title": "Bulls on Parade (In the Style of Rage Against the Machine) [Instrumental Version]"
         }
     ]
 }

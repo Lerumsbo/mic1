@@ -181,16 +181,22 @@
             "title": "Panama - 2015 Remaster"
         },
         {
-            "spotifyURI": "spotify:track:2zSudlr6kCVjgxaYtP4vuc",
-            "starttime": 17000,
-            "artist": "Liliac",
-            "title": "Crazy Train"
-        },
-        {
             "spotifyURI": "spotify:track:4f74h9bcuHOroCaVsKIr4F",
             "starttime": 13600,
             "artist": "Mammoth",
             "title": "Don't Back Down"
+        },
+        {
+            "spotifyURI": "spotify:track:2SMNxADB0ffqaIoOwl2x06",
+            "starttime": 14500,
+            "artist": "Volbeat",
+            "title": "Shotgun Blues"
+        },
+        {
+            "spotifyURI": "spotify:track:2ZS87ydp7TZyJbqr8xqL4i",
+            "starttime": 62100,
+            "artist": "Danko Jones",
+            "title": "Guess Who's Back"
         }
     ]
 }
